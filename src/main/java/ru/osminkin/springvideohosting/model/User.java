@@ -1,13 +1,12 @@
 package ru.osminkin.springvideohosting.model;
 
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "auth")
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
