@@ -1,11 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-    <h1>Hallo!</h1>
+    <h1>Hello!</h1>
+    <form modelAttribute="messageForm" method="post" enctype="multipart/form-data">
+        <input type="text" name="text" placeholder="Add text" />
+        <input type="text" name="tag" placeholder="Tag">
+        <input type="file" name="file">
+        <input type="hidden" name="_csrf" value="${_csrf.token}" />
+        <button type="submit">Add</button>
+    </form>
+    <div th:each="message : ${messages}">
+        <div>
+            <p th:text="*{'Id: ' + message.getId()}"></p>
+            <p th:text="*{'Tag: ' + message.getTag()}"></p>
+            <p th:text="*{'Text: ' + message.getText()}"></p>
+            <p th:if="*{message.getFilename()}">
+                <img th:src="@{/img/(*{message.getFilename()})}" alt="">
+            </p>
+        </div>
+    </div>
     <form action="/auth/login" method="post">
         <button type="submit">Logout</button>
     </form>
