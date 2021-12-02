@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>My page</title>
+</head>
+<body>
+<h1>Main</h1>
+
+    <p th:text="${'FirstName: ' + user.getFirstName()}">VALUE</p>
+    <p th:text="${'LastName: ' + user.getLastName()}">VALUE</p>
+    <p th:text="${'Email: ' + user.getEmail()}">VALUE</p>
+
+<div>
+    <button>Популярное</button>
+    <button>По числу просмотров</button>
+    <button>По дате добавления</button>
+</div>
+
+<div th:if="${#authentication.getName() == user.getEmail()}">
+    <form modelAttribute="messageMessage" method="post" enctype="multipart/form-data">
+        <input type="text" name="text" placeholder="Add text" />
+        <input type="text" name="tag" placeholder="Tag">
+        <input type="file" name="file">
+        <input type="hidden" name="_csrf" value="${_csrf.token}" />
+        <button type="submit" name="save">Add</button>
+    </form>
+</div>
+
+<div th:each="message : ${messages}">
+    <div>
+        <p th:text="*{'Id: ' + message.getId()}"></p>
+        <p th:text="*{'Tag: ' + message.getTag()}"></p>
+        <p th:text="*{'Text: ' + message.getText()}"></p>
+        <p th:if="*{message.getFilename()}">
+            <img th:src="@{'/img/' + *{message.getFilename}}" alt="">
+        </p>
+    </div>
+    <form th:action="@{'/auth/success/channel/' + *{user.getId()}}" th:method="post">
+        <input type="hidden" name="id" th:value="${message.getId()}" />
+        <button type="submit" name="delete" th:id="*{message.getId()}">delete</button>
+    </form>
+</div>
+
+    <form action="/auth/login" method="post">
+        <button type="submit">Logout</button>
+    </form>
+</body>
+</html>

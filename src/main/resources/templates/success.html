@@ -6,6 +6,9 @@
 </head>
 <body>
     <h1>Hello!</h1>
+    <form th:action="@{'/auth/success/channel/' + *{user.getId()}}">
+        <button type="submit">My page</button>
+    </form>
     <form modelAttribute="messageForm" method="post" enctype="multipart/form-data">
         <input type="text" name="text" placeholder="Add text" />
         <input type="text" name="tag" placeholder="Tag">
@@ -19,7 +22,7 @@
             <p th:text="*{'Tag: ' + message.getTag()}"></p>
             <p th:text="*{'Text: ' + message.getText()}"></p>
             <p th:if="*{message.getFilename()}">
-                <img th:src="@{/img/(*{message.getFilename()})}" alt="">
+                <img th:src="@{'/img/' + *{message.getFilename}}" alt="">
             </p>
         </div>
     </div>

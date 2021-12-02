@@ -5,5 +5,7 @@ import ru.osminkin.springvideohosting.model.Message;
 import java.util.Optional;
 
 public interface MessageRepository extends JpaRepository<Message, Long> {
-    Optional<Message> findByTag(String tag);
+    @Override
+    Optional<Message> findById(Long id);
+    Iterable<Message> findMessagesByUserId(Long id);
 }

@@ -6,18 +6,14 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "posts")
-public class Message {
+@Table(name = "videos")
+public class Video {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
-    @Column(name = "text")
-    private String text;
-    @Column(name = "tag")
-    private String tag;
     @Column(name = "filename")
     private String filename;
 }
