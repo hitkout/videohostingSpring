@@ -3,31 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" type="text/css" th:href="@{static/success.css}">
 </head>
 <body>
+<div class="header">
+    <p>Video</p>
+    <a href="">Главная</a>
+    <a href="">Моя страница</a>
+    <a href=""></a>
+</div>
+<div class="content">
+    <a href="">Записи</a>
+    <a href="">Фотографии</a>
+    <a href="">Видео</a>
+</div>
+<div class="filter">
+    <a href="">Записи</a>
+    <a href="">Фотографии</a>
+    <a href="">Видео</a>
+</div>
     <h1>Hello!</h1>
     <form th:action="@{'/auth/success/channel/' + *{user.getId()}}">
         <button type="submit">My page</button>
     </form>
-    <form modelAttribute="messageForm" method="post" enctype="multipart/form-data">
-        <input type="text" name="text" placeholder="Add text" />
-        <input type="text" name="tag" placeholder="Tag">
-        <input type="file" name="file">
-        <input type="hidden" name="_csrf" value="${_csrf.token}" />
-        <button type="submit">Add</button>
-    </form>
-    <div th:each="message : ${messages}">
-        <div>
-            <p th:text="*{'Id: ' + message.getId()}"></p>
+
+<form modelAttribute="messageForm" method="post" enctype="multipart/form-data">
+    <input type="text" name="text" placeholder="Add text" />
+    <input type="text" name="tag" placeholder="Tag">
+    <input type="file" name="file">
+    <input type="hidden" name="_csrf" value="${_csrf.token}" />
+    <button type="submit" name="save">Add</button>
+</form>
+
+    <div class="main">
+        <div th:each="message : ${messages}">
+            <p class="id" th:text="${message.id}"></p>
             <p th:text="*{'Tag: ' + message.getTag()}"></p>
             <p th:text="*{'Text: ' + message.getText()}"></p>
             <p th:if="*{message.getFilename()}">
-                <img th:src="@{'/img/' + *{message.getFilename}}" alt="">
+                <img th:src="@{'/img/' + *{message.getFilename()}}" alt="">
             </p>
         </div>
     </div>
     <form action="/auth/login" method="post">
         <button type="submit">Logout</button>
     </form>
+
+<!--<script type="text/javascript">-->
+<!--    let arr = document.getElementsByClassName('id');-->
+<!--    let lastId = arr[arr.length-1].innerHTML - 1;-->
+
+<!--    function addListenerOnLastElement(array){-->
+<!--        array[array.length-1].addEventListener("mouseover", load);-->
+<!--    }-->
+
+<!--    addListenerOnLastElement(arr);-->
+
+<!--    function load(){-->
+<!--        let xhr = new XMLHttpRequest();-->
+<!--        let url = "http://localhost:8080/auth/success/" + lastId;-->
+<!--        xhr.open("GET", url);-->
+<!--        xhr.setRequestHeader("Content-type", "application/json");-->
+
+<!--        xhr.onload = function (){-->
+<!--            let jsonResponse = JSON.parse(xhr.responseText);-->
+<!--            if (jsonResponse != null && jsonResponse.length > 0){-->
+<!--                for (let i = 0; i < jsonResponse.length; i++){-->
+<!--                    let newDiv = document.createElement('div');-->
+<!--                    newDiv.innerHTML = "<p class='id'>" + jsonResponse[i].id + "</p>"-->
+<!--                        + "<p>" + jsonResponse[i].tag + "</p>"-->
+<!--                        + "<p>" + jsonResponse[i].text + "</p>";-->
+<!--                    document.getElementById('main').appendChild(newDiv);-->
+<!--                }-->
+<!--                lastId = arr[arr.length-1].innerHTML - 1;-->
+<!--                addListenerOnLastElement(arr);-->
+<!--            }-->
+<!--        };-->
+<!--        xhr.send();-->
+<!--        arr[arr.length-1].removeEventListener("mouseover", load);-->
+<!--    }-->
+<!--</script>-->
+
 </body>
 </html>

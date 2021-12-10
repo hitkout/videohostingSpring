@@ -11,12 +11,6 @@
     <p th:text="${'LastName: ' + user.getLastName()}">VALUE</p>
     <p th:text="${'Email: ' + user.getEmail()}">VALUE</p>
 
-<div>
-    <button>Популярное</button>
-    <button>По числу просмотров</button>
-    <button>По дате добавления</button>
-</div>
-
 <div th:if="${#authentication.getName() == user.getEmail()}">
     <form modelAttribute="messageMessage" method="post" enctype="multipart/form-data">
         <input type="text" name="text" placeholder="Add text" />
