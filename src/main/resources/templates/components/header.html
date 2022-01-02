@@ -2,11 +2,21 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>header</title>
+    <link rel="stylesheet" type="text/css" href="/css/header.css">
 </head>
 <body>
-<h1 th:fragment="header">
-    HEADER
-</h1>
+    <div class="header" th:fragment="header">
+        <div class="containerAll">
+            <button>Записи</button>
+            <button>Фотографии</button>
+            <button>Видео</button>
+        </div>
+        <div class="filter" th:method="get">
+            <a href="http://localhost:8080/auth/success?sort=new">Новое</a>
+            <a href="http://localhost:8080/auth/success?sort=old">Старое</a>
+            <a href="http://localhost:8080/auth/success?sort=pop">Популярное</a>
+        </div>
+    </div>
 </body>
 </html>

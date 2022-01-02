@@ -3,36 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <title>My page</title>
+    <link rel="stylesheet" href="/css/top-panel.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/body.css">
+    <link rel="stylesheet" href="/css/photoCards.css">
 </head>
 <body>
-<h1>Photos</h1>
-
-<p th:text="${'FirstName: ' + user.getFirstName()}">VALUE</p>
-<p th:text="${'LastName: ' + user.getLastName()}">VALUE</p>
-<p th:text="${'Email: ' + user.getEmail()}">VALUE</p>
-
-<form modelAttribute="messageMessage" method="post" enctype="multipart/form-data">
+<div th:replace="components/top-panel :: top-panel"></div>
+<div th:replace="components/header :: header"></div>
+<form modelAttribute="photoFromForm" method="post" enctype="multipart/form-data">
     <input type="file" name="file">
     <input type="hidden" name="_csrf" value="${_csrf.token}" />
     <button type="submit" name="save">Add</button>
 </form>
-
-<div th:each="photo : ${photos}">
-    <div>
-        <p th:text="*{'Id: ' + photo.getId()}"></p>
-        <p th:if="*{photo.getFilename()}">
+    <div id="mainPhoto" class="mainPhoto catalogRow">
+        <div class="catalogCard" th:each="photo : ${photos}">
+            <p class="idPhoto" th:text="${photo.id}"></p>
             <img th:src="@{'/img/' + *{photo.getFilename()}}" alt="">
-        </p>
+        </div>
     </div>
-    <a th:href="@{'/auth/success/channel/' + *{user.getId()} + '/photos/' + *{photo.getId()}}">go</a>
-    <form th:action="@{'/auth/success/channel/' + *{user.getId()} + '/photos'}" th:method="post">
-        <input type="hidden" name="id" th:value="${photo.getId()}" />
-        <button type="submit" name="delete" th:id="*{photo.getId()}">delete</button>
-    </form>
-</div>
 
+<!--<div th:each="photo : ${photos}">-->
+<!--    <div>-->
+<!--        <p th:text="*{'Id: ' + photo.getId()}"></p>-->
+<!--        <p th:if="*{photo.getFilename()}">-->
+<!--            <img th:src="@{'/img/' + *{photo.getFilename()}}" alt="">-->
+<!--        </p>-->
+<!--    </div>-->
+<!--    <a th:href="@{'/auth/success/channel/' + *{user.getId()} + '/photos/' + *{photo.getId()}}">go</a>-->
+<!--    <form th:action="@{'/auth/success/channel/' + *{user.getId()} + '/photos'}" th:method="post">-->
+<!--        <input type="hidden" name="id" th:value="${photo.getId()}" />-->
+<!--        <button type="submit" name="delete" th:id="*{photo.getId()}">delete</button>-->
+<!--    </form>-->
+<!--</div>-->
 <form action="/auth/login" method="post">
     <button type="submit">Logout</button>
 </form>
+<script>
+    let minFromDb = "[[${lastElement}]]";
+    let userId = "[[${user.id}]]";
+</script>
+<script src="/scripts/infiniteScrollForPhoto.js"></script>
 </body>
 </html>

@@ -1,0 +1,86 @@
+.top-panel {
+    height: 78px;
+    background-color: #262626;
+    color: #fff;
+}
+
+.container {
+    width: 65%;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.height-100{
+    height: 100%;
+}
+
+.row-top-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-un img {
+    height: 70px;
+    width: 200px;
+    margin-top: 30px;
+}
+
+.top-panel__logo {
+    font-size: 24px;
+    color: #fff;
+    text-decoration: none;
+}
+
+.top-panel__logo i {
+    color: #f00;
+}
+
+.top-panel__nav {
+    color: #404040;
+    font-family: "Teko", sans-serif;
+    font-weight: 600;
+    font-size: 23px;
+    text-transform: uppercase;
+    letter-spacing: 0.45px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.top-panel__nav ul, .top-panel__nav li {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.top-panel__nav ul {
+    display: flex;
+    justify-content: space-between;
+}
+
+.top-panel__nav-link {
+    margin-right: 30px;
+}
+.top-panel__nav-icon {
+    margin-left: 15px;
+}
+.top-panel__nav-link, .top-panel__nav-icon {
+    cursor: pointer;
+    text-transform: uppercase;
+    border: none;
+    background: unset;
+    color: #fff;
+    border-bottom: 1px solid transparent;
+    outline: none;
+    font-size: 20px;
+    transition: color 0.2s ease-in, border-bottom 1s ease-in;
+}
+
+.top-panel__nav-link:hover {
+    color: #f00;
+    border-color: #f00;
+}
+
+.top-panel__nav-icon:hover {
+    color: #f00;
+}

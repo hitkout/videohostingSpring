@@ -18,6 +18,5 @@ public class AuthenticatedUserService {
         String currentPrincipalName = authentication.getName();
         User user = userRepository.findByEmail(currentPrincipalName).orElseThrow(()->new UsernameNotFoundException(""));
         return user.getId().equals(id);
-
     }
 }

@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>My page</title>
+    <link rel="stylesheet" href="/css/top-panel.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/body.css">
 </head>
 <body>
-
+<div th:replace="components/top-panel :: top-panel" th:with="user"></div>
 <div th:replace="components/header :: header"></div>
 
 <h1>Main</h1>

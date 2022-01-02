@@ -1,8 +1,13 @@
 {
   "properties": [
     {
-      "name": "upload.path",
+      "name": "upload.path.image",
       "type": "java.lang.String",
-      "description": "Description for upload.path."
-  }
-] }
+      "description": "Description for upload.path.image."
+    },
+    {
+      "name": "upload.path.video",
+      "type": "java.lang.String",
+      "description": "Description for upload.path.video."
+    }
+  ] }

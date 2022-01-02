@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>top-panel</title>
+    <link rel="stylesheet" type="text/css" href="/css/top-panel.css">
+</head>
+<form th:action="@{'/auth/success/channel/' + *{user.getId()}}">
+    <button type="submit">My page</button>
+</form>
+<body>
+    <div class="top-panel" th:fragment="top-panel">
+        <div class="container height-100">
+            <div class="row-top-panel height-100">
+                <div class="top-panel__left">
+                    <a href="#" class="top-panel__logo">
+                        <i class="fa fa-desktop" aria-hidden="true"></i>
+                        Video
+                    </a>
+                </div>
+                <div class="top-panel__right">
+                    <nav class="top-panel__nav">
+                        <ul>
+                            <li>
+                                <button href="#advantages__title" class="top-panel__nav-link advantages-link">Главная</button>
+                            </li>
+                            <li>
+                                <a th:href="@{'/auth/success/channel/' + *{user.getId()}}" class="top-panel__nav-link catalog-link">Моя страница</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

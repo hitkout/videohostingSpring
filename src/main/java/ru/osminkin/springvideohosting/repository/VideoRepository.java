@@ -9,4 +9,5 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
     @Override
     Optional<Video> findById(Long id);
     Iterable<Video> findVideosById(Long id);
+    Iterable<Video> findVideoByUserId(Long id);
 }

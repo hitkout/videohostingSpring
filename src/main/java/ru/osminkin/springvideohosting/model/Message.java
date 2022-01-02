@@ -3,6 +3,7 @@ package ru.osminkin.springvideohosting.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Data
 @Entity
@@ -18,6 +19,7 @@ public class Message {
     private String text;
     @Column(name = "tag")
     private String tag;
-    @Column(name = "filename")
-    private String filename;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "photos_id")
+    private Photo filename;
 }
