@@ -15,6 +15,6 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     Iterable<Message> findAllByIdBetweenOrderByIdDesc(Long start, Long finish);
 
-    @Query(value = "select * from posts order by add_date", nativeQuery = true)
+    @Query(value = "select * from posts order by id", nativeQuery = true)
     Iterable<Message> findAllOldMessages();
 }

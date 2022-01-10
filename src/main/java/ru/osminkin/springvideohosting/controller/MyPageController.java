@@ -38,24 +38,61 @@ public class MyPageController {
     //@PreAuthorize("@authenticatedUserService.hasId(#userId)")
     public String getChannel(@PathVariable("userId") long userId, Model model){
         model.addAttribute("messages", messageService.findAllUserMessages(userId));
+        model.addAttribute("videos", videoService.findAllVideosByUserId(userId));
+        model.addAttribute("photos", photoService.findAllPhotosByUserId(userId));
         model.addAttribute("user", userService.findUserById(userId));
         return "channelMain";
     }
 
-    @PostMapping(value = "/auth/success/channel/{userId}", params = "save")
+    @PostMapping(value = "/auth/success/channel/{userId}", params = "saveMessage")
     @PreAuthorize("@authenticatedUserService.hasId(#userId)")
-    public String postSuccessPage(@PathVariable("userId") long userId,
-                                  @RequestParam("file") MultipartFile file,
-                                  @ModelAttribute("messageMessage") Message messageMessage) throws IOException {
-        //messageService.setMessageFromForm(userService.findUserById(userId), file, messageMessage);
-        messageService.save(messageMessage);
-        return "redirect:/auth/success/channel/{userId}";
+    public String postChannelMessage(@PathVariable("userId") long userId,
+                                     @ModelAttribute("messageFromForm") Message messageFromForm) {
+        messageFromForm.setUser(userService.findUserById(userId));
+        messageService.save(messageFromForm);
+        return "redirect:/auth/success/channel/{userId}?type=records";
     }
 
-    @PostMapping(value = "/auth/success/channel/{userId}", params = "delete")
-    public String postChannel(@RequestParam("id") long id){
+    @PostMapping(value = "/auth/success/channel/{userId}", params = "deleteMessage")
+    @PreAuthorize("@authenticatedUserService.hasId(#userId)")
+    public String postChannel(@PathVariable("userId") long userId,
+                              @RequestParam("id") long id){
         messageService.deleteMessageById(id);
-        return "redirect:/auth/success/channel/{userId}";
+        return "redirect:/auth/success/channel/{userId}?type=records";
+    }
+
+    @PostMapping(value = "/auth/success/channel/{userId}", params = "savePhoto")
+    @PreAuthorize("@authenticatedUserService.hasId(#userId)")
+    public String postChannelPhoto(@PathVariable("userId") long userId,
+                                   @RequestParam("file") MultipartFile file,
+                                   @ModelAttribute("photoFromForm") Photo photoFromForm) throws IOException {
+        photoService.savePhotoInDb(userId, file, photoFromForm);
+        return "redirect:/auth/success/channel/{userId}?type=photos";
+    }
+
+    @PostMapping(value = "/auth/success/channel/{userId}", params = "deletePhoto")
+    @PreAuthorize("@authenticatedUserService.hasId(#userId)")
+    public String deletePhoto(@PathVariable("userId") long userId,
+                              @RequestParam("id") long id){
+        photoService.deletePhotoById(id);
+        return "redirect:/auth/success/channel/{userId}?type=photos";
+    }
+
+    @PostMapping(value = "/auth/success/channel/{userId}", params = "saveVideo")
+    @PreAuthorize("@authenticatedUserService.hasId(#userId)")
+    public String postChannelVideo(@PathVariable("userId") long userId,
+                                   @RequestParam("file") MultipartFile file,
+                                   @ModelAttribute("videoFromForm") Video videoFromForm) throws IOException {
+        videoService.saveVideoInDb(userId, file, videoFromForm);
+        return "redirect:/auth/success/channel/{userId}?type=videos";
+    }
+
+    @PostMapping(value = "/auth/success/channel/{userId}", params = "deleteVideo")
+    @PreAuthorize("@authenticatedUserService.hasId(#userId)")
+    public String deleteVideo(@PathVariable("userId") long userId,
+                              @RequestParam("id") long id){
+        videoService.deleteVideoById(id);
+        return "redirect:/auth/success/channel/{userId}?type=videos";
     }
 
     @GetMapping("/auth/success/channel/{userId}/videos")
@@ -65,17 +102,8 @@ public class MyPageController {
         return "channelVideos";
     }
 
-    @PostMapping("/auth/success/channel/{userId}/videos")
-    public String postChannelVideo(@PathVariable("userId") long userId,
-                                   @RequestParam("file") MultipartFile file,
-                                   @ModelAttribute("video") Video videoFromForm) throws IOException {
-        videoService.saveVideoInDb(userId, file, videoFromForm);
-        return "redirect:/auth/success/channel/{userId}/videos";
-    }
-
     @GetMapping("/auth/success/channel/{userId}/photos")
     public String getChannelPhoto(@PathVariable("userId") long userId, Model model){
-        //Iterable<Photo> photos = photoRepository.findPhotosByUserId(user.getId());
         model.addAttribute("user", userService.findUserById(userId));
         model.addAttribute("photos", photoRepository.findLast10());
         model.addAttribute("lastElement", photoRepository.getLastId());
@@ -89,14 +117,6 @@ public class MyPageController {
         while (photoRepository.findById(idPhoto).isEmpty())
             idPhoto--;
         return photoRepository.findAllPhotosByIdBetweenOrderByIdDesc(idPhoto-2L, idPhoto);
-    }
-
-    @PostMapping("/auth/success/channel/{userId}/photos")
-    public String postChannelPhoto(@PathVariable("userId") long userId,
-                                   @RequestParam("file") MultipartFile file,
-                                   @ModelAttribute("photo") Photo photoFromForm) throws IOException {
-        photoService.savePhotoInDb(userId, file, photoFromForm);
-        return "redirect:/auth/success/channel/{userId}/photos";
     }
 
 //    @GetMapping("/channel/{userId}/photos/{photoId}")

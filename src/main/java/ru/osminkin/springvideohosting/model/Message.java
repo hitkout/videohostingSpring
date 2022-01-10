@@ -19,7 +19,4 @@ public class Message {
     private String text;
     @Column(name = "tag")
     private String tag;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "photos_id")
-    private Photo filename;
 }

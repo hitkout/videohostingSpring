@@ -8,14 +8,23 @@
 <body>
     <div class="header" th:fragment="header">
         <div class="containerAll">
-            <button>Записи</button>
-            <button>Фотографии</button>
-            <button>Видео</button>
+            <a th:href="'?type=records'">Записи</a>
+            <a th:href="'?type=photos'">Фотографии</a>
+            <a th:href="'?type=videos'">Видео</a>
         </div>
         <div class="filter" th:method="get">
-            <a href="http://localhost:8080/auth/success?sort=new">Новое</a>
-            <a href="http://localhost:8080/auth/success?sort=old">Старое</a>
-            <a href="http://localhost:8080/auth/success?sort=pop">Популярное</a>
+            <a th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder).fromCurrentRequest()}"
+                  th:href="${urlBuilder.replaceQueryParam('sort', 'new').toUriString()}">
+                Новое
+            </a>
+            <a th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder).fromCurrentRequest()}"
+                  th:href="${urlBuilder.replaceQueryParam('sort', 'old').toUriString()}">
+                Старое
+            </a>
+            <a th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder).fromCurrentRequest()}"
+                  th:href="${urlBuilder.replaceQueryParam('sort', 'pop').toUriString()}">
+                Популярное
+            </a>
         </div>
     </div>
 </body>

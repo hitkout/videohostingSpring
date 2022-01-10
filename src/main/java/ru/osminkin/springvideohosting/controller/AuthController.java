@@ -9,9 +9,13 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 import ru.osminkin.springvideohosting.model.Message;
 import ru.osminkin.springvideohosting.repository.MessageRepository;
+import ru.osminkin.springvideohosting.repository.VideoRepository;
 import ru.osminkin.springvideohosting.services.MessageService;
 import ru.osminkin.springvideohosting.services.StreamingService;
 import ru.osminkin.springvideohosting.services.UserService;
+import ru.osminkin.springvideohosting.services.VideoService;
+
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/auth")
@@ -22,6 +26,10 @@ public class AuthController {
     private MessageService messageService;
     @Autowired
     private MessageRepository messageRepository;
+    @Autowired
+    private VideoService videoService;
+    @Autowired
+    private VideoRepository videoRepository;
 
     @GetMapping("/login")
     public String getLoginPage(){
@@ -31,17 +39,24 @@ public class AuthController {
     @GetMapping("/success")
     public String getSuccessPage(Model model,
                                  Authentication authentication,
+                                 @RequestParam(value = "type", defaultValue = "videos") String type,
                                  @RequestParam(value = "sort", defaultValue = "pop") String sort){
         model.addAttribute("user", userService.findUserByEmail(authentication));
-        switch (sort) {
-            case "new":
-                model.addAttribute("messages", messageRepository.findAllOldMessages());
+        switch (type) {
+            case "videos":
+                if (Objects.equals(sort, "new")) model.addAttribute("videos", videoRepository.findAll());
+                else if (Objects.equals(sort, "old")) model.addAttribute("videos", videoRepository.findAll());
+                else model.addAttribute("videos", videoRepository.findAll());
                 break;
-            case "old":
-                model.addAttribute("messages", messageRepository.findAll());
+            case "records":
+                if (Objects.equals(sort, "new")) model.addAttribute("messages", messageRepository.findAllOldMessages());
+                else if (Objects.equals(sort, "old")) model.addAttribute("messages", messageRepository.findAll());
+                else model.addAttribute("messages", messageRepository.findLast10());
                 break;
             default:
-                model.addAttribute("messages", messageRepository.findLast10());
+                if (Objects.equals(sort, "new")) model.addAttribute("messages", messageRepository.findAllOldMessages());
+                else if (Objects.equals(sort, "old")) model.addAttribute("messages", messageRepository.findAll());
+                else model.addAttribute("messages", messageRepository.findLast10());
                 break;
         }
 

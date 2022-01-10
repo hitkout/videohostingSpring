@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="/css/top-panel.css">
     <link rel="stylesheet" href="/css/header.css">
     <link rel="stylesheet" href="/css/body.css">
+    <link rel="stylesheet" href="/css/imageZoom.css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 </head>
 <body>
 <div th:replace="components/top-panel :: top-panel" th:with="user"></div>
@@ -13,37 +15,115 @@
 
 <h1>Main</h1>
 
-    <p th:text="${'FirstName: ' + user.getFirstName()}">VALUE</p>
-    <p th:text="${'LastName: ' + user.getLastName()}">VALUE</p>
-    <p th:text="${'Email: ' + user.getEmail()}">VALUE</p>
+<p th:text="${'FirstName: ' + user.getFirstName()}">VALUE</p>
+<p th:text="${'LastName: ' + user.getLastName()}">VALUE</p>
+<p th:text="${'Email: ' + user.getEmail()}">VALUE</p>
 
-<div th:if="${#authentication.getName() == user.getEmail()}">
-    <form modelAttribute="messageMessage" method="post" enctype="multipart/form-data">
-        <input type="text" name="text" placeholder="Add text" />
-        <input type="text" name="tag" placeholder="Tag">
-        <input type="file" name="file">
-        <input type="hidden" name="_csrf" value="${_csrf.token}" />
-        <button type="submit" name="save">Add</button>
-    </form>
+<!--<div th:each="message : ${messages}">-->
+<!--    <div>-->
+<!--        <p th:text="*{'Id: ' + message.getId()}"></p>-->
+<!--        <p th:text="*{'Tag: ' + message.getTag()}"></p>-->
+<!--        <p th:text="*{'Text: ' + message.getText()}"></p>-->
+<!--        <p th:if="*{message.getFilename()}">-->
+<!--            <img th:src="@{'/img/' + *{message.getFilename}}" alt="">-->
+<!--        </p>-->
+<!--    </div>-->
+<!--    <form th:action="@{'/auth/success/channel/' + *{user.getId()}}" th:method="post">-->
+<!--        <input type="hidden" name="id" th:value="${message.getId()}" />-->
+<!--        <button type="submit" name="delete" th:id="*{message.getId()}">delete</button>-->
+<!--    </form>-->
+<!--</div>-->
+
+<div th:if="${(param.type == null) or (param.type[0] == 'videos')}">
+    <div th:if="${#authentication.getName() == user.getEmail()}">
+        <form modelAttribute="videoFromForm" method="post" enctype="multipart/form-data">
+            <input type="file" name="file">
+            <input type="text" name="videoTitle" placeholder="Add text" />
+            <input type="hidden" name="_csrf" value="${_csrf.token}" />
+            <button type="submit" name="saveVideo">Add</button>
+        </form>
+    </div>
+
+    <div id="mainVideo" class="mainVideo catalogRow">
+        <div class="catalogCard" th:each="video : ${videos}">
+            <p class="idVideo" th:text="${video.id}"></p>
+            <video th:preload="metadata" th:src="@{'/video/' + *{video.getFilename()}}" width="720px" height="480px" controls preload="none"></video>
+            <form th:action="@{'/auth/success/channel/' + *{user.getId()} + '#t=0.1'}" th:method="post">
+                <input type="hidden" name="id" th:value="${video.getId()}" />
+                <button type="submit" name="deleteVideo" th:id="*{video.getId()}">delete</button>
+            </form>
+        </div>
+
+    </div>
 </div>
 
-<div th:each="message : ${messages}">
-    <div>
-        <p th:text="*{'Id: ' + message.getId()}"></p>
+<div th:if="${(param.type != null) and (param.type[0] == 'records')}">
+    <div th:if="${#authentication.getName() == user.getEmail()}">
+        <form modelAttribute="messageFromForm" method="post" enctype="multipart/form-data">
+            <input type="text" name="text" placeholder="Add text" />
+            <input type="text" name="tag" placeholder="Tag">
+            <input type="hidden" name="_csrf" value="${_csrf.token}" />
+            <button type="submit" name="saveMessage">Add</button>
+        </form>
+    </div>
+
+    <div th:each="message : ${messages}">
+        <p class="id" th:text="${message.id}"></p>
         <p th:text="*{'Tag: ' + message.getTag()}"></p>
         <p th:text="*{'Text: ' + message.getText()}"></p>
-        <p th:if="*{message.getFilename()}">
-            <img th:src="@{'/img/' + *{message.getFilename}}" alt="">
-        </p>
+        <form th:action="@{'/auth/success/channel/' + *{user.getId()}}" th:method="post">
+            <input type="hidden" name="id" th:value="${message.getId()}" />
+            <button type="submit" name="deleteMessage" th:id="*{message.getId()}">delete</button>
+        </form>
     </div>
-    <form th:action="@{'/auth/success/channel/' + *{user.getId()}}" th:method="post">
-        <input type="hidden" name="id" th:value="${message.getId()}" />
-        <button type="submit" name="delete" th:id="*{message.getId()}">delete</button>
-    </form>
 </div>
 
-    <form action="/auth/login" method="post">
-        <button type="submit">Logout</button>
-    </form>
+<div th:if="${(param.type != null) and (param.type[0] == 'photos')}">
+    <div th:if="${#authentication.getName() == user.getEmail()}">
+        <form modelAttribute="photoFromForm" method="post" enctype="multipart/form-data">
+            <input type="file" name="file">
+            <input type="hidden" name="_csrf" value="${_csrf.token}" />
+            <button type="submit" name="savePhoto">Add</button>
+        </form>
+    </div>
+
+    <div id="mainPhoto" class="mainPhoto catalogRow">
+        <div class="catalogCard" th:each="photo : ${photos}">
+            <p class="idPhoto" th:text="${photo.id}"></p>
+            <img class="image" tabindex="0" width="100" th:src="@{'/img/' + *{photo.getFilename()}}" alt=""/>
+            <form th:action="@{'/auth/success/channel/' + *{user.getId()}}" th:method="post">
+                <input type="hidden" name="id" th:value="${photo.getId()}" />
+                <button type="submit" name="deletePhoto" th:id="*{photo.getId()}">delete</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<form action="/auth/login" method="post">
+    <button type="submit">Logout</button>
+</form>
+
+<script>
+    $(function() { // Ждём загрузки страницы
+
+        $(".image").click(function(){	// Событие клика на маленькое изображение
+            var img = $(this);	// Получаем изображение, на которое кликнули
+            var src = img.attr('src'); // Достаем из этого изображения путь до картинки
+            $("body").append("<div class='popup'>"+ //Добавляем в тело документа разметку всплывающего окна
+                "<div class='popup_bg'></div>"+ // Блок, который будет служить фоном затемненным
+                "<img src='"+src+"' class='popup_img' />"+ // Само увеличенное фото
+                "</div>");
+            $(".popup").fadeIn(200); // Медленно выводим изображение
+            $(".popup_bg").click(function(){	// Событие клика на затемненный фон
+                $(".popup").fadeOut(200);	// Медленно убираем всплывающее окн
+                setTimeout(function() {	// Выставляем таймер
+                    $(".popup").remove(); // Удаляем разметку всплывающего окна
+                }, 200);
+            });
+        });
+
+    });
+</script>
+
 </body>
 </html>

@@ -28,14 +28,18 @@ public class VideoService {
                 upload.mkdir();
             }
             String uuidFile = UUID.randomUUID().toString();
-            file.transferTo(new File(uploadPathVideos + "/" + uuidFile));
+            file.transferTo(new File(uploadPathVideos + "/" + uuidFile + ".mp4"));
             videoFromForm.setFilename(uuidFile);
             videoFromForm.setUser(userService.findUserById(userId));
             videoRepository.save(videoFromForm);
         }
     }
 
-    public Iterable<Video> findAllPhotosByUserId(Long id){
+    public Iterable<Video> findAllVideosByUserId(Long id){
         return videoRepository.findVideoByUserId(id);
+    }
+
+    public void deleteVideoById(Long id){
+        videoRepository.deleteById(id);
     }
 }

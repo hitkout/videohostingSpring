@@ -2,12 +2,10 @@ package ru.osminkin.springvideohosting.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.osminkin.springvideohosting.model.Photo;
 import ru.osminkin.springvideohosting.repository.PhotoRepository;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
@@ -39,5 +37,9 @@ public class PhotoService {
 
     public Iterable<Photo> findAllPhotosByUserId(Long id){
         return photoRepository.findPhotosByUserId(id);
+    }
+
+    public void deletePhotoById(Long id){
+        photoRepository.deleteById(id);
     }
 }

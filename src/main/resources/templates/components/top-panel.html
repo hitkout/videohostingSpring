@@ -22,10 +22,10 @@
                     <nav class="top-panel__nav">
                         <ul>
                             <li>
-                                <button href="#advantages__title" class="top-panel__nav-link advantages-link">Главная</button>
+                                <a th:href="@{'/auth/success'}" class="top-panel__nav-link advantages-link">Главная</a>
                             </li>
                             <li>
-                                <a th:href="@{'/auth/success/channel/' + *{user.getId()}}" class="top-panel__nav-link catalog-link">Моя страница</a>
+                                <a th:href="@{'/auth/success/channel/' + ${user.getId()}}" class="top-panel__nav-link catalog-link">Моя страница</a>
                             </li>
                         </ul>
                     </nav>

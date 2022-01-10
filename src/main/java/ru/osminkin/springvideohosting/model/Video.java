@@ -16,4 +16,6 @@ public class Video {
     private User user;
     @Column(name = "filename")
     private String filename;
+    @Column(name = "video_title")
+    private String videoTitle;
 }
