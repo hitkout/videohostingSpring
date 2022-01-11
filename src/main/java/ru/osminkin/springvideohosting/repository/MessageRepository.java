@@ -2,7 +2,9 @@ package ru.osminkin.springvideohosting.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import ru.osminkin.springvideohosting.model.Message;
+
 import java.util.Optional;
 
 public interface MessageRepository extends JpaRepository<Message, Long> {
@@ -17,4 +19,16 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     @Query(value = "select * from posts order by id", nativeQuery = true)
     Iterable<Message> findAllOldMessages();
+
+    @Query(value = "select * from posts order by add_date desc", nativeQuery=true)
+    Iterable<Message> findAllMessagesOrderByDate();
+
+    @Query(value = "select * from posts order by add_date", nativeQuery=true)
+    Iterable<Message> findAllMessagesOrderByDateDesc();
+
+    @Query(value = "select * from posts where user_id = :id order by add_date desc", nativeQuery=true)
+    Iterable<Message> findAllUserMessagesOrderByDate(@Param("id") Long id);
+
+    @Query(value = "select * from posts where user_id = :id order by add_date", nativeQuery=true)
+    Iterable<Message> findAllUserMessagesOrderByDateDesc(@Param("id") Long id);
 }

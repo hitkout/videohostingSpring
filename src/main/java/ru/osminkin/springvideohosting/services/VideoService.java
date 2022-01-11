@@ -1,27 +1,34 @@
 package ru.osminkin.springvideohosting.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.osminkin.springvideohosting.model.Video;
 import ru.osminkin.springvideohosting.repository.VideoRepository;
-
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
 import java.util.Objects;
+import java.util.TimeZone;
 import java.util.UUID;
 
 @Service
 public class VideoService {
-    @Autowired
-    private VideoRepository videoRepository;
-    @Autowired
-    private UserService userService;
+    private final VideoRepository videoRepository;
+    private final UserService userService;
     @Value("${upload.path.video}")
     private String uploadPathVideos;
 
+    public VideoService(VideoRepository videoRepository, UserService userService) {
+        this.videoRepository = videoRepository;
+        this.userService = userService;
+    }
+
     public void saveVideoInDb(long userId, MultipartFile file, Video videoFromForm) throws IOException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()){
             File upload = new File(uploadPathVideos);
             if (!upload.exists()){
@@ -31,6 +38,7 @@ public class VideoService {
             file.transferTo(new File(uploadPathVideos + "/" + uuidFile + ".mp4"));
             videoFromForm.setFilename(uuidFile);
             videoFromForm.setUser(userService.findUserById(userId));
+            videoFromForm.setAddDate(Timestamp.valueOf(dateFormat.format(GregorianCalendar.getInstance().getTime())));
             videoRepository.save(videoFromForm);
         }
     }
@@ -41,5 +49,25 @@ public class VideoService {
 
     public void deleteVideoById(Long id){
         videoRepository.deleteById(id);
+    }
+
+    public Iterable<Video> findAll(){
+        return videoRepository.findAll();
+    }
+
+    public Iterable<Video> findAllVideosOrderByDateDesc(){
+        return videoRepository.findAllVideosOrderByDateDesc();
+    }
+
+    public Iterable<Video> findAllVideosOrderByDate(){
+        return videoRepository.findAllVideosOrderByDate();
+    }
+
+    public Iterable<Video> findAllUserVideosOrderByDateDesc(Long id){
+        return videoRepository.findAllUserVideosOrderByDateDesc(id);
+    }
+
+    public Iterable<Video> findAllUserVideosOrderByDate(Long id){
+        return videoRepository.findAllUserVideosOrderByDate(id);
     }
 }

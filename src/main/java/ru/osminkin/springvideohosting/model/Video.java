@@ -3,6 +3,7 @@ package ru.osminkin.springvideohosting.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Data
 @Entity
@@ -18,4 +19,6 @@ public class Video {
     private String filename;
     @Column(name = "video_title")
     private String videoTitle;
+    @JoinColumn(name = "add_date")
+    private Timestamp addDate;
 }

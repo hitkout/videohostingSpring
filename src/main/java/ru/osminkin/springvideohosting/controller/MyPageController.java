@@ -1,46 +1,50 @@
 package ru.osminkin.springvideohosting.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.core.io.Resource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import reactor.core.publisher.Mono;
 import ru.osminkin.springvideohosting.model.Message;
 import ru.osminkin.springvideohosting.model.Photo;
 import ru.osminkin.springvideohosting.model.Video;
 import ru.osminkin.springvideohosting.repository.PhotoRepository;
 import ru.osminkin.springvideohosting.repository.VideoRepository;
 import ru.osminkin.springvideohosting.services.*;
-
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 @Controller
 public class MyPageController {
-    @Autowired
-    private MessageService messageService;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private PhotoService photoService;
-    @Autowired
-    private VideoService videoService;
+    private final MessageService messageService;
+    private final UserService userService;
+    private final PhotoService photoService;
+    private final VideoService videoService;
+    final TypeAndSortService typeAndSortService;
+    private final PhotoRepository photoRepository;
+    private final VideoRepository videoRepository;
 
-    @Autowired
-    private PhotoRepository photoRepository;
-    @Autowired
-    private VideoRepository videoRepository;
+    public MyPageController(MessageService messageService, UserService userService, PhotoService photoService, VideoService videoService, TypeAndSortService typeAndSortService, PhotoRepository photoRepository, VideoRepository videoRepository) {
+        this.messageService = messageService;
+        this.userService = userService;
+        this.photoService = photoService;
+        this.videoService = videoService;
+        this.typeAndSortService = typeAndSortService;
+        this.photoRepository = photoRepository;
+        this.videoRepository = videoRepository;
+    }
 
     @GetMapping("/auth/success/channel/{userId}")
     //@PreAuthorize("@authenticatedUserService.hasId(#userId)")
-    public String getChannel(@PathVariable("userId") long userId, Model model){
-        model.addAttribute("messages", messageService.findAllUserMessages(userId));
-        model.addAttribute("videos", videoService.findAllVideosByUserId(userId));
-        model.addAttribute("photos", photoService.findAllPhotosByUserId(userId));
+    public String getChannel(@PathVariable("userId") long userId,
+                             @RequestParam(value = "type", defaultValue = "videos") String type,
+                             @RequestParam(value = "sort", defaultValue = "pop") String sort,
+                             Model model){
         model.addAttribute("user", userService.findUserById(userId));
+        typeAndSortService.getPage(type, sort, model, userId);
         return "channelMain";
     }
 
@@ -48,7 +52,10 @@ public class MyPageController {
     @PreAuthorize("@authenticatedUserService.hasId(#userId)")
     public String postChannelMessage(@PathVariable("userId") long userId,
                                      @ModelAttribute("messageFromForm") Message messageFromForm) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         messageFromForm.setUser(userService.findUserById(userId));
+        messageFromForm.setAddDate(Timestamp.valueOf(dateFormat.format(GregorianCalendar.getInstance().getTime())));
         messageService.save(messageFromForm);
         return "redirect:/auth/success/channel/{userId}?type=records";
     }

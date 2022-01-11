@@ -3,6 +3,7 @@ package ru.osminkin.springvideohosting.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Data
 @Entity
@@ -16,4 +17,6 @@ public class Photo {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
+    @JoinColumn(name = "add_date")
+    private Timestamp addDate;
 }

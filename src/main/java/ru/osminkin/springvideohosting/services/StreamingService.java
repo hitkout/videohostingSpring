@@ -1,6 +1,5 @@
 package ru.osminkin.springvideohosting.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -12,8 +11,11 @@ public class StreamingService {
     @Value("${upload.path.video}")
     private String uploadPathVideos;
 
-    @Autowired
-    private ResourceLoader resourceLoader;
+    private final ResourceLoader resourceLoader;
+
+    public StreamingService(ResourceLoader resourceLoader) {
+        this.resourceLoader = resourceLoader;
+    }
 
     public Mono<Resource> getVideo(String title) {
         final String FORMAT = "file:/" + uploadPathVideos + "/%s.mp4";

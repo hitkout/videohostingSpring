@@ -19,4 +19,6 @@ public class Message {
     private String text;
     @Column(name = "tag")
     private String tag;
+    @JoinColumn(name = "add_date")
+    private Timestamp addDate;
 }

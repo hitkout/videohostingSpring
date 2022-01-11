@@ -1,35 +1,31 @@
 package ru.osminkin.springvideohosting.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Mono;
 import ru.osminkin.springvideohosting.model.Message;
 import ru.osminkin.springvideohosting.repository.MessageRepository;
-import ru.osminkin.springvideohosting.repository.VideoRepository;
-import ru.osminkin.springvideohosting.services.MessageService;
-import ru.osminkin.springvideohosting.services.StreamingService;
-import ru.osminkin.springvideohosting.services.UserService;
-import ru.osminkin.springvideohosting.services.VideoService;
-
-import java.util.Objects;
+import ru.osminkin.springvideohosting.services.*;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 @Controller
 @RequestMapping("/auth")
 public class AuthController {
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private MessageService messageService;
-    @Autowired
-    private MessageRepository messageRepository;
-    @Autowired
-    private VideoService videoService;
-    @Autowired
-    private VideoRepository videoRepository;
+    private final UserService userService;
+    private final MessageService messageService;
+    private final MessageRepository messageRepository;
+    private final TypeAndSortService typeAndSortService;
+
+    public AuthController(UserService userService, MessageService messageService, MessageRepository messageRepository, TypeAndSortService typeAndSortService) {
+        this.userService = userService;
+        this.messageService = messageService;
+        this.messageRepository = messageRepository;
+        this.typeAndSortService = typeAndSortService;
+    }
 
     @GetMapping("/login")
     public String getLoginPage(){
@@ -42,24 +38,7 @@ public class AuthController {
                                  @RequestParam(value = "type", defaultValue = "videos") String type,
                                  @RequestParam(value = "sort", defaultValue = "pop") String sort){
         model.addAttribute("user", userService.findUserByEmail(authentication));
-        switch (type) {
-            case "videos":
-                if (Objects.equals(sort, "new")) model.addAttribute("videos", videoRepository.findAll());
-                else if (Objects.equals(sort, "old")) model.addAttribute("videos", videoRepository.findAll());
-                else model.addAttribute("videos", videoRepository.findAll());
-                break;
-            case "records":
-                if (Objects.equals(sort, "new")) model.addAttribute("messages", messageRepository.findAllOldMessages());
-                else if (Objects.equals(sort, "old")) model.addAttribute("messages", messageRepository.findAll());
-                else model.addAttribute("messages", messageRepository.findLast10());
-                break;
-            default:
-                if (Objects.equals(sort, "new")) model.addAttribute("messages", messageRepository.findAllOldMessages());
-                else if (Objects.equals(sort, "old")) model.addAttribute("messages", messageRepository.findAll());
-                else model.addAttribute("messages", messageRepository.findLast10());
-                break;
-        }
-
+        typeAndSortService.getPage(type, sort, model, null);
         return "success";
     }
 
@@ -73,6 +52,9 @@ public class AuthController {
 
     @PostMapping("/success")
     public String postSuccessPage(@ModelAttribute("messageForm") Message messageFromForm) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        messageFromForm.setAddDate(Timestamp.valueOf(dateFormat.format(GregorianCalendar.getInstance().getTime())));
         messageService.save(messageFromForm);
         return "redirect:/auth/success";
     }
