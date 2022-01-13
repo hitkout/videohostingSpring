@@ -24,4 +24,7 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
 
     @Query(value = "select * from videos where user_id = :id order by add_date", nativeQuery=true)
     Iterable<Video> findAllUserVideosOrderByDate(@Param("id") Long id);
+
+    @Query(value = "select * from videos where id = :id", nativeQuery = true)
+    Video findVideoById(@Param("id") Long id);
 }

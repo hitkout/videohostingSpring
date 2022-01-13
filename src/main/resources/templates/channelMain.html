@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/css/header.css">
     <link rel="stylesheet" href="/css/body.css">
     <link rel="stylesheet" href="/css/imageZoom.css">
+    <link rel="stylesheet" href="/css/photoCards.css">
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 </head>
 <body>
@@ -47,11 +48,13 @@
     <div id="mainVideo" class="mainVideo catalogRow">
         <div class="catalogCard" th:each="video : ${videos}">
             <p class="idVideo" th:text="${video.id}"></p>
-            <video th:preload="metadata" th:src="@{'/video/' + *{video.getFilename()}}" width="720px" height="480px" controls preload="none"></video>
-            <form th:action="@{'/auth/success/channel/' + *{user.getId()} + '#t=0.1'}" th:method="post">
-                <input type="hidden" name="id" th:value="${video.getId()}" />
-                <button type="submit" name="deleteVideo" th:id="*{video.getId()}">delete</button>
-            </form>
+            <video th:preload="metadata" th:src="@{'/video/' + *{video.getFilename()}}" controls preload="none"></video>
+            <div th:if="${#authentication.getName() == user.getEmail()}">
+                <form th:action="@{'/auth/success/channel/' + *{user.getId()}}" th:method="post">
+                    <input type="hidden" name="id" th:value="${video.getId()}" />
+                    <button type="submit" name="deleteVideo" th:id="*{video.getId()}">delete</button>
+                </form>
+            </div>
         </div>
 
     </div>
@@ -71,10 +74,12 @@
         <p class="id" th:text="${message.id}"></p>
         <p th:text="*{'Tag: ' + message.getTag()}"></p>
         <p th:text="*{'Text: ' + message.getText()}"></p>
-        <form th:action="@{'/auth/success/channel/' + *{user.getId()}}" th:method="post">
-            <input type="hidden" name="id" th:value="${message.getId()}" />
-            <button type="submit" name="deleteMessage" th:id="*{message.getId()}">delete</button>
-        </form>
+        <div th:if="${#authentication.getName() == user.getEmail()}">
+            <form th:action="@{'/auth/success/channel/' + *{user.getId()}}" th:method="post">
+                <input type="hidden" name="id" th:value="${message.getId()}" />
+                <button type="submit" name="deleteMessage" th:id="*{message.getId()}">delete</button>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -87,43 +92,27 @@
         </form>
     </div>
 
-    <div id="mainPhoto" class="mainPhoto catalogRow">
-        <div class="catalogCard" th:each="photo : ${photos}">
-            <p class="idPhoto" th:text="${photo.id}"></p>
-            <img class="image" tabindex="0" width="100" th:src="@{'/img/' + *{photo.getFilename()}}" alt=""/>
-            <form th:action="@{'/auth/success/channel/' + *{user.getId()}}" th:method="post">
-                <input type="hidden" name="id" th:value="${photo.getId()}" />
-                <button type="submit" name="deletePhoto" th:id="*{photo.getId()}">delete</button>
-            </form>
+    <section class="content">
+        <div id="mainPhoto" class="mainPhoto catalogRow">
+            <div class="catalogCard" th:each="photo : ${photos}">
+                <p class="idPhoto" th:text="*{photo.id}"></p>
+                <img class="image catalogImg" th:src="@{'/img/' + *{photo.getFilename()}}" alt=""/>
+                <div th:if="${#authentication.getName() == user.getEmail()}">
+                    <form th:action="@{'/auth/success/channel/' + *{user.getId()}}" th:method="post">
+                        <input type="hidden" name="id" th:value="*{photo.getId()}" />
+                        <button type="submit" name="deletePhoto" th:id="*{photo.getId()}">delete</button>
+                    </form>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
 </div>
 
 <form action="/auth/login" method="post">
     <button type="submit">Logout</button>
 </form>
 
-<script>
-    $(function() { // Ждём загрузки страницы
-
-        $(".image").click(function(){	// Событие клика на маленькое изображение
-            var img = $(this);	// Получаем изображение, на которое кликнули
-            var src = img.attr('src'); // Достаем из этого изображения путь до картинки
-            $("body").append("<div class='popup'>"+ //Добавляем в тело документа разметку всплывающего окна
-                "<div class='popup_bg'></div>"+ // Блок, который будет служить фоном затемненным
-                "<img src='"+src+"' class='popup_img' />"+ // Само увеличенное фото
-                "</div>");
-            $(".popup").fadeIn(200); // Медленно выводим изображение
-            $(".popup_bg").click(function(){	// Событие клика на затемненный фон
-                $(".popup").fadeOut(200);	// Медленно убираем всплывающее окн
-                setTimeout(function() {	// Выставляем таймер
-                    $(".popup").remove(); // Удаляем разметку всплывающего окна
-                }, 200);
-            });
-        });
-
-    });
-</script>
+<script src="/scripts/imageZoom.js"></script>
 
 </body>
 </html>

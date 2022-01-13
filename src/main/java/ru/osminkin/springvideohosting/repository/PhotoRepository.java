@@ -31,4 +31,7 @@ public interface PhotoRepository extends JpaRepository<Photo, Long> {
 
     @Query(value = "select * from photos where user_id = :id order by add_date", nativeQuery=true)
     Iterable<Photo> findAllUserPhotosOrderByDateDesc(@Param("id") Long id);
+
+    @Query(value = "select * from photos where id = :id", nativeQuery = true)
+    Photo findPhotoById(@Param("id") Long id);
 }

@@ -32,7 +32,9 @@ public class VideoService {
         if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()){
             File upload = new File(uploadPathVideos);
             if (!upload.exists()){
-                upload.mkdir();
+                if (upload.mkdir()){
+                    System.out.println("Created directory");
+                }
             }
             String uuidFile = UUID.randomUUID().toString();
             file.transferTo(new File(uploadPathVideos + "/" + uuidFile + ".mp4"));
@@ -48,6 +50,11 @@ public class VideoService {
     }
 
     public void deleteVideoById(Long id){
+        File file = new File(uploadPathVideos + "/" + videoRepository.findVideoById(id).getFilename() + ".mp4");
+        System.out.println(uploadPathVideos + "/" + videoRepository.findVideoById(id).getFilename() + ".mp4");
+        if (file.delete()){
+            System.out.println("Video deleted");
+        }
         videoRepository.deleteById(id);
     }
 

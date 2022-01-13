@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" type="text/css" href="/css/body.css">
-    <link rel="stylesheet" type="text/css" href="/css/success.css">
-    <link rel="stylesheet" type="text/css" href="/css/header.css">
-    <link rel="stylesheet" type="text/css" href="/css/top-panel.css">
+    <link rel="stylesheet" href="/css/body.css">
+    <link rel="stylesheet" href="/css/success.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/top-panel.css">
+    <link rel="stylesheet" href="/css/imageZoom.css">
+    <link rel="stylesheet" href="/css/photoCards.css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 </head>
 <body>
-<div th:replace="components/top-panel :: top-panel" th:with="user"></div>
+<div th:replace="components/top-panel :: top-panel"></div>
 <div th:replace="components/header :: header"></div>
 
 <!--    <div id="main" class="main">-->
@@ -39,13 +42,8 @@
     <div id="mainVideo" class="mainVideo catalogRow">
         <div class="catalogCard" th:each="video : ${videos}">
             <p class="idVideo" th:text="${video.id}"></p>
-            <video th:src="@{'/video/' + *{video.getFilename()}}" width="720px" height="480px" controls preload="none"></video>
-            <form th:action="@{'/auth/success/channel/' + *{user.getId()}}" th:method="post">
-                <input type="hidden" name="id" th:value="${video.getId()}" />
-                <button type="submit" name="deleteVideo" th:id="*{video.getId()}">delete</button>
-            </form>
+            <video th:preload="metadata" th:src="@{'/video/' + *{video.getFilename()}}" controls preload="none"></video>
         </div>
-
     </div>
 </div>
 
@@ -54,24 +52,22 @@
         <p class="id" th:text="${message.id}"></p>
         <p th:text="*{'Tag: ' + message.getTag()}"></p>
         <p th:text="*{'Text: ' + message.getText()}"></p>
-        <form th:action="@{'/auth/success/channel/' + *{user.getId()}}" th:method="post">
-            <input type="hidden" name="id" th:value="${message.getId()}" />
-            <button type="submit" name="deleteMessage" th:id="*{message.getId()}">delete</button>
-        </form>
     </div>
 </div>
 
 <div th:if="${(param.type != null) and (param.type[0] == 'photos')}">
-    <div id="mainPhoto" class="mainPhoto catalogRow">
-        <div class="catalogCard" th:each="photo : ${photos}">
-            <p class="idPhoto" th:text="${photo.id}"></p>
-            <img th:src="@{'/img/' + *{photo.getFilename()}}" alt="">
-            <form th:action="@{'/auth/success/channel/' + *{user.getId()}}" th:method="post">
-                <input type="hidden" name="id" th:value="${photo.getId()}" />
-                <button type="submit" name="deletePhoto" th:id="*{photo.getId()}">delete</button>
-            </form>
+    <section class="content">
+        <div id="mainPhoto" class="mainPhoto catalogRow">
+            <div class="catalogCard" th:each="photo : ${photos}">
+                <p class="idPhoto" th:text="${photo.id}" style="display: none"></p>
+                <p>
+                    Автор:
+                    <a th:href="@{'/auth/success/channel/' + ${photo.getUser().id} + '?type=photos'}" th:text="${photo.getUser().getFirstName()} + ' ' + ${photo.getUser().getLastName()}"></a>
+                </p>
+                <img class="image catalogImg" th:src="@{'/img/' + *{photo.getFilename()}}" alt="">
+            </div>
         </div>
-    </div>
+    </section>
 </div>
 
     <form action="/auth/login" method="post">
@@ -79,6 +75,7 @@
     </form>
 
 <script src="/scripts/infiniteScroll.js"></script>
+<script src="/scripts/imageZoom.js"></script>
 
 </body>
 </html>

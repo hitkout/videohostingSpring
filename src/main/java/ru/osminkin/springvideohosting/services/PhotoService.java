@@ -29,7 +29,9 @@ public class PhotoService {
         if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()){
             File upload = new File(uploadPathImages);
             if (!upload.exists()){
-                upload.mkdir();
+                if (upload.mkdir()){
+                    System.out.println("Created directory");
+                }
             }
             String uuidFile = UUID.randomUUID().toString();
             String resultFilename = uuidFile + "." + file.getOriginalFilename();
@@ -46,6 +48,10 @@ public class PhotoService {
     }
 
     public void deletePhotoById(Long id){
+        File file = new File(uploadPathImages + "/" + photoRepository.findPhotoById(id).getFilename());
+        if (file.delete()){
+            System.out.println("Photo deleted");
+        }
         photoRepository.deleteById(id);
     }
 

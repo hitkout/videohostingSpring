@@ -10,6 +10,32 @@
     padding-top: 40px;
 }
 
+.headerButton{
+    text-decoration: none;
+}
+
+.headerButton {
+    cursor: pointer;
+    text-transform: uppercase;
+    border: none;
+    background: unset;
+    color: #fff;
+    border-bottom: 1px solid transparent;
+    outline: none;
+    font-size: 20px;
+    transition: color 0.2s ease-in, border-bottom 1s ease-in;
+}
+
+.headerButtonConstant {
+    color: #f00;
+    border-color: #f00;
+}
+
+.headerButton:hover {
+    color: #f00;
+    border-color: #f00;
+}
+
 .containerAll{
     width: 40%;
     height: 50px;
@@ -18,7 +44,6 @@
     margin: 0 auto;
     display: flex;
     justify-content: space-around;
-
 }
 
 .filter{

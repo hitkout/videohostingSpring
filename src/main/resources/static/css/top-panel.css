@@ -4,6 +4,10 @@
     color: #fff;
 }
 
+a{
+    text-decoration: none;
+}
+
 .container {
     width: 65%;
     margin: 0 auto;
@@ -74,6 +78,11 @@
     outline: none;
     font-size: 20px;
     transition: color 0.2s ease-in, border-bottom 1s ease-in;
+}
+
+.top-panel__nav-link-constant {
+    color: #f00;
+    border-color: #f00;
 }
 
 .top-panel__nav-link:hover {

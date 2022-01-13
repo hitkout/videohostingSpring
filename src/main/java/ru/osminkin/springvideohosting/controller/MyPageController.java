@@ -1,6 +1,7 @@
 package ru.osminkin.springvideohosting.controller;
 
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -42,8 +43,10 @@ public class MyPageController {
     public String getChannel(@PathVariable("userId") long userId,
                              @RequestParam(value = "type", defaultValue = "videos") String type,
                              @RequestParam(value = "sort", defaultValue = "pop") String sort,
+                             Authentication authentication,
                              Model model){
         model.addAttribute("user", userService.findUserById(userId));
+        model.addAttribute("authUser", userService.findUserByEmail(authentication));
         typeAndSortService.getPage(type, sort, model, userId);
         return "channelMain";
     }

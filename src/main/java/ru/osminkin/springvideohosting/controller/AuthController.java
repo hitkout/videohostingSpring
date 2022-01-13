@@ -37,7 +37,7 @@ public class AuthController {
                                  Authentication authentication,
                                  @RequestParam(value = "type", defaultValue = "videos") String type,
                                  @RequestParam(value = "sort", defaultValue = "pop") String sort){
-        model.addAttribute("user", userService.findUserByEmail(authentication));
+        model.addAttribute("authUser", userService.findUserByEmail(authentication));
         typeAndSortService.getPage(type, sort, model, null);
         return "success";
     }
