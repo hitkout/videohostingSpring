@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My page</title>
+    <link rel="stylesheet" href="/css/top-panel.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/body.css">
+</head>
+<body>
+
+<div th:replace="components/top-panel :: top-panel"></div>
+<div th:replace="components/header :: header"></div>
+<div th:replace="components/videoComponent :: videoComponent"></div>
+
+<form action="/auth/login" method="post">
+    <button type="submit">Logout</button>
+</form>
+</body>
+</html>

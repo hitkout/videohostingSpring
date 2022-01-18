@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--/*@thymesVar id="user" type="ru.osminkin.springvideohosting.model.User"*/-->
+<!--/*@thymesVar id="photos" type="ru.osminkin.springvideohosting.model.Photo"*/-->
+<!--/*@thymesVar id="photo" type="ru.osminkin.springvideohosting.model.Photo"*/-->
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <section class="content" th:fragment="photoComponent">
+        <div id="mainPhoto" class="mainPhoto catalogRow">
+            <div class="catalogCard" th:each="photo : ${photos}">
+                <p class="idPhoto" th:text="*{photo.id}"></p>
+                <img class="image catalogImg" th:src="@{'/img/' + *{photo.getFilename()}}" alt=""/>
+                <div th:if="${#authentication.getName() == user.getEmail()}">
+                    <form th:action="@{'/auth/success/channel/' + *{user.getId()}}" th:method="post">
+                        <input type="hidden" name="id" th:value="*{photo.getId()}" />
+                        <button type="submit" name="deletePhoto" th:id="*{photo.getId()}">delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

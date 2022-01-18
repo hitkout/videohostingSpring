@@ -38,37 +38,39 @@
 <!--        </div>-->
 <!--    </div>-->
 
-<div th:if="${(param.type == null) or (param.type[0] == 'videos')}">
-    <div id="mainVideo" class="mainVideo catalogRow">
-        <div class="catalogCard" th:each="video : ${videos}">
-            <p class="idVideo" th:text="${video.id}"></p>
-            <video th:preload="metadata" th:src="@{'/video/' + *{video.getFilename()}}" controls preload="none"></video>
-        </div>
-    </div>
-</div>
+<!--<div th:if="${(param.type == null) or (param.type[0] == 'videos')}">-->
+<!--    <div id="mainVideo" class="mainVideo catalogRow">-->
+<!--        <div class="catalogCard" th:each="video : ${videos}">-->
+<!--            <p class="idVideo" th:text="${video.id}"></p>-->
+<!--            <video th:preload="metadata" th:src="@{'/video/' + *{video.getFilename()}}" controls preload="none"></video>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 
-<div th:if="${(param.type != null) and (param.type[0] == 'records')}">
-    <div th:each="message : ${messages}">
-        <p class="id" th:text="${message.id}"></p>
-        <p th:text="*{'Tag: ' + message.getTag()}"></p>
-        <p th:text="*{'Text: ' + message.getText()}"></p>
-    </div>
-</div>
+<!--<div th:if="${(param.type != null) and (param.type[0] == 'records')}">-->
+<!--    <div th:each="record : ${records}">-->
+<!--        <p class="id" th:text="${record.id}"></p>-->
+<!--        <p th:text="*{'Tag: ' + record.getTag()}"></p>-->
+<!--        <p th:text="*{'Text: ' + record.getText()}"></p>-->
+<!--    </div>-->
+<!--</div>-->
 
-<div th:if="${(param.type != null) and (param.type[0] == 'photos')}">
-    <section class="content">
-        <div id="mainPhoto" class="mainPhoto catalogRow">
-            <div class="catalogCard" th:each="photo : ${photos}">
-                <p class="idPhoto" th:text="${photo.id}" style="display: none"></p>
-                <p>
-                    Автор:
-                    <a th:href="@{'/auth/success/channel/' + ${photo.getUser().id} + '?type=photos'}" th:text="${photo.getUser().getFirstName()} + ' ' + ${photo.getUser().getLastName()}"></a>
-                </p>
-                <img class="image catalogImg" th:src="@{'/img/' + *{photo.getFilename()}}" alt="">
-            </div>
-        </div>
-    </section>
-</div>
+<!--<div th:if="${(param.type != null) and (param.type[0] == 'photos')}">-->
+<!--    <section class="content">-->
+<!--        <div id="mainPhoto" class="mainPhoto catalogRow">-->
+<!--            <div class="catalogCard" th:each="photo : ${photos}">-->
+<!--                <p class="idPhoto" th:text="${photo.id}" style="display: none"></p>-->
+<!--                <p>-->
+<!--                    Автор:-->
+<!--                    <a th:href="@{'/auth/success/channel/' + ${photo.getUser().id} + '?type=photos'}" th:text="${photo.getUser().getFirstName()} + ' ' + ${photo.getUser().getLastName()}"></a>-->
+<!--                </p>-->
+<!--                <img class="image catalogImg" th:src="@{'/img/' + *{photo.getFilename()}}" alt="">-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </section>-->
+<!--</div>-->
+
+<h1>Main</h1>
 
     <form action="/auth/login" method="post">
         <button type="submit">Logout</button>

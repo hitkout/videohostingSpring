@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My page</title>
+    <link rel="stylesheet" href="/css/top-panel.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/body.css">
+    <link rel="stylesheet" href="/css/photoCards.css">
+</head>
+<body>
+<div th:replace="components/top-panel :: top-panel"></div>
+<div th:replace="components/header :: header"></div>
+<div th:replace="components/photoComponent :: photoComponent"></div>
+
+<!--    <div id="mainPhoto" class="mainPhoto catalogRow">-->
+<!--        <div class="catalogCard" th:each="photo : ${photos}">-->
+<!--            <p class="idPhoto" th:text="${photo.id}"></p>-->
+<!--            <img th:src="@{'/img/' + *{photo.getFilename()}}" alt="">-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--<div th:each="photo : ${photos}">-->
+<!--    <div>-->
+<!--        <p th:text="*{'Id: ' + photo.getId()}"></p>-->
+<!--        <p th:if="*{photo.getFilename()}">-->
+<!--            <img th:src="@{'/img/' + *{photo.getFilename()}}" alt="">-->
+<!--        </p>-->
+<!--    </div>-->
+<!--    <a th:href="@{'/auth/success/channel/' + *{user.getId()} + '/photos/' + *{photo.getId()}}">go</a>-->
+<!--    <form th:action="@{'/auth/success/channel/' + *{user.getId()} + '/photos'}" th:method="post">-->
+<!--        <input type="hidden" name="id" th:value="${photo.getId()}" />-->
+<!--        <button type="submit" name="delete" th:id="*{photo.getId()}">delete</button>-->
+<!--    </form>-->
+<!--</div>-->
+<form action="/auth/login" method="post">
+    <button type="submit">Logout</button>
+</form>
+<!--<script>-->
+<!--    let minFromDb = "[[${lastElement}]]";-->
+<!--    let userId = "[[${authUser.id}]]";-->
+<!--</script>-->
+<!--<script src="/scripts/infiniteScrollForPhoto.js"></script>-->
+</body>
+</html>

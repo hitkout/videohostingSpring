@@ -18,14 +18,14 @@ function loadPhoto(){
             for (let i = 0; i < jsonResponsePhoto.length; i++){
                 let newDivPhoto = document.createElement('div');
                 newDivPhoto.className = 'catalogCard';
-                newDivPhoto.innerHTML = "<p class='idPhoto'>" + jsonResponsePhoto[i].id + "</p>" + "<img class='catalogImg' src='/img/" + jsonResponsePhoto[i].filename + "'/>";
+                newDivPhoto.innerHTML = "<p class='idPhoto'>" + jsonResponsePhoto[i].id + "</p>" + "<img class='catalogImg' src='/img/" + jsonResponsePhoto[i].filename + "' alt=''/>";
                 document.getElementById('mainPhoto').appendChild(newDivPhoto);
             }
             let id = document.getElementById('mainPhoto').lastElementChild.getElementsByClassName('catalogCard').length;
             lastIdPhoto = arrPhoto[arrPhoto.length-1].innerHTML - 1;
             console.log("id: " + id);
             console.log("last: " + lastIdPhoto);
-            if (id == lastIdPhoto){
+            if (id === lastIdPhoto){
                 lastIdPhoto -= 3;
                 console.log(lastIdPhoto);
             }

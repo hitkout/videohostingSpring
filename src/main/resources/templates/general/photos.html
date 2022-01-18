@@ -6,22 +6,21 @@
     <link rel="stylesheet" href="/css/top-panel.css">
     <link rel="stylesheet" href="/css/header.css">
     <link rel="stylesheet" href="/css/body.css">
+    <link rel="stylesheet" href="/css/imageZoom.css">
     <link rel="stylesheet" href="/css/photoCards.css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 </head>
 <body>
 <div th:replace="components/top-panel :: top-panel"></div>
 <div th:replace="components/header :: header"></div>
-<form modelAttribute="photoFromForm" method="post" enctype="multipart/form-data">
-    <input type="file" name="file">
-    <input type="hidden" name="_csrf" value="${_csrf.token}" />
-    <button type="submit" name="save">Add</button>
-</form>
-    <div id="mainPhoto" class="mainPhoto catalogRow">
-        <div class="catalogCard" th:each="photo : ${photos}">
-            <p class="idPhoto" th:text="${photo.id}"></p>
-            <img th:src="@{'/img/' + *{photo.getFilename()}}" alt="">
-        </div>
-    </div>
+<div th:replace="components/photoComponent :: photoComponent"></div>
+
+<!--    <div id="mainPhoto" class="mainPhoto catalogRow">-->
+<!--        <div class="catalogCard" th:each="photo : ${photos}">-->
+<!--            <p class="idPhoto" th:text="${photo.id}"></p>-->
+<!--            <img th:src="@{'/img/' + *{photo.getFilename()}}" alt="">-->
+<!--        </div>-->
+<!--    </div>-->
 
 <!--<div th:each="photo : ${photos}">-->
 <!--    <div>-->
@@ -39,10 +38,11 @@
 <form action="/auth/login" method="post">
     <button type="submit">Logout</button>
 </form>
-<script>
-    let minFromDb = "[[${lastElement}]]";
-    let userId = "[[${user.id}]]";
-</script>
-<script src="/scripts/infiniteScrollForPhoto.js"></script>
+<!--<script>-->
+<!--    let minFromDb = "[[${lastElement}]]";-->
+<!--    let userId = "[[${user.id}]]";-->
+<!--</script>-->
+<!--<script src="/scripts/infiniteScrollForPhoto.js"></script>-->
+<script src="/scripts/imageZoom.js"></script>
 </body>
 </html>

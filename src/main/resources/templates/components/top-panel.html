@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <!--/*@thymesVar id="authUser" type="ru.osminkin.springvideohosting.model.User"*/-->
+<!--/*@thymesVar id="user" type="ru.osminkin.springvideohosting.model.User"*/-->
 <head>
     <meta charset="UTF-8">
     <title>top-panel</title>
@@ -11,17 +12,27 @@
         <div class="container height-100">
             <div class="row-top-panel height-100">
                 <div class="top-panel__left">
-                    <a href="#" class="top-panel__logo">
+                    <a th:href="@{'/auth/success/main'}" class="top-panel__logo">
                         <i class="fa fa-desktop" aria-hidden="true"></i>
                         Video
                     </a>
                 </div>
                 <div class="top-panel__right">
                     <nav class="top-panel__nav">
-                        <ul>
+                        <ul th:if="${#strings.contains(#httpServletRequest.requestURI, 'main')}">
                             <li>
-                                <a th:href="@{'/auth/success'}" class="top-panel__nav-link advantages-link"
-                                   th:classappend="${#httpServletRequest.requestURI == '/auth/success'} ? 'top-panel__nav-link-constant' : ''">Главная</a>
+                                <a th:href="@{'/auth/success/main'}" class="top-panel__nav-link advantages-link"
+                                   th:classappend="${#httpServletRequest.requestURI == '/auth/success/main'} ? 'top-panel__nav-link-constant' : ''">Главная</a>
+                            </li>
+                            <li>
+                                <a th:href="@{'/auth/success/channel/' + ${user.getId()}}" class="top-panel__nav-link catalog-link"
+                                   th:classappend="${#httpServletRequest.requestURI == ('/auth/success/channel/' + user.getId())} ? 'top-panel__nav-link-constant' : ''">Моя страница</a>
+                            </li>
+                        </ul>
+                        <ul th:if="${#strings.contains(#httpServletRequest.requestURI, 'channel')}">
+                            <li>
+                                <a th:href="@{'/auth/success/main'}" class="top-panel__nav-link advantages-link"
+                                   th:classappend="${#httpServletRequest.requestURI == '/auth/success/main'} ? 'top-panel__nav-link-constant' : ''">Главная</a>
                             </li>
                             <li>
                                 <a th:href="@{'/auth/success/channel/' + ${authUser.getId()}}" class="top-panel__nav-link catalog-link"

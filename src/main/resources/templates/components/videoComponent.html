@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--/*@thymesVar id="user" type="ru.osminkin.springvideohosting.model.User"*/-->
+<!--/*@thymesVar id="videos" type="ru.osminkin.springvideohosting.model.Video"*/-->
+<!--/*@thymesVar id="video" type="ru.osminkin.springvideohosting.model.Video"*/-->
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <section th:fragment="videoComponent">
+        <div id="mainVideo" class="mainVideo catalogRow">
+            <div class="catalogCard" th:each="video : ${videos}">
+                <p class="idVideo" th:text="${video.id}"></p>
+                <video th:preload="metadata" th:src="@{'/video/' + *{video.getFilename()}}" controls preload="none"></video>
+                <div th:if="${#authentication.getName() == user.getEmail()}">
+                    <form th:action="@{'/auth/success/channel/' + *{user.getId()}}" th:method="post">
+                        <input type="hidden" name="id" th:value="${video.getId()}" />
+                        <button type="submit" name="deleteVideo" th:id="*{video.getId()}">delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
