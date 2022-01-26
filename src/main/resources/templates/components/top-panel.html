@@ -12,31 +12,37 @@
         <div class="container height-100">
             <div class="row-top-panel height-100">
                 <div class="top-panel__left">
-                    <a th:href="@{'/auth/success/main'}" class="top-panel__logo">
-                        <i class="fa fa-desktop" aria-hidden="true"></i>
-                        Video
+                    <a th:href="@{'/'}" class="top-panel__logo">
+                        itube
                     </a>
                 </div>
                 <div class="top-panel__right">
                     <nav class="top-panel__nav">
-                        <ul th:if="${#strings.contains(#httpServletRequest.requestURI, 'main')}">
+                        <ul>
                             <li>
-                                <a th:href="@{'/auth/success/main'}" class="top-panel__nav-link advantages-link"
-                                   th:classappend="${#httpServletRequest.requestURI == '/auth/success/main'} ? 'top-panel__nav-link-constant' : ''">Главная</a>
+                                <a th:href="@{'/'}" class="top-panel__nav-link"
+                                    th:classappend="${#httpServletRequest.getRequestURL() == 'http://localhost:8080/'
+                                    || #httpServletRequest.requestURI == '/users'
+                                    || #httpServletRequest.requestURI == '/subscriptions'} ? 'top-panel__nav-link-constant' : ''">Главная</a>
                             </li>
-                            <li>
-                                <a th:href="@{'/auth/success/channel/' + ${user.getId()}}" class="top-panel__nav-link catalog-link"
-                                   th:classappend="${#httpServletRequest.requestURI == ('/auth/success/channel/' + user.getId())} ? 'top-panel__nav-link-constant' : ''">Моя страница</a>
+                            <li th:if="${authUser == null}">
+                                <a class="top-panel__nav-link" th:href="'/auth/success'">Войти</a>
                             </li>
-                        </ul>
-                        <ul th:if="${#strings.contains(#httpServletRequest.requestURI, 'channel')}">
-                            <li>
-                                <a th:href="@{'/auth/success/main'}" class="top-panel__nav-link advantages-link"
-                                   th:classappend="${#httpServletRequest.requestURI == '/auth/success/main'} ? 'top-panel__nav-link-constant' : ''">Главная</a>
+                            <li th:if="${authUser != null}">
+                                <a th:href="@{'/channel/' + ${authUser.getId()}}" class="top-panel__nav-link"
+                                   th:classappend="${#strings.contains(#httpServletRequest.requestURI, 'channel/' + authUser.getId())} ? 'top-panel__nav-link-constant' : ''">Моя страница</a>
                             </li>
-                            <li>
-                                <a th:href="@{'/auth/success/channel/' + ${authUser.getId()}}" class="top-panel__nav-link catalog-link"
-                                   th:classappend="${#httpServletRequest.requestURI == ('/auth/success/channel/' + authUser.getId())} ? 'top-panel__nav-link-constant' : ''">Моя страница</a>
+                            <li th:if="${authUser != null}" class="dropdown">
+                                <div th:href="@{'/settings'}" class="top-panel__nav-link dropButton">
+                                    <img class="linkImg" th:src="@{'/img/' + *{authUser.getPhoto()}}" alt="">
+                                    <i class="fas fa-caret-down"></i>
+                                </div>
+                                <div class="dropdown-content">
+                                    <a href="#">Настройки</a>
+                                    <form action="/auth/login" method="post">
+                                        <button class="btnExit" type="submit">Выход</button>
+                                    </form>
+                                </div>
                             </li>
                         </ul>
                     </nav>

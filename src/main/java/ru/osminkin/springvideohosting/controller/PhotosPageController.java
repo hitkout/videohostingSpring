@@ -25,13 +25,14 @@ public class PhotosPageController {
         this.photoService = photoService;
     }
 
-    @GetMapping("/auth/success/channel/{userId}/photos")
+    @GetMapping("/channel/{userId}/photos")
     public String getChannelPhoto(@PathVariable("userId") long userId,
                                   @RequestParam(value = "sort", defaultValue = "pop") String sort,
                                   Authentication authentication,
                                   Model model){
         model.addAttribute("user", userService.findUserById(userId));
-        model.addAttribute("authUser", userService.findUserByEmail(authentication));
+        model.addAttribute("authUser", authentication == null ? null : userService.findUserByEmail(authentication));
+        model.addAttribute("follow", authentication == null ? null : userService.isSubscribe(userService.findUserByEmail(authentication), userService.findUserById(userId)));
         typeAndSortService.getPhotosPage(sort, model, userId);
         //model.addAttribute("photos", photoRepository.findLast10());
         //model.addAttribute("lastElement", photoRepository.getLastId());
@@ -47,20 +48,20 @@ public class PhotosPageController {
 //        return photoRepository.findAllPhotosByIdBetweenOrderByIdDesc(idPhoto-2L, idPhoto);
 //    }
 
-    @PostMapping(value = "/auth/success/channel/{userId}/photos", params = "savePhoto")
+    @PostMapping(value = "/channel/{userId}/photos", params = "savePhoto")
     @PreAuthorize("@authenticatedUserService.hasId(#userId)")
     public String postChannelPhoto(@PathVariable("userId") long userId,
                                    @RequestParam("file") MultipartFile file,
                                    @ModelAttribute("photoFromForm") Photo photoFromForm) throws IOException {
         photoService.savePhotoInDb(userId, file, photoFromForm);
-        return "redirect:/auth/success/channel/{userId}?type=photos";
+        return "redirect:/channel/{userId}/photos";
     }
 
-    @PostMapping(value = "/auth/success/channel/{userId}/photos", params = "deletePhoto")
+    @PostMapping(value = "/channel/{userId}/photos", params = "deletePhoto")
     @PreAuthorize("@authenticatedUserService.hasId(#userId)")
     public String deletePhoto(@PathVariable("userId") long userId,
                               @RequestParam("id") long id){
         photoService.deletePhotoById(id);
-        return "redirect:/auth/success/channel/{userId}?type=photos";
+        return "redirect:/channel/{userId}/photos";
     }
 }

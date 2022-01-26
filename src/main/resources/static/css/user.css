@@ -1,0 +1,60 @@
+.user {
+  display: flex;
+  justify-content: center;
+  max-width: 600px;
+  margin: 0 auto;
+  padding-bottom: 20px;
+}
+
+.userAvatar img {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.userInfo {
+  padding-left: 20px;
+  padding-top: 5px;
+  color: #ffffff;
+}
+
+.userInfo p {
+  margin: 0;
+  padding: 0;
+}
+
+.followButton{
+  cursor: pointer;
+  width: 100px;
+  height: 30px;
+  font-size: 14px;
+  background: rgba(0,0,0,0);
+  text-align: center;
+  border: 2px solid #ffffff;
+  color: #ffffff;
+  transition: border 0.2s ease-in, color 0.2s ease-in;
+}
+
+.followButton:hover{
+  border: 2px solid #4ED8D8;
+  color: #4ED8D8;
+}
+
+.unfollowButton{
+  cursor: pointer;
+  width: 100px;
+  height: 30px;
+  font-size: 14px;
+  background: rgba(0,0,0,0);
+  text-align: center;
+  border: 2px solid #4ED8D8;
+  color: #4ED8D8;
+  transition: border 0.2s ease-in, color 0.2s ease-in;
+}
+
+.unfollowButton:hover{
+  border: 2px solid #ffffff;
+  color: #ffffff;
+}

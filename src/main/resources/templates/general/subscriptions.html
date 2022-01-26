@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Subscriptions</title>
+    <link rel="stylesheet" href="/css/body.css">
+    <link rel="stylesheet" href="/css/success.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/top-panel.css">
+    <link rel="stylesheet" href="/css/allUsers.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+<div th:replace="components/top-panel :: top-panel"></div>
+<div th:replace="components/header :: header"></div>
+
+<div class="searchContainer">
+    <form th:action="@{'/users'}" method="get">
+        <input class="searchBar" name="search" type="text">
+        <button class="searchButton" type="submit">Найти</button>
+    </form>
+</div>
+
+<div class="allUsers userRow">
+    <a th:href="'/channel/' + ${followUser.getId()}" class="userCard" th:each="followUser : ${followUsers}">
+        <img class="userAvatar" th:src="@{'/img/' + *{followUser.getPhoto()}}" alt="">
+        <p th:text="*{followUser.getFirstName()}"></p>
+        <p th:text="*{followUser.getLastName()}"></p>
+    </a>
+</div>
+
+<div class="newVideos">
+    <p th:text="'Новые видео за последнюю неделю'"></p>
+    <div th:replace="components/videoComponent :: videoComponent"></div>
+</div>
+
+<script src="/scripts/infiniteScroll.js"></script>
+<script src="/scripts/imageZoom.js"></script>
+
+</body>
+</html>

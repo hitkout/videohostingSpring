@@ -1,0 +1,107 @@
+body{
+    margin: 0;
+    background-color: #282A35;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.bodyForm {
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+}
+
+.bodyForm {
+    position: relative;
+}
+.containerForm {
+    position: absolute;
+    transform: translateY(30%);
+}
+
+.containerForm {
+    border: 2px solid #4ED8D8;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    width: 450px;
+    max-width: 100%;
+}
+
+.formAuth {
+    padding: 30px 40px;
+}
+
+.formAuth h2{
+    text-align: center;
+}
+
+.form-control {
+    margin-bottom: 10px;
+    padding-bottom: 20px;
+    position: relative;
+}
+
+.form-control label {
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+.form-control input {
+    background-color: #464646;
+    border: 2px solid #464646;
+    color: #ffffff;
+    border-radius: 4px;
+    display: block;
+    font-family: inherit;
+    font-size: 14px;
+    padding: 5px 0;
+    width: 100%;
+}
+
+.form-control input:focus {
+    outline: 0;
+    border-color: #4ED8D8;
+}
+
+.formAuth .authSignIn {
+    cursor: pointer;
+    background-color: #ffffff;
+    border: 2px solid #ffffff;
+    border-radius: 4px;
+    color: #000000;
+    display: block;
+    font-family: inherit;
+    font-size: 16px;
+    padding: 10px;
+    margin-top: 20px;
+    width: 100%;
+    transition: background-color 0.3s ease-in, border 0.3s ease-in, color 0.3s ease-in;
+}
+
+.formAuth .authSignIn:hover {
+    background-color: #4ED8D8;
+    border: 2px solid #4ED8D8;
+    color: #ffffff;
+}
+
+.formAuth .authSignUp{
+    text-decoration: none;
+    align-items: center;
+    background-color: rgba(0,0,0,0);
+    border: 2px solid #ffffff;
+    border-radius: 4px;
+    color: #ffffff;
+    display: block;
+    font-family: inherit;
+    font-size: 16px;
+    padding: 10px;
+    margin: 20px auto 0 auto;
+    text-align: center;
+    width: 70%;
+    transition: border 0.3s ease-in, color 0.3s ease-in;
+}
+
+.formAuth .authSignUp:hover{
+    border: 2px solid #4ED8D8;
+    color: #4ED8D8;
+}

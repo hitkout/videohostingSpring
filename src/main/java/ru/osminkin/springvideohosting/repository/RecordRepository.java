@@ -4,7 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ru.osminkin.springvideohosting.model.Record;
+import ru.osminkin.springvideohosting.model.Video;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface RecordRepository extends JpaRepository<Record, Long> {
@@ -30,4 +32,7 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
 
     @Query(value = "select * from posts where user_id = :id order by add_date", nativeQuery=true)
     Iterable<Record> findAllUserRecordsOrderByDateDesc(@Param("id") Long id);
+
+    @Query(value = "select * from posts order by random() limit 5", nativeQuery = true)
+    List<Record> getFiveRandomRecords();
 }

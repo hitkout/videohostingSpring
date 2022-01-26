@@ -13,6 +13,6 @@ public class AuthController {
 
     @GetMapping("/success")
     public String success(){
-        return "redirect:/auth/success/main";
+        return "redirect:/";
     }
 }

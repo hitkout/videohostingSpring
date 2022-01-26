@@ -15,7 +15,6 @@ import ru.osminkin.springvideohosting.repository.UserRepository;
 @RequestMapping("/auth")
 public class RegistrationController {
     private final UserRepository userRepository;
-
     private final PasswordEncoder passwordEncoder;
 
     public RegistrationController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
@@ -32,6 +31,7 @@ public class RegistrationController {
     public String registration(@ModelAttribute("userForm") User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(Role.USER);
+        user.setPhoto("default.png");
         user.setStatus(Status.ACTIVE);
         userRepository.save(user);
         return "redirect:/login";

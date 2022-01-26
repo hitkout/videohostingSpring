@@ -29,7 +29,7 @@ public class RecordsPageController {
         this.recordRepository = recordRepository;
     }
 
-    @PostMapping(value = "/auth/success/channel/{userId}/records", params = "saveMessage")
+    @PostMapping(value = "/channel/{userId}/records", params = "saveMessage")
     @PreAuthorize("@authenticatedUserService.hasId(#userId)")
     public String postChannelMessage(@PathVariable("userId") long userId,
                                      @ModelAttribute("messageFromForm") Record messageFromForm) {
@@ -38,15 +38,15 @@ public class RecordsPageController {
         messageFromForm.setUser(userService.findUserById(userId));
         messageFromForm.setAddDate(Timestamp.valueOf(dateFormat.format(GregorianCalendar.getInstance().getTime())));
         recordService.save(messageFromForm);
-        return "redirect:/auth/success/channel/{userId}/records";
+        return "redirect:/channel/{userId}/records";
     }
 
-    @PostMapping(value = "/auth/success/channel/{userId}/records", params = "deleteMessage")
+    @PostMapping(value = "/channel/{userId}/records", params = "deleteMessage")
     @PreAuthorize("@authenticatedUserService.hasId(#userId)")
     public String postChannel(@PathVariable("userId") long userId,
                               @RequestParam("id") long id){
         recordService.deleteRecordById(id);
-        return "redirect:/auth/success/channel/{userId}/records";
+        return "redirect:/channel/{userId}/records";
     }
 
 //    @GetMapping("/success/{id}")
@@ -57,13 +57,14 @@ public class RecordsPageController {
 //        return messageRepository.findAllByIdBetweenOrderByIdDesc(id-2L, id);
 //    }
 
-    @GetMapping("/auth/success/channel/{userId}/records")
+    @GetMapping("/channel/{userId}/records")
     public String getChannelRecords(@PathVariable("userId") Long userId,
                                     @RequestParam(value = "sort", defaultValue = "pop") String sort,
                                     Authentication authentication,
                                     Model model){
         model.addAttribute("user", userService.findUserById(userId));
-        model.addAttribute("authUser", userService.findUserByEmail(authentication));
+        model.addAttribute("authUser", authentication == null ? null : userService.findUserByEmail(authentication));
+        model.addAttribute("follow", authentication == null ? null : userService.isSubscribe(userService.findUserByEmail(authentication), userService.findUserById(userId)));
         typeAndSortService.getRecordsPage(sort, model, userId);
         return "channel/channelRecords";
     }
@@ -74,6 +75,6 @@ public class RecordsPageController {
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         messageFromForm.setAddDate(Timestamp.valueOf(dateFormat.format(GregorianCalendar.getInstance().getTime())));
         recordService.save(messageFromForm);
-        return "redirect:/auth/success/main";
+        return "redirect:/";
     }
 }

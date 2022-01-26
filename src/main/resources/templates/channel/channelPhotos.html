@@ -7,10 +7,14 @@
     <link rel="stylesheet" href="/css/header.css">
     <link rel="stylesheet" href="/css/body.css">
     <link rel="stylesheet" href="/css/photoCards.css">
+    <link rel="stylesheet" href="/css/imageZoom.css">
+    <link rel="stylesheet" href="/css/user.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 </head>
 <body>
 <div th:replace="components/top-panel :: top-panel"></div>
-<div th:replace="components/header :: header"></div>
+<div th:replace="components/headerForChannel :: headerForChannel"></div>
 <div th:replace="components/photoComponent :: photoComponent"></div>
 
 <!--    <div id="mainPhoto" class="mainPhoto catalogRow">-->
@@ -33,13 +37,6 @@
 <!--        <button type="submit" name="delete" th:id="*{photo.getId()}">delete</button>-->
 <!--    </form>-->
 <!--</div>-->
-<form action="/auth/login" method="post">
-    <button type="submit">Logout</button>
-</form>
-<!--<script>-->
-<!--    let minFromDb = "[[${lastElement}]]";-->
-<!--    let userId = "[[${authUser.id}]]";-->
-<!--</script>-->
-<!--<script src="/scripts/infiniteScrollForPhoto.js"></script>-->
+<script src="/scripts/imageZoom.js"></script>
 </body>
 </html>

@@ -9,11 +9,29 @@
     <link rel="stylesheet" href="/css/top-panel.css">
     <link rel="stylesheet" href="/css/imageZoom.css">
     <link rel="stylesheet" href="/css/photoCards.css">
+    <link rel="stylesheet" href="/css/videoCards.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 </head>
 <body>
 <div th:replace="components/top-panel :: top-panel"></div>
 <div th:replace="components/header :: header"></div>
+<div class="marginContentMain">
+    <div class="videoMain">
+        <a class="mainLinks" th:href="'/videos'">Посмотреть все видео<i class="fas fa-angle-double-right"></i></a>
+        <div th:replace="components/videoComponent :: videoComponent"></div>
+    </div>
+    <div class="photoMain">
+        <a class="mainLinks" th:href="'/photos'">Посмотреть все фотографии<i class="fas fa-angle-double-right"></i></a>
+        <div th:replace="components/photoComponent :: photoComponent"></div>
+    </div>
+    <div class="recordMain">
+        <a class="mainLinks" th:href="'/records'">Посмотреть все записи<i class="fas fa-angle-double-right"></i></a>
+        <div th:replace="components/recordComponent :: recordComponent"></div>
+    </div>
+</div>
+
 
 <!--    <div id="main" class="main">-->
 <!--        <div th:if="${(param.type == null) or (param.type[0] == 'videos')}">-->
@@ -70,14 +88,7 @@
 <!--    </section>-->
 <!--</div>-->
 
-<h1>Main</h1>
-
-    <form action="/auth/login" method="post">
-        <button type="submit">Logout</button>
-    </form>
-
 <script src="/scripts/infiniteScroll.js"></script>
 <script src="/scripts/imageZoom.js"></script>
-
 </body>
 </html>

@@ -1,21 +1,28 @@
 <!DOCTYPE html>
-<html lang="en"><head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"><head>
     <meta charset="utf-8">
     <title>Please sign in</title>
+    <link rel="stylesheet" href="/css/top-panel.css">
+    <link rel="stylesheet" href="/css/login.css">
 </head>
 <body>
-<div class="container">
-    <form method="post" action="/auth/login">
-        <h2>Please sign in</h2>
-        <p>
-            <label for="username" class="sr-only">Username</label>
-            <input type="text" id="username" name="username" placeholder="Username">
-        </p>
-        <p>
-            <label for="password" class="sr-only">Password</label>
-            <input type="password" id="password" name="password" placeholder="Password">
-        </p>
-        <button type="submit">Sign in</button>
-    </form>
+<div th:replace="components/top-panel :: top-panel"></div>
+<div class="bodyForm">
+    <div class="containerForm">
+        <form class="formAuth" method="post" action="/auth/login">
+            <h2>Авторизация</h2>
+            <div class="form-control">
+                <label for="username" class="sr-only">Введите почту</label>
+                <input type="text" id="username" name="username" placeholder="email">
+            </div>
+            <div class="form-control">
+                <label for="password" class="sr-only">Введите пароль</label>
+                <input type="password" id="password" name="password" placeholder="Password">
+            </div>
+            <button class="authSignIn" type="submit">Войти в учётную запись</button>
+            <a class="authSignUp" href="/auth/registration">Создать новый аккаунт</a>
+        </form>
+    </div>
 </div>
-</body></html>
+</body>
+</html>

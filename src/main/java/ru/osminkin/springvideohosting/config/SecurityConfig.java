@@ -29,7 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
-                .antMatchers("/", "/auth/registration").permitAll()
+                .antMatchers("/", "/auth/registration", "/video/**", "/img/**", "/css/**", "/scripts/**", "/videos", "/photos", "/records", "/users", "/channel/**", "/watch/**").permitAll()
                 .anyRequest().authenticated().and().formLogin().loginPage("/auth/login").permitAll().defaultSuccessUrl("/auth/success")
                 .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout", "POST"))
                 .invalidateHttpSession(true)

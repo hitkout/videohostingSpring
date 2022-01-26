@@ -4,7 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ru.osminkin.springvideohosting.model.Photo;
+import ru.osminkin.springvideohosting.model.Record;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface PhotoRepository extends JpaRepository<Photo, Long> {
@@ -34,4 +36,7 @@ public interface PhotoRepository extends JpaRepository<Photo, Long> {
 
     @Query(value = "select * from photos where id = :id", nativeQuery = true)
     Photo findPhotoById(@Param("id") Long id);
+
+    @Query(value = "select * from photos order by random() limit 5", nativeQuery = true)
+    List<Photo> getFiveRandomPhotos();
 }

@@ -8,17 +8,22 @@
     <title>Title</title>
 </head>
 <body>
-    <section class="content" th:fragment="photoComponent">
+    <section th:fragment="photoComponent">
+<!--        <form modelAttribute="photoFromForm" method="post" enctype="multipart/form-data">-->
+<!--            <input type="file" name="file">-->
+<!--            <input type="hidden" name="_csrf" value="${_csrf.token}" />-->
+<!--            <button type="submit" name="savePhoto">Add</button>-->
+<!--        </form>-->
         <div id="mainPhoto" class="mainPhoto catalogRow">
             <div class="catalogCard" th:each="photo : ${photos}">
                 <p class="idPhoto" th:text="*{photo.id}"></p>
                 <img class="image catalogImg" th:src="@{'/img/' + *{photo.getFilename()}}" alt=""/>
-                <div th:if="${#authentication.getName() == user.getEmail()}">
-                    <form th:action="@{'/auth/success/channel/' + *{user.getId()}}" th:method="post">
-                        <input type="hidden" name="id" th:value="*{photo.getId()}" />
-                        <button type="submit" name="deletePhoto" th:id="*{photo.getId()}">delete</button>
-                    </form>
-                </div>
+<!--                <div th:if="${#authentication.getName() == photo.getUser().getEmail()}">-->
+<!--                    <form th:action="@{'/channel/' + *{user.getId()} + '/photos'}" th:method="post">-->
+<!--                        <input type="hidden" name="id" th:value="*{photo.getId()}" />-->
+<!--                        <button type="submit" name="deletePhoto" th:id="*{photo.getId()}">delete</button>-->
+<!--                    </form>-->
+<!--                </div>-->
             </div>
         </div>
     </section>

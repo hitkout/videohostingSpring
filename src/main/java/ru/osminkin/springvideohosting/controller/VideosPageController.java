@@ -25,30 +25,31 @@ public class VideosPageController {
         this.videoService = videoService;
     }
 
-    @PostMapping(value = "/auth/success/channel/{userId}/videos", params = "saveVideo")
+    @PostMapping(value = "/channel/{userId}/videos", params = "saveVideo")
     @PreAuthorize("@authenticatedUserService.hasId(#userId)")
     public String postChannelVideo(@PathVariable("userId") long userId,
                                    @RequestParam("file") MultipartFile file,
                                    @ModelAttribute("videoFromForm") Video videoFromForm) throws IOException {
         videoService.saveVideoInDb(userId, file, videoFromForm);
-        return "redirect:/auth/success/channel/{userId}?type=videos";
+        return "redirect:/channel/{userId}?type=videos";
     }
 
-    @PostMapping(value = "/auth/success/channel/{userId}/videos", params = "deleteVideo")
+    @PostMapping(value = "/channel/{userId}/videos", params = "deleteVideo")
     @PreAuthorize("@authenticatedUserService.hasId(#userId)")
     public String deleteVideo(@PathVariable("userId") long userId,
                               @RequestParam("id") long id){
         videoService.deleteVideoById(id);
-        return "redirect:/auth/success/channel/{userId}?type=videos";
+        return "redirect:/channel/{userId}?type=videos";
     }
 
-    @GetMapping("/auth/success/channel/{userId}/videos")
+    @GetMapping("/channel/{userId}/videos")
     public String getChannelVideos(@PathVariable("userId") long userId,
                                    Authentication authentication,
                                    @RequestParam(value = "sort", defaultValue = "pop") String sort,
                                    Model model){
         model.addAttribute("user", userService.findUserById(userId));
-        model.addAttribute("authUser", userService.findUserByEmail(authentication));
+        model.addAttribute("authUser", authentication == null ? null : userService.findUserByEmail(authentication));
+        model.addAttribute("follow", authentication == null ? null : userService.isSubscribe(userService.findUserByEmail(authentication), userService.findUserById(userId)));
         typeAndSortService.getVideosPage(sort, model, userId);
         return "channel/channelVideos";
     }

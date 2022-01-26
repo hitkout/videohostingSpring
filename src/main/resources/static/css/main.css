@@ -1,0 +1,25 @@
+.marginContentMain {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.videoMain{
+    padding-top: 25px;
+}
+
+.mainLinks{
+    text-decoration: none;
+    font-size: 24px;
+    color: #ffffff;
+    transition: color 0.2s ease-in;
+}
+
+.mainLinks i{
+    padding-left: 5px;
+    font-size: 18px;
+}
+
+.mainLinks:hover{
+    color: #4ED8D8;
+}

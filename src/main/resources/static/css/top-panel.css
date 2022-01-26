@@ -2,6 +2,7 @@
     height: 78px;
     background-color: #262626;
     color: #fff;
+    font-family: "Teko", sans-serif;
 }
 
 a{
@@ -24,28 +25,17 @@ a{
     align-items: center;
 }
 
-.logo-un img {
-    height: 70px;
-    width: 200px;
-    margin-top: 30px;
-}
-
 .top-panel__logo {
-    font-size: 24px;
-    color: #fff;
+    font-size: 26px;
+    color: #4ED8D8;
     text-decoration: none;
 }
 
-.top-panel__logo i {
-    color: #f00;
-}
-
 .top-panel__nav {
-    color: #404040;
-    font-family: "Teko", sans-serif;
-    font-weight: 600;
-    font-size: 23px;
     text-transform: uppercase;
+    font-weight: 600;
+    color: #404040;
+    font-size: 24px;
     letter-spacing: 0.45px;
     display: flex;
     justify-content: space-between;
@@ -55,6 +45,7 @@ a{
     list-style-type: none;
     padding: 0;
     margin: 0;
+    align-items: center;
 }
 
 .top-panel__nav ul {
@@ -64,11 +55,6 @@ a{
 
 .top-panel__nav-link {
     margin-right: 30px;
-}
-.top-panel__nav-icon {
-    margin-left: 15px;
-}
-.top-panel__nav-link, .top-panel__nav-icon {
     cursor: pointer;
     text-transform: uppercase;
     border: none;
@@ -80,16 +66,72 @@ a{
     transition: color 0.2s ease-in, border-bottom 1s ease-in;
 }
 
+.top-panel__nav-link i{
+    font-size: 25px;
+}
+
+.linkImg{
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+    vertical-align: middle;
+}
+
 .top-panel__nav-link-constant {
-    color: #f00;
-    border-color: #f00;
+    color: #4ED8D8;
+    border-color: #4ED8D8;
 }
 
 .top-panel__nav-link:hover {
-    color: #f00;
-    border-color: #f00;
+    color: #4ED8D8;
+    border-color: #4ED8D8;
 }
 
-.top-panel__nav-icon:hover {
-    color: #f00;
+.dropButton {
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+}
+
+.dropdown {
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.5);
+    font-size: 15px;
+    z-index: 1;
+}
+
+.dropdown-content .btnExit{
+    border: none;
+    font: inherit;
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+    cursor: pointer;
+    width: 100%;
+    text-transform: uppercase;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+.dropdown-content a:hover, .btnExit:hover {
+    background-color: #4ED8D8;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
 }

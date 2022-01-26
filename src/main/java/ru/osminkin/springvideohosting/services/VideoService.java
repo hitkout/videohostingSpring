@@ -3,16 +3,14 @@ package ru.osminkin.springvideohosting.services;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.osminkin.springvideohosting.model.User;
 import ru.osminkin.springvideohosting.model.Video;
 import ru.osminkin.springvideohosting.repository.VideoRepository;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.GregorianCalendar;
-import java.util.Objects;
-import java.util.TimeZone;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class VideoService {
@@ -24,6 +22,10 @@ public class VideoService {
     public VideoService(VideoRepository videoRepository, UserService userService) {
         this.videoRepository = videoRepository;
         this.userService = userService;
+    }
+
+    public Video findVideoById(Long videoId){
+        return videoRepository.findVideoById(videoId);
     }
 
     public void saveVideoInDb(long userId, MultipartFile file, Video videoFromForm) throws IOException {
@@ -76,5 +78,17 @@ public class VideoService {
 
     public Iterable<Video> findAllUserVideosOrderByDate(Long id){
         return videoRepository.findAllUserVideosOrderByDate(id);
+    }
+
+    public List<Video> getFiveRandomVideos(){
+        return videoRepository.getFiveRandomVideos();
+    }
+
+    public List<Video> getAllVideosFromAllFollowUsers(User follower){
+        return videoRepository.getAllVideosFromAllFollowUsers(follower);
+    }
+
+    public List<Video> getAllVideosForLastWeekFromAllFollowUsers(User follower, Timestamp dateNow){
+        return videoRepository.getAllVideosForLastWeekFromAllFollowUsers(follower);
     }
 }

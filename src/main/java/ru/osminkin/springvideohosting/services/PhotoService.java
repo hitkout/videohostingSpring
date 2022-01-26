@@ -74,4 +74,8 @@ public class PhotoService {
     public Iterable<Photo> findAll(){
         return photoRepository.findAll();
     }
+
+    public List<Photo> getFiveRandomPhotos(){
+        return photoRepository.getFiveRandomPhotos();
+    }
 }

@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="/css/top-panel.css">
     <link rel="stylesheet" href="/css/header.css">
     <link rel="stylesheet" href="/css/body.css">
+    <link rel="stylesheet" href="/css/videoCards.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 
@@ -13,8 +15,5 @@
 <div th:replace="components/header :: header"></div>
 <div th:replace="components/videoComponent :: videoComponent"></div>
 
-<form action="/auth/login" method="post">
-    <button type="submit">Logout</button>
-</form>
 </body>
 </html>

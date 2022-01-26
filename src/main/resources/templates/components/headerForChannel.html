@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--/*@thymesVar id="user" type="ru.osminkin.springvideohosting.model.User"*/-->
+<head>
+    <meta charset="UTF-8">
+    <title>header</title>
+</head>
+<body>
+<div class="header" th:fragment="headerForChannel">
+    <div class="user">
+        <div class="userAvatar">
+            <img th:src="@{'/img/' + *{user.getPhoto()}}" alt="">
+        </div>
+        <div class="userInfo">
+            <p class="firstName" th:text="${user.getFirstName()}"></p>
+            <br/>
+            <p class="lastName" th:text="${user.getLastName()}"></p>
+            <br/>
+            <div>
+                <form th:if="${#authentication.getName() != user.getEmail() && follow == false}" th:action="@{'/channel/' + *{user.getId()}}" th:method="post">
+                    <button class="followButton" type="submit" name="subscribe" th:id="*{user.getId()}">Подписаться</button>
+                </form>
+                <form th:if="${#authentication.getName() != user.getEmail() && follow == true}" th:action="@{'/channel/' + *{user.getId()}}" th:method="post">
+                    <button class="unfollowButton" type="submit" name="unsubscribe" th:id="*{user.getId()}">Отписаться</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="containerAll">
+        <a class="headerButton" th:classappend="${#httpServletRequest.requestURI == '/channel/' + user.getId()}
+                                        ? 'headerButtonConstant'
+                                        : ''"
+           th:href="@{'/channel/' + *{user.getId()}}"
+           th:text="Главная"></a>
+
+        <a class="headerButton" th:classappend="${#httpServletRequest.requestURI == '/channel/' + user.getId() + '/videos'}
+                                        ? 'headerButtonConstant'
+                                        : ''"
+           th:href="@{'/channel/' + *{user.getId()} + '/videos'}"
+           th:text="Видео"></a>
+
+        <a class="headerButton" th:classappend="${#httpServletRequest.requestURI == '/channel/' + user.getId() + '/photos'}
+                                        ? 'headerButtonConstant'
+                                        : ''"
+           th:href="@{'/channel/' + *{user.getId()} + '/photos'}"
+           th:text="Фотографии"></a>
+
+        <a class="headerButton" th:classappend="${#httpServletRequest.requestURI == '/channel/' + user.getId() + '/records'}
+                                        ? 'headerButtonConstant'
+                                        : ''"
+           th:href="@{'/channel/' + *{user.getId()} + '/records'}"
+           th:text="Записи"></a>
+    </div>
+</div>
+</body>
+</html>

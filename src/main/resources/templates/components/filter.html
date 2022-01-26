@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Filter</title>
+</head>
+<body>
+<div class="filter" th:fragment="filter">
+    <a class="headerButton" th:classappend="${(param.sort != null) and (param.sort[0] == 'new')} ? 'headerButtonConstant' : ''"
+       th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder).fromCurrentRequest()}"
+       th:href="${urlBuilder.replaceQueryParam('sort', 'new').toUriString()}"
+       th:text="'Новое'">
+    </a>
+    <a class="headerButton" th:classappend="${(param.sort == null) or (param.sort[0] == 'pop')} ? 'headerButtonConstant' : ''"
+       th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder).fromCurrentRequest()}"
+       th:href="${urlBuilder.replaceQueryParam('sort', 'pop').toUriString()}"
+       th:text="'Популярное'">
+    </a>
+    <a class="headerButton" th:classappend="${(param.sort != null) and (param.sort[0] == 'old')} ? 'headerButtonConstant' : ''"
+       th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder).fromCurrentRequest()}"
+       th:href="${urlBuilder.replaceQueryParam('sort', 'old').toUriString()}"
+       th:text="'Старое'">
+    </a>
+</div>
+</body>
+</html>

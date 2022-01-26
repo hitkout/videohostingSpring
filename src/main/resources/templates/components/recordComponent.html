@@ -8,17 +8,17 @@
     <title>Title</title>
 </head>
 <body>
-    <section class="content" th:fragment="recordComponent">
+    <section th:fragment="recordComponent">
         <div th:each="record : ${records}">
             <p class="id" th:text="${record.id}"></p>
             <p th:text="*{'Tag: ' + record.getTag()}"></p>
             <p th:text="*{'Text: ' + record.getText()}"></p>
-            <div th:if="${#authentication.getName() == user.getEmail()}">
-                <form th:action="@{'/auth/success/channel/' + *{user.getId()}}" th:method="post">
-                    <input type="hidden" name="id" th:value="${record.getId()}" />
-                    <button type="submit" name="deleteMessage" th:id="*{record.getId()}">delete</button>
-                </form>
-            </div>
+<!--            <div th:if="${#authentication.getName() == user.getEmail()}">-->
+<!--                <form th:action="@{'/auth/success/channel/' + *{user.getId()}}" th:method="post">-->
+<!--                    <input type="hidden" name="id" th:value="${record.getId()}" />-->
+<!--                    <button type="submit" name="deleteMessage" th:id="*{record.getId()}">delete</button>-->
+<!--                </form>-->
+<!--            </div>-->
         </div>
     </section>
 </body>

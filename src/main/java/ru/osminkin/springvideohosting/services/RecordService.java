@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import ru.osminkin.springvideohosting.model.Record;
 import ru.osminkin.springvideohosting.repository.RecordRepository;
 
+import java.util.List;
+
 @Service
 public class RecordService {
     private final RecordRepository recordsRepository;
@@ -42,5 +44,9 @@ public class RecordService {
 
     public Iterable<Record> findAllUserRecordsOrderByDateDesc(Long id){
         return recordsRepository.findAllUserRecordsOrderByDateDesc(id);
+    }
+
+    public List<Record> getFiveRandomRecords(){
+        return recordsRepository.getFiveRandomRecords();
     }
 }
