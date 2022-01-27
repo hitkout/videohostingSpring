@@ -10,19 +10,12 @@
     <link rel="stylesheet" href="/css/photoCards.css">
     <link rel="stylesheet" href="/css/user.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="/css/filter.css">
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 </head>
 <body>
 <div th:replace="components/top-panel :: top-panel" th:with="user"></div>
 <div th:replace="components/headerForChannel :: headerForChannel"></div>
-
-<h1>Main</h1>
-
-<form modelAttribute="userPhotoFromForm" method="post" enctype="multipart/form-data">
-    <input type="file" name="file">
-    <input type="hidden" name="_csrf" value="${_csrf.token}" />
-    <button type="submit" name="saveUserPhoto">Add</button>
-</form>
 
 <!--<div th:each="message : ${messages}">-->
 <!--    <div>-->

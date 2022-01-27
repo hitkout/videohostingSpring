@@ -26,6 +26,7 @@ public class WatchController {
         model.addAttribute("authUser", authentication == null ? null : userService.findUserByEmail(authentication));
         model.addAttribute("follow", authentication == null ? null : userService.isSubscribe(userService.findUserByEmail(authentication), userService.findUserById(videoService.findVideoById(videoId).getUser().getId())));
         model.addAttribute("video", videoService.findVideoById(videoId));
+        model.addAttribute("videos", videoService.findRandomVideosWithoutSelectedVideo(videoId));
         return "general/watch";
     }
 }

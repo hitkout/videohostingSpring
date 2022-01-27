@@ -1,0 +1,49 @@
+.record {
+    padding-top: 30px;
+    color: #ffffff;
+}
+
+.recordUserNameText{
+
+}
+
+.recordDate{
+
+}
+
+.recordUserNameAndDate p{
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.recordUserInfo{
+    text-decoration: none;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+}
+
+.rowRecordText{
+    display: flex;
+    justify-content: center;
+}
+
+.recordUserNameAndDate{
+    padding-left: 20px;
+}
+
+.recordUserAvatar img {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.recordText {
+    max-width: 700px;
+}
+
+.recordText p {
+
+}

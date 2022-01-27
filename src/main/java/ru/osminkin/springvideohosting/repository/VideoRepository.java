@@ -40,4 +40,7 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
 
     @Query(value = "select * from videos v inner join users u on v.user_id = u.id inner join subscriptions s on u.id = s.follow_user where follower = :follower and v.user_id = s.follow_user and v.add_date >= (now() at time zone 'UTC' - interval '7 day')", nativeQuery = true)
     List<Video> getAllVideosForLastWeekFromAllFollowUsers(@Param("follower") User follower);
+
+    @Query(value = "select * from videos where id != :videoId order by random() limit 10", nativeQuery = true)
+    List<Video> findRandomVideosWithoutSelectedVideo(@Param("videoId") Long videoId);
 }

@@ -9,10 +9,33 @@
 </head>
 <body>
     <section th:fragment="recordComponent">
-        <div th:each="record : ${records}">
-            <p class="id" th:text="${record.id}"></p>
-            <p th:text="*{'Tag: ' + record.getTag()}"></p>
-            <p th:text="*{'Text: ' + record.getText()}"></p>
+        <div class="record" th:each="record : ${records}">
+            <div class="recordContainer">
+                <a th:href="@{'/channel/' + *{record.getUser().getId()}}" class="recordUserInfo">
+                    <div class="recordUserAvatar">
+                        <img th:src="@{'/img/' + *{record.getUser().getPhoto()}}" alt="">
+                    </div>
+                    <div class="recordUserNameAndDate">
+                        <div class="recordUserNameText">
+                            <p th:text="*{record.getUser().getFirstName() + ' ' + record.getUser().getLastName()}"></p>
+                        </div>
+                        <div class="recordDate">
+                            <p th:text="*{record.getAddDate()}"></p>
+                        </div>
+                    </div>
+                </a>
+
+                <div class="rowRecordText">
+                    <div class="recordText">
+                        <p th:text="*{record.getText()}"></p>
+                    </div>
+                </div>
+            </div>
+
+<!--            <p class="id" th:text="${record.id}"></p>-->
+<!--            <p th:text="*{'Tag: ' + record.getTag()}"></p>-->
+<!--            <p th:text="*{'Text: ' + record.getText()}"></p>-->
+
 <!--            <div th:if="${#authentication.getName() == user.getEmail()}">-->
 <!--                <form th:action="@{'/auth/success/channel/' + *{user.getId()}}" th:method="post">-->
 <!--                    <input type="hidden" name="id" th:value="${record.getId()}" />-->

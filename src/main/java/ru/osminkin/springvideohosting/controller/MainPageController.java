@@ -38,6 +38,7 @@ public class MainPageController {
         model.addAttribute("authUser", authentication == null ? null : userService.findUserByEmail(authentication));
         model.addAttribute("videos", videoService.getFiveRandomVideos());
         model.addAttribute("photos", photoService.getFiveRandomPhotos());
+        model.addAttribute("user", authentication == null ? null : userService.findUserByEmail(authentication));
         model.addAttribute("records", recordService.getFiveRandomRecords());
         return "general/main";
     }

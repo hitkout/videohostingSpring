@@ -34,17 +34,6 @@ public class UserPageController {
         return "channel/channelMain";
     }
 
-    @PostMapping(value = "/channel/{userId}", params = "saveUserPhoto")
-    @PreAuthorize("@authenticatedUserService.hasId(#userId)")
-    public String postChannelPhoto(@PathVariable("userId") long userId,
-                                   @RequestParam("file") MultipartFile file,
-                                   @ModelAttribute("userPhotoFromForm") Photo userPhotoFromForm) throws IOException {
-        if (!userService.findUserById(userId).getPhoto().equals("default.png"))
-            userService.deleteUserPhoto(userService.findUserById(userId).getPhoto());
-        userService.saveUserPhoto(userId, file);
-        return "redirect:/channel/{userId}";
-    }
-
     @PostMapping(value = "/channel/{userId}", params = "subscribe")
     //@PreAuthorize("@authenticatedUserService.hasId(#userId)")
     public String postSubscribe(@PathVariable("userId") long userId,

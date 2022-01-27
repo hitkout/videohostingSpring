@@ -91,4 +91,8 @@ public class VideoService {
     public List<Video> getAllVideosForLastWeekFromAllFollowUsers(User follower, Timestamp dateNow){
         return videoRepository.getAllVideosForLastWeekFromAllFollowUsers(follower);
     }
+
+    public List<Video> findRandomVideosWithoutSelectedVideo(Long videoId){
+        return videoRepository.findRandomVideosWithoutSelectedVideo(videoId);
+    }
 }

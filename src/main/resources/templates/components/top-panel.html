@@ -33,12 +33,12 @@
                                    th:classappend="${#strings.contains(#httpServletRequest.requestURI, 'channel/' + authUser.getId())} ? 'top-panel__nav-link-constant' : ''">Моя страница</a>
                             </li>
                             <li th:if="${authUser != null}" class="dropdown">
-                                <div th:href="@{'/settings'}" class="top-panel__nav-link dropButton">
+                                <div class="top-panel__nav-link dropButton">
                                     <img class="linkImg" th:src="@{'/img/' + *{authUser.getPhoto()}}" alt="">
                                     <i class="fas fa-caret-down"></i>
                                 </div>
                                 <div class="dropdown-content">
-                                    <a href="#">Настройки</a>
+                                    <a th:href="@{'/settings'}">Настройки</a>
                                     <form action="/auth/login" method="post">
                                         <button class="btnExit" type="submit">Выход</button>
                                     </form>

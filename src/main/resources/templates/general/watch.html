@@ -5,13 +5,16 @@
     <title>Watch</title>
     <link rel="stylesheet" href="/css/body.css">
     <link rel="stylesheet" href="/css/top-panel.css">
+    <link rel="stylesheet" href="/css/watch.css">
+    <link rel="stylesheet" href="/css/videosSide.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div th:replace="components/top-panel :: top-panel"></div>
-    <div id="mainVideo" class="mainVideo catalogRow">
+<div class="columns">
+    <div id="watchVideo" class="watchVideo firstColumn">
         <!--                    <p class="idVideo" th:text="${video.id}"></p>-->
-        <video class="video" th:preload="metadata" th:src="@{'/video/' + *{video.getFilename()}}" controls preload="none"></video>
+        <video class="selectVideo" th:preload="metadata" th:src="@{'/video/' + *{video.getFilename()}}" controls preload="none"></video>
         <p th:text="${video.getVideoTitle()}"></p>
         <div th:if="${#authentication.getName() == user.getEmail()}">
             <form th:action="@{'/channel/' + *{user.getId()}}" th:method="post">
@@ -20,5 +23,10 @@
             </form>
         </div>
     </div>
+
+    <div class="secondColumn">
+        <div th:replace="components/videoComponent :: videoComponent"></div>
+    </div>
+</div>
 </body>
 </html>

@@ -38,4 +38,19 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "select * from users u inner join subscriptions s on u.id = s.follow_user where follower = :follower", nativeQuery = true)
     List<User> findAllUserByUserAuthFromSubscriptions(@Param("follower") User follower);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "update users set first_name = :name where id = :id", nativeQuery = true)
+    void changeName(@Param("id") Long id, @Param("name") String name);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "update users set last_name = :surname where id = :id", nativeQuery = true)
+    void changeSurname(@Param("id") Long id, @Param("surname") String surname);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "update users set password = :password where id = :id", nativeQuery = true)
+    void changeUserPassword(@Param("id") Long id, @Param("password") String password);
 }

@@ -1,0 +1,33 @@
+.columns{
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.firstColumn{
+    padding-top: 30px;
+    text-align: center;
+    width: 75%;
+}
+
+.secondColumn{
+    position: absolute;
+    right: 0;
+    width: 25%;
+    background-color: #262626;
+}
+
+.videoCard{
+    text-align: center;
+}
+
+.mainVideo{
+}
+
+.selectVideo{
+    max-height: 700px;
+}
+
+.video{
+    width: 70%;
+}

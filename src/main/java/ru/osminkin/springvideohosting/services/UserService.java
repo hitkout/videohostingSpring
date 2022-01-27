@@ -3,6 +3,7 @@ package ru.osminkin.springvideohosting.services;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.osminkin.springvideohosting.model.Photo;
@@ -41,7 +42,7 @@ public class UserService {
         return userRepository.findByEmail(authentication.getName()).orElseThrow(() -> new UsernameNotFoundException("User doesn't exists"));
     }
 
-    public void saveUserPhoto(long userId, MultipartFile file) throws IOException {
+    public void saveUserPhoto(Long userId, MultipartFile file) throws IOException {
         if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()){
             File upload = new File(uploadPathImages);
             if (!upload.exists()){
@@ -54,6 +55,10 @@ public class UserService {
             file.transferTo(new File(uploadPathImages + "/" + resultFilename));
             userRepository.updatePhoto(userId, resultFilename);
         }
+    }
+
+    public void saveUserPhoto(Long userId, String photoName){
+        userRepository.updatePhoto(userId, photoName);
     }
 
     public void deleteUserPhoto(String photoName){
@@ -77,5 +82,18 @@ public class UserService {
 
     public List<User> findAllUserByUserAuthFromSubscriptions(User follower){
         return userRepository.findAllUserByUserAuthFromSubscriptions(follower);
+    }
+
+    public void changeName(Long id, String name){
+        userRepository.changeName(id, name);
+    }
+
+    public void changeSurname(Long id, String surname){
+        userRepository.changeSurname(id, surname);
+    }
+
+    public void changeUserPassword(Long id, String password){
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
+        userRepository.changeUserPassword(id, passwordEncoder.encode(password));
     }
 }

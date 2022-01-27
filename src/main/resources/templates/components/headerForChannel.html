@@ -52,6 +52,21 @@
            th:href="@{'/channel/' + *{user.getId()} + '/records'}"
            th:text="Записи"></a>
     </div>
+
+    <div class="dropButtonFilterAlign">
+        <div class="dropdownFilter">
+            <div class="dropButtonFilter">
+                <p>Упорядочить<i class="fas fa-caret-down"></i></p>
+            </div>
+            <div class="dropdownFilter-content">
+                <a th:href="@{'?sort=new'}">Новые</a>
+                <a th:href="@{'?sort=old'}">Старые</a>
+                <a th:href="@{'?sort=pop'}">Популярные</a>
+            </div>
+        </div>
+    </div>
+
+
 </div>
 </body>
 </html>

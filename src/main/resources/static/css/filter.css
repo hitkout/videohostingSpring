@@ -1,0 +1,63 @@
+.dropButtonFilter {
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    border: none;
+    background: unset;
+    color: #fff;
+    border-bottom: 1px solid transparent;
+    outline: none;
+    font-size: 20px;
+    transition: color 0.2s ease-in, border-bottom 1s ease-in;
+}
+
+.dropButtonFilter p {
+    margin-bottom: 0;
+}
+
+.dropButtonFilter:hover{
+    color: #4ED8D8;
+    border-color: #4ED8D8;
+}
+
+.dropButtonFilter i{
+    padding-left: 10px;
+}
+
+.dropButtonFilterAlign{
+    display: flex;
+    justify-content: center;
+}
+
+.dropdownFilter {
+    display: inline-block;
+    position: relative;
+}
+
+.dropdownFilter-content {
+    display: none;
+    position: absolute;
+    width: 100%;
+    background-color: #f9f9f9;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.5);
+    font-size: 15px;
+    z-index: 1;
+}
+
+.dropdownFilter-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+.dropdownFilter-content a:hover {
+    background-color: #4ED8D8;
+}
+
+.dropdownFilter:hover .dropdownFilter-content {
+    display: block;
+}
