@@ -1,0 +1,67 @@
+.comments{
+    padding-left: 80px;
+}
+
+.comment:last-child{
+    border-bottom: 0;
+}
+
+.comment {
+    padding-top: 30px;
+    color: #ffffff;
+    border-bottom: 1px solid #686868;
+}
+
+.commentUserNameText{
+
+}
+
+.commentDate{
+
+}
+
+.commentUserNameDateText p{
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.commentUserInfo{
+    display: flex;
+}
+
+.commentLinkToUser{
+    text-decoration: none;
+    color: #dbdbdb;
+    font-size: 15px;
+    font-weight: 600;
+    transition: color 0.2s ease-in;
+}
+
+.commentLinkToUser:hover{
+    color: #4ED8D8;
+}
+
+.commentLinkToUser{
+
+}
+
+.commentUserNameDateText{
+    padding-left: 20px;
+}
+
+.commentUserAvatar img {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.commentText {
+    font-size: 24px;
+    color: #ffffff;
+}
+
+.commentText p {
+
+}

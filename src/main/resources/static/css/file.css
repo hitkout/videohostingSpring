@@ -1,0 +1,36 @@
+.example{
+    display: flex;
+    justify-content: center;
+}
+
+.example .form-group{
+    padding:1em;
+    margin:1em;
+}
+
+.example input[type=file]{
+    outline:0;
+    opacity:0;
+    pointer-events:none;
+    user-select:none
+}
+
+.example .label{
+    width: 120px;
+    border: 2px dashed #dbdbdb;
+    border-radius: 5px;
+    display: block;
+    padding: 1.2em;
+    transition: border 0.2s ease-in;
+    cursor: pointer;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+
+.example .label p{
+    color: #ffffff;
+}
+
+.example .label:hover{
+    border: 2px solid #4ED8D8;
+}

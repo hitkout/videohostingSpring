@@ -45,12 +45,14 @@ public class VideosPageController {
     @GetMapping("/channel/{userId}/videos")
     public String getChannelVideos(@PathVariable("userId") long userId,
                                    Authentication authentication,
+                                   @RequestParam(value = "search", defaultValue = "") String search,
                                    @RequestParam(value = "sort", defaultValue = "pop") String sort,
                                    Model model){
         model.addAttribute("user", userService.findUserById(userId));
-        model.addAttribute("authUser", authentication == null ? null : userService.findUserByEmail(authentication));
-        model.addAttribute("follow", authentication == null ? null : userService.isSubscribe(userService.findUserByEmail(authentication), userService.findUserById(userId)));
-        typeAndSortService.getVideosPage(sort, model, userId);
+        model.addAttribute("authUser", authentication == null ? null : userService.findUserByAuthentication(authentication));
+        model.addAttribute("follow", authentication == null ? null : userService.isSubscribe(userService.findUserByAuthentication(authentication), userService.findUserById(userId)));
+        model.addAttribute("subscribers", userService.getSubscribersCount(userService.findUserById(userId)));
+        typeAndSortService.getVideosPage(search, sort, model, userId);
         return "channel/channelVideos";
     }
 }

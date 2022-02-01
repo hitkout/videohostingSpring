@@ -17,20 +17,40 @@ public class TypeAndSortService {
         this.photoService = photoService;
     }
 
-    public void getVideosPage(String sort, Model model, Long userId){
+    public void getVideosPage(String search, String sort, Model model, Long userId){
         if (userId == null){
-            if (Objects.equals(sort, "new"))
-                model.addAttribute("videos", videoService.findAllVideosOrderByDate());
-            else if (Objects.equals(sort, "old"))
-                model.addAttribute("videos", videoService.findAllVideosOrderByDateDesc());
-            else model.addAttribute("videos", videoService.findAll());
+            if (Objects.equals(sort, "new")){
+                if (search != null)
+                    model.addAttribute("videos", videoService.findAllVideosOrderByDate(search));
+                else model.addAttribute("videos", videoService.findAllVideosOrderByDate());
+            }
+            else if (Objects.equals(sort, "old")){
+                if (search != null)
+                    model.addAttribute("videos", videoService.findAllVideosOrderByDateDesc(search));
+                else model.addAttribute("videos", videoService.findAllVideosOrderByDateDesc());
+            }
+            else {
+                if (search != null)
+                    model.addAttribute("videos", videoService.findAll(search));
+                else model.addAttribute("videos", videoService.findAll());
+            }
         }
         else {
-            if (Objects.equals(sort, "new"))
-                model.addAttribute("videos", videoService.findAllUserVideosOrderByDate(userId));
-            else if (Objects.equals(sort, "old"))
-                model.addAttribute("videos", videoService.findAllUserVideosOrderByDateDesc(userId));
-            else model.addAttribute("videos", videoService.findAllVideosByUserId(userId));
+            if (Objects.equals(sort, "new")){
+                if (search != null)
+                    model.addAttribute("videos", videoService.findAllUserVideosOrderByDate(userId, search));
+                else model.addAttribute("videos", videoService.findAllUserVideosOrderByDate(userId));
+            }
+            else if (Objects.equals(sort, "old")){
+                if (search != null)
+                    model.addAttribute("videos", videoService.findAllUserVideosOrderByDateDesc(userId, search));
+                else model.addAttribute("videos", videoService.findAllUserVideosOrderByDateDesc(userId));
+            }
+            else {
+                if (search != null)
+                    model.addAttribute("videos", videoService.findAllVideosByUserId(userId, search));
+                else model.addAttribute("videos", videoService.findAllVideosByUserId(userId));
+            }
         }
     }
 

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.osminkin.springvideohosting.model.User;
 import ru.osminkin.springvideohosting.model.Video;
+import ru.osminkin.springvideohosting.repository.NumberWatchVideoRepository;
 import ru.osminkin.springvideohosting.repository.VideoRepository;
 import java.io.File;
 import java.io.IOException;
@@ -18,10 +19,12 @@ public class VideoService {
     private final UserService userService;
     @Value("${upload.path.video}")
     private String uploadPathVideos;
+    private final NumberWatchVideoRepository numberWatchVideoRepository;
 
-    public VideoService(VideoRepository videoRepository, UserService userService) {
+    public VideoService(VideoRepository videoRepository, UserService userService, NumberWatchVideoRepository numberWatchVideoRepository) {
         this.videoRepository = videoRepository;
         this.userService = userService;
+        this.numberWatchVideoRepository = numberWatchVideoRepository;
     }
 
     public Video findVideoById(Long videoId){
@@ -42,6 +45,8 @@ public class VideoService {
             file.transferTo(new File(uploadPathVideos + "/" + uuidFile + ".mp4"));
             videoFromForm.setFilename(uuidFile);
             videoFromForm.setUser(userService.findUserById(userId));
+            videoFromForm.setLikes(0L);
+            videoFromForm.setDislikes(0L);
             videoFromForm.setAddDate(Timestamp.valueOf(dateFormat.format(GregorianCalendar.getInstance().getTime())));
             videoRepository.save(videoFromForm);
         }
@@ -51,7 +56,16 @@ public class VideoService {
         return videoRepository.findVideoByUserId(id);
     }
 
+    public Iterable<Video> findAllVideosByUserId(Long id, String search){
+        return videoRepository.findAllVideosByUserId(id, search);
+    }
+
+    public Iterable<Video> findAll(String search){
+        return videoRepository.findAll(search);
+    }
+
     public void deleteVideoById(Long id){
+        numberWatchVideoRepository.deleteByVideoId(id);
         File file = new File(uploadPathVideos + "/" + videoRepository.findVideoById(id).getFilename() + ".mp4");
         System.out.println(uploadPathVideos + "/" + videoRepository.findVideoById(id).getFilename() + ".mp4");
         if (file.delete()){
@@ -72,12 +86,28 @@ public class VideoService {
         return videoRepository.findAllVideosOrderByDate();
     }
 
+    public Iterable<Video> findAllVideosOrderByDateDesc(String search){
+        return videoRepository.findAllVideosOrderByDateDesc(search);
+    }
+
+    public Iterable<Video> findAllVideosOrderByDate(String search){
+        return videoRepository.findAllVideosOrderByDate(search);
+    }
+
     public Iterable<Video> findAllUserVideosOrderByDateDesc(Long id){
         return videoRepository.findAllUserVideosOrderByDateDesc(id);
     }
 
+    public Iterable<Video> findAllUserVideosOrderByDateDesc(Long id, String search){
+        return videoRepository.findAllUserVideosOrderByDateDesc(id, search);
+    }
+
     public Iterable<Video> findAllUserVideosOrderByDate(Long id){
         return videoRepository.findAllUserVideosOrderByDate(id);
+    }
+
+    public Iterable<Video> findAllUserVideosOrderByDate(Long id, String search){
+        return videoRepository.findAllUserVideosOrderByDate(id, search);
     }
 
     public List<Video> getFiveRandomVideos(){
@@ -88,8 +118,12 @@ public class VideoService {
         return videoRepository.getAllVideosFromAllFollowUsers(follower);
     }
 
-    public List<Video> getAllVideosForLastWeekFromAllFollowUsers(User follower, Timestamp dateNow){
+    public List<Video> getAllVideosForLastWeekFromAllFollowUsers(User follower){
         return videoRepository.getAllVideosForLastWeekFromAllFollowUsers(follower);
+    }
+
+    public List<Video> getAllVideosForLastWeekFromAllFollowUsersByFollowUserSearch(User follower, String search){
+        return videoRepository.getAllVideosForLastWeekFromAllFollowUsersByFollowUserSearch(follower, search);
     }
 
     public List<Video> findRandomVideosWithoutSelectedVideo(Long videoId){

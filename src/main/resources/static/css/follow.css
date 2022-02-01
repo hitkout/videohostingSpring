@@ -1,0 +1,54 @@
+.followButton{
+    cursor: pointer;
+    width: 100%;
+    height: 30px;
+    font-size: 14px;
+    background: rgba(0,0,0,0);
+    text-align: center;
+    border: 2px solid #ffffff;
+    color: #ffffff;
+    transition: border 0.2s ease-in, color 0.2s ease-in;
+}
+
+.followButton:hover{
+    border: 2px solid #4ED8D8;
+    color: #4ED8D8;
+}
+
+.unfollowButton{
+    cursor: pointer;
+    width: 100%;
+    height: 30px;
+    font-size: 14px;
+    background: rgba(0,0,0,0);
+    text-align: center;
+    border: 2px solid #4ED8D8;
+    color: #4ED8D8;
+    transition: border 0.2s ease-in, color 0.2s ease-in;
+}
+
+.unfollowButton:hover{
+    border: 2px solid #ffffff;
+    color: #ffffff;
+}
+
+.authNullFollow{
+    position: relative;
+}
+
+.hoverTextAuthFollow{
+    position: absolute;
+    color: #4ed8d8;
+    width: 300%;
+    visibility: hidden;
+    opacity: 0;
+    font-size: 18px;
+    padding: 0;
+    margin: 0;
+    transition: opacity 0.2s, visibility 0.2s;
+}
+
+.authNullFollow:hover .hoverTextAuthFollow{
+    visibility: visible;
+    opacity: 1;
+}

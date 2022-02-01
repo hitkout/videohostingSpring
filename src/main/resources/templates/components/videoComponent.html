@@ -15,12 +15,6 @@
 <!--                    <p class="idVideo" th:text="${video.id}"></p>-->
                     <video class="video" th:preload="metadata" th:src="@{'/video/' + *{video.getFilename()}}" preload="none"></video>
                     <p th:text="${video.getVideoTitle()}"></p>
-<!--                    <div th:if="${#authentication.getName() == user.getEmail()}">-->
-<!--                        <form th:action="@{'/channel/' + *{user.getId()} + '/videos'}" th:method="post">-->
-<!--                            <input type="hidden" name="id" th:value="${video.getId()}" />-->
-<!--                            <button type="submit" name="deleteVideo" th:id="*{video.getId()}">delete</button>-->
-<!--                        </form>-->
-<!--                    </div>-->
                 </a>
             </div>
         </div>

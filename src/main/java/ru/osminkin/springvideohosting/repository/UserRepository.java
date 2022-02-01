@@ -15,6 +15,24 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findById(Long id);
     Optional<User> findByEmail(String email);
 
+    User findUserByEmail(String email);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "update users set status = 'BANNED' where id = :bannedUser", nativeQuery = true)
+    void banUserById(@Param("bannedUser") Long bannedUser);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "update users set status = 'ACTIVE' where id = :bannedUser", nativeQuery = true)
+    void unbanUserById(@Param("bannedUser") Long bannedUser);
+
+    @Query(value = "select role from users where id = :authUser", nativeQuery = true)
+    String getUserRole(@Param("authUser") User authUser);
+
+    @Query(value = "select status from users where id = :userId", nativeQuery = true)
+    String getUserStatus(@Param("userId") Long userId);
+
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query(value = "update users set photo = :photoName where id = :id", nativeQuery = true)
@@ -39,6 +57,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "select * from users u inner join subscriptions s on u.id = s.follow_user where follower = :follower", nativeQuery = true)
     List<User> findAllUserByUserAuthFromSubscriptions(@Param("follower") User follower);
 
+    @Query(value = "select * from users u inner join subscriptions s on u.id = s.follow_user where follower = :follower and (lower(first_name) like %:search% or lower(last_name) like %:search%)", nativeQuery = true)
+    List<User> findBySearchUserAuthFromSubscriptions(@Param("follower") User follower, @Param("search") String search);
+
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query(value = "update users set first_name = :name where id = :id", nativeQuery = true)
@@ -53,4 +74,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying(clearAutomatically = true)
     @Query(value = "update users set password = :password where id = :id", nativeQuery = true)
     void changeUserPassword(@Param("id") Long id, @Param("password") String password);
+
+    @Query(value = "select count(follower) from subscriptions where follow_user = :user", nativeQuery = true)
+    Long getSubscribersCount(@Param("user") User user);
 }

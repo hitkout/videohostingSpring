@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Follow</title>
+</head>
+<body>
+<div th:fragment="followComponent">
+    <form th:if="${#authentication.getName() != user.getEmail() && follow == false}" th:action="@{'/channel/' + *{user.getId()}}" th:method="post">
+        <button class="followButton" type="submit" name="subscribe" th:id="*{user.getId()}">Подписаться</button>
+    </form>
+    <form th:if="${#authentication.getName() != user.getEmail() && follow == true}" th:action="@{'/channel/' + *{user.getId()}}" th:method="post">
+        <button class="unfollowButton" type="submit" name="unsubscribe" th:id="*{user.getId()}">Отписаться</button>
+    </form>
+</div>
+</body>
+</html>

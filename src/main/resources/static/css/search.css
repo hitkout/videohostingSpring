@@ -1,0 +1,27 @@
+.searchContainer{
+    display: flex;
+    justify-content: center;
+    padding-top: 50px;
+    align-items: center;
+}
+
+.searchBar{
+    padding: 0;
+    margin: 0;
+    width: 300px;
+    height: 23px;
+    border: 1px solid #4ED8D8;
+}
+
+.searchButton{
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    font-size: 20px;
+    width: 85px;
+    height: 25px;
+    border-radius: 5%;
+    background: #4ED8D8;
+    vertical-align: middle;
+}

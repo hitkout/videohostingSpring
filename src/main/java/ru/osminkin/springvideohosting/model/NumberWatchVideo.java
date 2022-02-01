@@ -3,23 +3,17 @@ package ru.osminkin.springvideohosting.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 
 @Data
 @Entity
-@Table(name = "comments")
-public class Record {
+@Table(name = "number_watch_video")
+public class NumberWatchVideo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
-    private User user;
-    @Column(name = "text")
-    private String text;
+    @Column(name = "number")
+    private Long number;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "video_id")
     private Video videoId;
-    @JoinColumn(name = "add_date")
-    private Timestamp addDate;
 }

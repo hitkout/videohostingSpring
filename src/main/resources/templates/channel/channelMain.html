@@ -9,30 +9,30 @@
     <link rel="stylesheet" href="/css/imageZoom.css">
     <link rel="stylesheet" href="/css/photoCards.css">
     <link rel="stylesheet" href="/css/user.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="/css/filter.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/videoCards.css">
+    <link rel="stylesheet" href="/css/follow.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 </head>
 <body>
 <div th:replace="components/top-panel :: top-panel" th:with="user"></div>
 <div th:replace="components/headerForChannel :: headerForChannel"></div>
 
-<!--<div th:each="message : ${messages}">-->
-<!--    <div>-->
-<!--        <p th:text="*{'Id: ' + message.getId()}"></p>-->
-<!--        <p th:text="*{'Tag: ' + message.getTag()}"></p>-->
-<!--        <p th:text="*{'Text: ' + message.getText()}"></p>-->
-<!--        <p th:if="*{message.getFilename()}">-->
-<!--            <img th:src="@{'/img/' + *{message.getFilename}}" alt="">-->
-<!--        </p>-->
-<!--    </div>-->
-<!--    <form th:action="@{'/auth/success/channel/' + *{user.getId()}}" th:method="post">-->
-<!--        <input type="hidden" name="id" th:value="${message.getId()}" />-->
-<!--        <button type="submit" name="delete" th:id="*{message.getId()}">delete</button>-->
-<!--    </form>-->
-<!--</div>-->
-
-<h1>Main</h1>
+<div class="marginContentMain">
+    <div class="videoMain" th:if="${not #lists.isEmpty(videos)}">
+        <a class="mainLinks" th:href="@{'/channel/' + *{user.getId()} + '/videos'}">Все видео<i class="fas fa-angle-double-right"></i></a>
+        <div th:replace="components/videoComponent :: videoComponent"></div>
+    </div>
+    <div class="photoMain" th:if="${not #lists.isEmpty(photos)}">
+        <a class="mainLinks" th:href="@{'/channel/' + *{user.getId()} + '/photos'}">Посмотреть все фотографии<i class="fas fa-angle-double-right"></i></a>
+        <div th:replace="components/photoComponent :: photoComponent"></div>
+    </div>
+    <div class="emptyMainUser" th:if="${#lists.isEmpty(videos) and #lists.isEmpty(photos)}">
+        Данный пользователь ничего не выкладывал :(
+    </div>
+</div>
 
 <script src="/scripts/imageZoom.js"></script>
 

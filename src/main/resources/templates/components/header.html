@@ -14,23 +14,17 @@
                                     th:href="'/'"
                                     th:text="'Главная'"></a>
 
-<!--            <a class="headerButton" th:classappend="${#httpServletRequest.requestURI == '/videos'}-->
-<!--                                        ? 'headerButtonConstant'-->
-<!--                                        : ''"-->
-<!--                                    th:href="'/videos'"-->
-<!--                                    th:text="Видео"></a>-->
+            <a class="headerButton" th:classappend="${#httpServletRequest.requestURI == '/videos'}
+                                        ? 'headerButtonConstant'
+                                        : ''"
+                                    th:href="'/videos'"
+                                    th:text="'Видео'"></a>
 
-<!--            <a class="headerButton" th:classappend="${#httpServletRequest.requestURI == '/photos'}-->
-<!--                                        ? 'headerButtonConstant'-->
-<!--                                        : ''"-->
-<!--                                    th:href="'/photos'"-->
-<!--                                    th:text="Фотографии"></a>-->
-
-<!--            <a class="headerButton" th:classappend="${#httpServletRequest.requestURI == '/records'}-->
-<!--                                        ? 'headerButtonConstant'-->
-<!--                                        : ''"-->
-<!--                                    th:href="'/records'"-->
-<!--                                    th:text="Записи"></a>-->
+            <a class="headerButton" th:classappend="${#httpServletRequest.requestURI == '/photos'}
+                                        ? 'headerButtonConstant'
+                                        : ''"
+                                    th:href="'/photos'"
+                                    th:text="'Фотографии'"></a>
 
             <a class="headerButton" th:classappend="${#httpServletRequest.requestURI == '/users'}
                                         ? 'headerButtonConstant'

@@ -14,6 +14,10 @@
     text-decoration: none;
 }
 
+.headerButtonConstant{
+    background-color: #4ED8D8;
+}
+
 .headerButton {
     cursor: pointer;
     text-transform: uppercase;

@@ -31,8 +31,9 @@ public class PhotosPageController {
                                   Authentication authentication,
                                   Model model){
         model.addAttribute("user", userService.findUserById(userId));
-        model.addAttribute("authUser", authentication == null ? null : userService.findUserByEmail(authentication));
-        model.addAttribute("follow", authentication == null ? null : userService.isSubscribe(userService.findUserByEmail(authentication), userService.findUserById(userId)));
+        model.addAttribute("authUser", authentication == null ? null : userService.findUserByAuthentication(authentication));
+        model.addAttribute("follow", authentication == null ? null : userService.isSubscribe(userService.findUserByAuthentication(authentication), userService.findUserById(userId)));
+        model.addAttribute("subscribers", userService.getSubscribersCount(userService.findUserById(userId)));
         typeAndSortService.getPhotosPage(sort, model, userId);
         //model.addAttribute("photos", photoRepository.findLast10());
         //model.addAttribute("lastElement", photoRepository.getLastId());
@@ -60,8 +61,8 @@ public class PhotosPageController {
     @PostMapping(value = "/channel/{userId}/photos", params = "deletePhoto")
     @PreAuthorize("@authenticatedUserService.hasId(#userId)")
     public String deletePhoto(@PathVariable("userId") long userId,
-                              @RequestParam("id") long id){
-        photoService.deletePhotoById(id);
+                              @RequestParam("photoId") long photoId){
+        photoService.deletePhotoById(photoId);
         return "redirect:/channel/{userId}/photos";
     }
 }

@@ -5,22 +5,29 @@
     <title>Filter</title>
 </head>
 <body>
-<div class="filter" th:fragment="filter">
-    <a class="headerButton" th:classappend="${(param.sort != null) and (param.sort[0] == 'new')} ? 'headerButtonConstant' : ''"
-       th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder).fromCurrentRequest()}"
-       th:href="${urlBuilder.replaceQueryParam('sort', 'new').toUriString()}"
-       th:text="'Новое'">
-    </a>
-    <a class="headerButton" th:classappend="${(param.sort == null) or (param.sort[0] == 'pop')} ? 'headerButtonConstant' : ''"
-       th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder).fromCurrentRequest()}"
-       th:href="${urlBuilder.replaceQueryParam('sort', 'pop').toUriString()}"
-       th:text="'Популярное'">
-    </a>
-    <a class="headerButton" th:classappend="${(param.sort != null) and (param.sort[0] == 'old')} ? 'headerButtonConstant' : ''"
-       th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder).fromCurrentRequest()}"
-       th:href="${urlBuilder.replaceQueryParam('sort', 'old').toUriString()}"
-       th:text="'Старое'">
-    </a>
+<div class="dropButtonFilterAlign" th:fragment="filter">
+    <div class="dropdownFilter">
+        <div class="dropButtonFilter">
+            <p>Упорядочить<i class="fas fa-caret-down"></i></p>
+        </div>
+        <div class="dropdownFilter-content">
+            <a th:classappend="${(param.sort != null) and (param.sort[0] == 'new')} ? 'headerButtonConstant' : ''"
+               th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder)}"
+               th:href="${urlBuilder.fromCurrentRequest().replaceQueryParam('sort', 'new').toUriString()}"
+               th:text="'Новые'">
+            </a>
+            <a th:classappend="${(param.sort != null) and (param.sort[0] == 'old')} ? 'headerButtonConstant' : ''"
+               th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder)}"
+               th:href="${urlBuilder.fromCurrentRequest().replaceQueryParam('sort', 'old').toUriString()}"
+               th:text="'Старые'">
+            </a>
+            <a th:classappend="${(param.sort == null) or (param.sort[0] == 'pop')} ? 'headerButtonConstant' : ''"
+               th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder)}"
+               th:href="${urlBuilder.fromCurrentRequest().replaceQueryParam('sort', 'pop').toUriString()}"
+               th:text="'Популярные'">
+            </a>
+        </div>
+    </div>
 </div>
 </body>
 </html>

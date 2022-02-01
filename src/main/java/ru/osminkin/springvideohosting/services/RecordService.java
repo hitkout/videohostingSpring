@@ -1,10 +1,19 @@
 package ru.osminkin.springvideohosting.services;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import ru.osminkin.springvideohosting.model.Photo;
 import ru.osminkin.springvideohosting.model.Record;
+import ru.osminkin.springvideohosting.model.User;
+import ru.osminkin.springvideohosting.model.Video;
 import ru.osminkin.springvideohosting.repository.RecordRepository;
 
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class RecordService {
@@ -48,5 +57,18 @@ public class RecordService {
 
     public List<Record> getFiveRandomRecords(){
         return recordsRepository.getFiveRandomRecords();
+    }
+
+    public void saveComment(User authUser, Video videoId, Record record) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        record.setAddDate(Timestamp.valueOf(dateFormat.format(GregorianCalendar.getInstance().getTime())));
+        record.setUser(authUser);
+        record.setVideoId(videoId);
+        recordsRepository.save(record);
+    }
+
+    public List<Record> findAllCommentsByVideoId(Long videoId){
+        return recordsRepository.findAllCommentsByVideoId(videoId);
     }
 }

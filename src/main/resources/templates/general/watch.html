@@ -7,20 +7,71 @@
     <link rel="stylesheet" href="/css/top-panel.css">
     <link rel="stylesheet" href="/css/watch.css">
     <link rel="stylesheet" href="/css/videosSide.css">
+    <link rel="stylesheet" href="/css/comment.css">
+    <link rel="stylesheet" href="/css/follow.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div th:replace="components/top-panel :: top-panel"></div>
 <div class="columns">
-    <div id="watchVideo" class="watchVideo firstColumn">
-        <!--                    <p class="idVideo" th:text="${video.id}"></p>-->
-        <video class="selectVideo" th:preload="metadata" th:src="@{'/video/' + *{video.getFilename()}}" controls preload="none"></video>
-        <p th:text="${video.getVideoTitle()}"></p>
-        <div th:if="${#authentication.getName() == user.getEmail()}">
-            <form th:action="@{'/channel/' + *{user.getId()}}" th:method="post">
-                <input type="hidden" name="id" th:value="${video.getId()}" />
-                <button type="submit" name="deleteVideo" th:id="*{video.getId()}">delete</button>
+    <div class="firstColumn">
+        <div id="watchVideo" class="watchVideo">
+            <!--                    <p class="idVideo" th:text="${video.id}"></p>-->
+            <video class="selectVideo" th:preload="metadata" th:src="@{'/video/' + *{video.getFilename()}}" controls preload="none"></video>
+            <div class="textStyleWatch">
+                <div class="rowTitleAndLikes">
+                    <p class="videoTitle" th:text="${video.getVideoTitle()}"></p>
+
+                    <form th:class="${authUser == null} ? 'authNull' : ''" method="post" th:action="@{'/watch/' + *{video.getId()}}">
+                        <button class="btnLikeOrDislike" th:disabled="${authUser == null}" th:classappend="${isLikeOrDislike == 'like'} ? 'btnLikeOrDislikeConstant' : ''" type="submit" name="like"><i class="fas fa-thumbs-up"></i><span th:text="${video.getLikes()}"></span></button>
+                        <button class="btnLikeOrDislike" th:disabled="${authUser == null}" th:classappend="${isLikeOrDislike == 'dislike'} ? 'btnLikeOrDislikeConstant' : ''" type="submit" name="dislike"><i class="fas fa-thumbs-down"></i><span th:text="${video.getDislikes()}"></span></button>
+                        <p th:if="${authUser == null}" class="hoverTextAuth">Войдите в аккаунт, чтобы сохранить оценку.</p>
+                    </form>
+
+                    <div th:if="${#authentication.getName() == user.getEmail()}">
+                        <form th:action="@{'/watch/' + *{video.getId()}}" th:method="post">
+                            <input type="hidden" name="id" th:value="${video.getId()}" />
+                            <button type="submit" name="delete">Удалить видео</button>
+                        </form>
+                    </div>
+                </div>
+                <p class="viewsCount" th:text="'Количество просмотров: ' + ${number}"></p>
+                <div class="lineBetweenTitleAndDescription"></div>
+                <div class="commentUserInfo">
+                    <a th:href="@{'/channel/' + *{video.getUser().getId()}}" class="commentLinkToUser">
+                        <div class="commentUserAvatar">
+                            <img th:src="@{'/img/' + *{video.getUser().getPhoto()}}" alt="">
+                        </div>
+                    </a>
+                    <div class="commentUserNameDateText">
+                        <a th:href="@{'/channel/' + *{video.getUser().getId()}}" class="commentLinkToUser">
+                            <div class="commentUserNameText">
+                                <p th:text="*{video.getUser().getFirstName() + ' ' + video.getUser().getLastName()}"></p>
+                            </div>
+                            <div class="subscribers">
+                                <p th:text="'Подписчиков: ' + *{subscribers}"></p>
+                            </div>
+                        </a>
+                        <div class="authNullFollow" th:if="${authUser == null}">
+                            <button class="followButton" disabled>Подписаться</button>
+                            <p class="hoverTextAuthFollow">Войдите в аккаунт, чтобы подписаться.</p>
+                        </div>
+                        <div th:replace="components/followComponent :: followComponent"></div>
+                    </div>
+                </div>
+
+                <p th:text="*{'Дата добавления видео: ' + video.getAddDate()}"></p>
+                <p th:text="${video.getVideoDescription()}"></p>
+            </div>
+        </div>
+        <div class="comments">
+            <form th:if="${authUser != null}" modelAttribute="commentFromForm" th:action="@{'/watch/' + *{video.getId()}}" th:method="post">
+                <label>
+                    <input type="text" name="text">
+                </label>
+                <button type="submit" name="addComment">Добавить комментарий</button>
             </form>
+            <div th:replace="components/commentComponent :: commentComponent"></div>
         </div>
     </div>
 

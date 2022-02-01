@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--/*@thymesVar id="user" type="ru.osminkin.springvideohosting.model.User"*/-->
+<!--/*@thymesVar id="comments" type="ru.osminkin.springvideohosting.model.Record"*/-->
+<!--/*@thymesVar id="comment" type="ru.osminkin.springvideohosting.model.Record"*/-->
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<section th:fragment="commentComponent">
+  <div class="comment" th:each="comment : ${comments}">
+    <div class="commentContainer">
+      <div class="commentUserInfo">
+        <a th:href="@{'/channel/' + *{comment.getUser().getId()}}" class="commentLinkToUser">
+          <div class="commentUserAvatar">
+            <img th:src="@{'/img/' + *{comment.getUser().getPhoto()}}" alt="">
+          </div>
+        </a>
+          <div class="commentUserNameDateText">
+            <a th:href="@{'/channel/' + *{comment.getUser().getId()}}" class="commentLinkToUser">
+              <div class="commentUserNameText">
+                <p th:text="*{comment.getUser().getFirstName() + ' ' + comment.getUser().getLastName()}"></p>
+              </div>
+              <div class="commentDate">
+                <p th:text="*{comment.getAddDate()}"></p>
+              </div>
+            </a>
+            <div class="commentText">
+              <p th:text="*{comment.getText()}"></p>
+            </div>
+          </div>
+      </div>
+    </div>
+
+                <div th:if="${#authentication.getName() == comment.getUser().getEmail()}">
+                    <form th:action="@{'/watch/' + *{video.getId()}}" th:method="post">
+                        <input type="hidden" name="commentId" th:value="${comment.getId()}" />
+                        <button type="submit" name="deleteComment">удалить комментарий</button>
+                    </form>
+                </div>
+  </div>
+</section>
+</body>
+</html>

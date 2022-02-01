@@ -19,17 +19,13 @@
 <div th:replace="components/top-panel :: top-panel"></div>
 <div th:replace="components/header :: header"></div>
 <div class="marginContentMain">
-    <div class="videoMain">
+    <div class="videoMain" th:if="${not #lists.isEmpty(videos)}">
         <a class="mainLinks" th:href="'/videos'">Посмотреть все видео<i class="fas fa-angle-double-right"></i></a>
         <div th:replace="components/videoComponent :: videoComponent"></div>
     </div>
-    <div class="photoMain">
+    <div class="photoMain" th:if="${not #lists.isEmpty(photos)}">
         <a class="mainLinks" th:href="'/photos'">Посмотреть все фотографии<i class="fas fa-angle-double-right"></i></a>
         <div th:replace="components/photoComponent :: photoComponent"></div>
-    </div>
-    <div class="recordMain">
-        <a class="mainLinks" th:href="'/records'">Посмотреть все записи<i class="fas fa-angle-double-right"></i></a>
-        <div th:replace="components/recordComponent :: recordComponent"></div>
     </div>
 </div>
 

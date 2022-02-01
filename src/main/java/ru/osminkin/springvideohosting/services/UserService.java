@@ -6,14 +6,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.osminkin.springvideohosting.model.Photo;
 import ru.osminkin.springvideohosting.model.User;
 import ru.osminkin.springvideohosting.repository.UserRepository;
-
 import java.io.File;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -38,8 +34,26 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User doesn't exists"));
     }
 
-    public User findUserByEmail(Authentication authentication){
+    public User findUserByAuthentication(Authentication authentication){
         return userRepository.findByEmail(authentication.getName()).orElseThrow(() -> new UsernameNotFoundException("User doesn't exists"));
+    }
+
+    public String getUserRole(User authUser){
+        return userRepository.getUserRole(authUser);
+    }
+
+    public void banUserById(User authUser, Long bannedUser){
+        if (Objects.equals(userRepository.getUserRole(authUser), "ADMIN"))
+            userRepository.banUserById(bannedUser);
+    }
+
+    public void unbanUserById(User authUser, Long bannedUser){
+        if (Objects.equals(userRepository.getUserRole(authUser), "ADMIN"))
+            userRepository.unbanUserById(bannedUser);
+    }
+
+    public String getUserStatus(Long userId){
+        return userRepository.getUserStatus(userId);
     }
 
     public void saveUserPhoto(Long userId, MultipartFile file) throws IOException {
@@ -80,6 +94,10 @@ public class UserService {
         return userRepository.isSubscribe(follower, followUser);
     }
 
+    public List<User> findBySearchUserAuthFromSubscriptions(User follower, String search){
+        return userRepository.findBySearchUserAuthFromSubscriptions(follower, search);
+    }
+
     public List<User> findAllUserByUserAuthFromSubscriptions(User follower){
         return userRepository.findAllUserByUserAuthFromSubscriptions(follower);
     }
@@ -95,5 +113,9 @@ public class UserService {
     public void changeUserPassword(Long id, String password){
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
         userRepository.changeUserPassword(id, passwordEncoder.encode(password));
+    }
+
+    public Long getSubscribersCount(User user){
+        return userRepository.getSubscribersCount(user);
     }
 }
