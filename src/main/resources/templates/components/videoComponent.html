@@ -13,9 +13,29 @@
             <div class="videoCard" th:each="video : ${videos}">
                 <a th:href="@{'/watch/' + *{video.getId()}}">
 <!--                    <p class="idVideo" th:text="${video.id}"></p>-->
-                    <video class="video" th:preload="metadata" th:src="@{'/video/' + *{video.getFilename()}}" preload="none"></video>
-                    <p th:text="${video.getVideoTitle()}"></p>
+                    <div class="videoImg">
+                        <video class="video" th:preload="metadata" th:src="@{'/video/' + *{video.getFilename()}}" preload="none"></video>
+                        <i class="fas fa-play-circle videoPlayIcon"></i>
+                    </div>
+                    <p class="videoTitleCard" th:text="${video.getVideoTitle()}"></p>
                 </a>
+                <div th:if="${!#strings.contains(#httpServletRequest.requestURI, '/watch/')}" class="photoUserInfo">
+                    <a th:href="@{'/channel/' + *{video.getUser().getId()}}" class="photoLinkToUser">
+                        <div class="photoUserAvatar">
+                            <img th:src="@{'/img/' + *{video.getUser().getPhoto()}}" alt="">
+                        </div>
+                    </a>
+                    <div class="photoUserNameDateText">
+                        <a th:href="@{'/channel/' + *{video.getUser().getId()}}" class="photoLinkToUser">
+                            <div class="photoUserNameText">
+                                <p th:text="*{video.getUser().getFirstName() + ' ' + video.getUser().getLastName()}"></p>
+                            </div>
+                            <div class="photoDate">
+                                <p th:text="*{video.getAddDate()}"></p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </section>

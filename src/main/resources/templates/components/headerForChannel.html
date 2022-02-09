@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <!--/*@thymesVar id="user" type="ru.osminkin.springvideohosting.model.User"*/-->
 <head>
     <meta charset="UTF-8">
@@ -31,10 +31,10 @@
             </div>
         </div>
         <div>
-            <form th:if="${#authentication.getName() != user.getEmail() and userRole == 'ADMIN' and userStatus == 'ACTIVE'}" th:action="@{'/channel/' + *{user.getId()}}" th:method="post">
+            <form sec:authorize="hasRole('ROLE_ADMIN')" th:if="${#authentication.getName() != user.getEmail() and userStatus == 'ACTIVE'}" th:action="@{'/channel/' + *{user.getId()}}" th:method="post">
                 <button class="followButton" type="submit" name="banUser" th:id="*{user.getId()}">Заблокировать пользователя</button>
             </form>
-            <form th:if="${#authentication.getName() != user.getEmail() and userRole == 'ADMIN' and userStatus == 'BANNED'}" th:action="@{'/channel/' + *{user.getId()}}" th:method="post">
+            <form sec:authorize="hasRole('ROLE_ADMIN')" th:if="${#authentication.getName() != user.getEmail() and userStatus == 'BANNED'}" th:action="@{'/channel/' + *{user.getId()}}" th:method="post">
                 <button class="unfollowButton" type="submit" name="unbanUser" th:id="*{user.getId()}">Разблокировать пользователя</button>
             </form>
         </div>

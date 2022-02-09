@@ -1,5 +1,6 @@
 package ru.osminkin.springvideohosting.services;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,16 +15,19 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
+@Slf4j
 public class VideoService {
     private final VideoRepository videoRepository;
     private final UserService userService;
+    private final RecordService recordService;
     @Value("${upload.path.video}")
     private String uploadPathVideos;
     private final NumberWatchVideoRepository numberWatchVideoRepository;
 
-    public VideoService(VideoRepository videoRepository, UserService userService, NumberWatchVideoRepository numberWatchVideoRepository) {
+    public VideoService(VideoRepository videoRepository, UserService userService, RecordService recordService, NumberWatchVideoRepository numberWatchVideoRepository) {
         this.videoRepository = videoRepository;
         this.userService = userService;
+        this.recordService = recordService;
         this.numberWatchVideoRepository = numberWatchVideoRepository;
     }
 
@@ -31,45 +35,52 @@ public class VideoService {
         return videoRepository.findVideoById(videoId);
     }
 
-    public void saveVideoInDb(long userId, MultipartFile file, Video videoFromForm) throws IOException {
+    public void saveVideoInDb(long userId, MultipartFile file, String videoTitle, String videoDescription) throws IOException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Video video = new Video();
         if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()){
             File upload = new File(uploadPathVideos);
             if (!upload.exists()){
                 if (upload.mkdir()){
-                    System.out.println("Created directory");
+                    log.info("Dir {} created", upload.getName());
                 }
             }
             String uuidFile = UUID.randomUUID().toString();
             file.transferTo(new File(uploadPathVideos + "/" + uuidFile + ".mp4"));
-            videoFromForm.setFilename(uuidFile);
-            videoFromForm.setUser(userService.findUserById(userId));
-            videoFromForm.setLikes(0L);
-            videoFromForm.setDislikes(0L);
-            videoFromForm.setAddDate(Timestamp.valueOf(dateFormat.format(GregorianCalendar.getInstance().getTime())));
-            videoRepository.save(videoFromForm);
+            video.setFilename(uuidFile);
+            video.setUser(userService.findUserById(userId));
+            video.setVideoTitle(videoTitle);
+            video.setVideoDescription(videoDescription);
+            video.setLikes(0L);
+            video.setDislikes(0L);
+            video.setAddDate(Timestamp.valueOf(dateFormat.format(GregorianCalendar.getInstance().getTime())));
+            videoRepository.save(video);
         }
     }
 
     public Iterable<Video> findAllVideosByUserId(Long id){
-        return videoRepository.findVideoByUserId(id);
+        return videoRepository.findVideosByUserId(id);
     }
 
     public Iterable<Video> findAllVideosByUserId(Long id, String search){
         return videoRepository.findAllVideosByUserId(id, search);
     }
 
-    public Iterable<Video> findAll(String search){
-        return videoRepository.findAll(search);
+    public Iterable<Video> findAllVideos(String search){
+        return videoRepository.findAllVideos(search);
+    }
+
+    public Iterable<Video> findAllVideos(){
+        return videoRepository.findAllVideos();
     }
 
     public void deleteVideoById(Long id){
         numberWatchVideoRepository.deleteByVideoId(id);
+        recordService.deleteByVideoId(id);
         File file = new File(uploadPathVideos + "/" + videoRepository.findVideoById(id).getFilename() + ".mp4");
-        System.out.println(uploadPathVideos + "/" + videoRepository.findVideoById(id).getFilename() + ".mp4");
         if (file.delete()){
-            System.out.println("Video deleted");
+            log.info("Video {} deleted", file.getName());
         }
         videoRepository.deleteById(id);
     }

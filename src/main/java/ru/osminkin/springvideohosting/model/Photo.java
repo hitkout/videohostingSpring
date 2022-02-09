@@ -14,6 +14,8 @@ public class Photo {
     private Long id;
     @Column(name = "filename")
     private String filename;
+    @Column(name = "text")
+    private String text;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;

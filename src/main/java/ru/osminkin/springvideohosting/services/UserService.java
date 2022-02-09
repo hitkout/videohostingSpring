@@ -1,11 +1,14 @@
 package ru.osminkin.springvideohosting.services;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.osminkin.springvideohosting.controller.ResourceNotFoundException;
 import ru.osminkin.springvideohosting.model.User;
 import ru.osminkin.springvideohosting.repository.UserRepository;
 import java.io.File;
@@ -13,13 +16,16 @@ import java.io.IOException;
 import java.util.*;
 
 @Service
+@Slf4j
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
     @Value("${upload.path.image}")
     private String uploadPathImages;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<User> findAll(){
@@ -31,25 +37,21 @@ public class UserService {
     }
 
     public User findUserById(Long id){
-        return userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User doesn't exists"));
+        return userRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
     }
 
     public User findUserByAuthentication(Authentication authentication){
         return userRepository.findByEmail(authentication.getName()).orElseThrow(() -> new UsernameNotFoundException("User doesn't exists"));
     }
 
-    public String getUserRole(User authUser){
-        return userRepository.getUserRole(authUser);
+    @PreAuthorize("hasRole('ADMIN')")
+    public void banUserById(Long bannedUser){
+        userRepository.banUserById(bannedUser);
     }
 
-    public void banUserById(User authUser, Long bannedUser){
-        if (Objects.equals(userRepository.getUserRole(authUser), "ADMIN"))
-            userRepository.banUserById(bannedUser);
-    }
-
-    public void unbanUserById(User authUser, Long bannedUser){
-        if (Objects.equals(userRepository.getUserRole(authUser), "ADMIN"))
-            userRepository.unbanUserById(bannedUser);
+    @PreAuthorize("hasRole('ADMIN')")
+    public void unbanUserById(Long bannedUser){
+        userRepository.unbanUserById(bannedUser);
     }
 
     public String getUserStatus(Long userId){
@@ -61,7 +63,7 @@ public class UserService {
             File upload = new File(uploadPathImages);
             if (!upload.exists()){
                 if (upload.mkdir()){
-                    System.out.println("Created directory");
+                    log.info("Dir {} created", upload.getName());
                 }
             }
             String uuidFile = UUID.randomUUID().toString();
@@ -78,7 +80,7 @@ public class UserService {
     public void deleteUserPhoto(String photoName){
         File file = new File(uploadPathImages + "/" + photoName);
         if (file.delete()){
-            System.out.println("Photo deleted");
+            log.info("Photo {} deleted", file.getName());
         }
     }
 
@@ -103,16 +105,23 @@ public class UserService {
     }
 
     public void changeName(Long id, String name){
-        userRepository.changeName(id, name);
+        User user = userRepository.getById(id);
+        user.setFirstName(name);
+        userRepository.save(user);
     }
 
     public void changeSurname(Long id, String surname){
-        userRepository.changeSurname(id, surname);
+        User user = userRepository.getById(id);
+        user.setFirstName(surname);
+        userRepository.save(user);
     }
 
-    public void changeUserPassword(Long id, String password){
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
-        userRepository.changeUserPassword(id, passwordEncoder.encode(password));
+    public boolean changeUserPassword(Long id, String oldPassword, String password){
+        if (passwordEncoder.matches(oldPassword, findUserById(id).getPassword())){
+            userRepository.changeUserPassword(id, passwordEncoder.encode(password));
+            return true;
+        }
+        return false;
     }
 
     public Long getSubscribersCount(User user){

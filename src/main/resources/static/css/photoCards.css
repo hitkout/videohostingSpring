@@ -18,10 +18,15 @@
     margin-bottom: 25px;
 }
 
+.photoText{
+    color: #ffffff;
+    font-size: 18px;
+}
+
 .catalogCard a{
     text-decoration: none;
-    color: #ffffff;
-    font-size: 16px;
+    color: #dbdbdb;
+    font-size: 15px;
     transition: color ease-in 0.2s;
 }
 

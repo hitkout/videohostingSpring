@@ -1,0 +1,12 @@
+.videoImg{
+    position: relative;
+}
+
+.videoPlayIcon{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    color: #fff;
+    font-size: 55px;
+    transform: translate(-50%, -50%);
+}

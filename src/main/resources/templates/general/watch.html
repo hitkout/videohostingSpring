@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/css/videosSide.css">
     <link rel="stylesheet" href="/css/comment.css">
     <link rel="stylesheet" href="/css/follow.css">
+    <link rel="stylesheet" href="/css/videoPlayButton.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -22,17 +23,19 @@
                 <div class="rowTitleAndLikes">
                     <p class="videoTitle" th:text="${video.getVideoTitle()}"></p>
 
-                    <form th:class="${authUser == null} ? 'authNull' : ''" method="post" th:action="@{'/watch/' + *{video.getId()}}">
-                        <button class="btnLikeOrDislike" th:disabled="${authUser == null}" th:classappend="${isLikeOrDislike == 'like'} ? 'btnLikeOrDislikeConstant' : ''" type="submit" name="like"><i class="fas fa-thumbs-up"></i><span th:text="${video.getLikes()}"></span></button>
-                        <button class="btnLikeOrDislike" th:disabled="${authUser == null}" th:classappend="${isLikeOrDislike == 'dislike'} ? 'btnLikeOrDislikeConstant' : ''" type="submit" name="dislike"><i class="fas fa-thumbs-down"></i><span th:text="${video.getDislikes()}"></span></button>
-                        <p th:if="${authUser == null}" class="hoverTextAuth">Войдите в аккаунт, чтобы сохранить оценку.</p>
-                    </form>
-
-                    <div th:if="${#authentication.getName() == user.getEmail()}">
-                        <form th:action="@{'/watch/' + *{video.getId()}}" th:method="post">
-                            <input type="hidden" name="id" th:value="${video.getId()}" />
-                            <button type="submit" name="delete">Удалить видео</button>
+                    <div class="btnVideoSetting">
+                        <form th:class="${authUser == null} ? 'authNull' : ''" method="post" th:action="@{'/watch/' + *{video.getId()}}">
+                            <button class="btnLikeOrDislike" th:disabled="${authUser == null}" th:classappend="${isLikeOrDislike == 'like'} ? 'btnLikeOrDislikeConstant' : ''" type="submit" name="like"><i class="fas fa-thumbs-up"></i><span th:text="${video.getLikes()}"></span></button>
+                            <button class="btnLikeOrDislike" th:disabled="${authUser == null}" th:classappend="${isLikeOrDislike == 'dislike'} ? 'btnLikeOrDislikeConstant' : ''" type="submit" name="dislike"><i class="fas fa-thumbs-down"></i><span th:text="${video.getDislikes()}"></span></button>
+                            <p th:if="${authUser == null}" class="hoverTextAuth">Войдите в аккаунт, чтобы сохранить оценку.</p>
                         </form>
+
+                        <div th:if="${#authentication.getName() == user.getEmail()}">
+                            <form th:action="@{'/watch/' + *{video.getId()}}" th:method="post">
+                                <input type="hidden" name="id" th:value="${video.getId()}" />
+                                <button class="btnDeleteVideo" type="submit" name="delete"><i class="fas fa-trash-alt"></i></button>
+                            </form>
+                        </div>
                     </div>
                 </div>
                 <p class="viewsCount" th:text="'Количество просмотров: ' + ${number}"></p>
@@ -71,6 +74,20 @@
                 </label>
                 <button type="submit" name="addComment">Добавить комментарий</button>
             </form>
+            <a th:if="!${(param.sort != null) and (param.sort[0] == 'old')}"
+               class="filterComment"
+               th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder)}"
+               th:href="${urlBuilder.fromCurrentRequest().replaceQueryParam('sort', 'old').toUriString()}">
+                <p>Старые комментарии</p>
+                <i class="fas fa-sort-amount-up-alt"></i>
+            </a>
+            <a th:if="!${(param.sort == null) or (param.sort[0] == 'new')}"
+               class="filterComment"
+               th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder)}"
+               th:href="${urlBuilder.fromCurrentRequest().replaceQueryParam('sort', 'new').toUriString()}">
+                <p>Новые комментарии</p>
+                <i class="fas fa-sort-amount-down-alt"></i>
+            </a>
             <div th:replace="components/commentComponent :: commentComponent"></div>
         </div>
     </div>

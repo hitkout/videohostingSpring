@@ -1,5 +1,27 @@
 .comments{
     padding-left: 80px;
+    width: 68%;
+    position: absolute;
+}
+
+.filterComment{
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    right: 0;
+    text-decoration: none;
+    color: #fff;
+    font-size: 18px;
+    transition: color 0.2s ease-in;
+}
+
+.filterComment:hover{
+    color: #4ED8D8;
+}
+
+.filterComment i{
+    padding-left: 15px;
 }
 
 .comment:last-child{
@@ -20,9 +42,27 @@
 
 }
 
+.btnDeleteComment{
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 24px;
+    cursor: pointer;
+    transition: color ease-in 0.2s;
+}
+
+.btnDeleteComment:hover{
+    color: #4ED8D8;
+}
+
 .commentUserNameDateText p{
     margin-top: 0;
     padding-top: 0;
+}
+
+.commentContainer{
+    display: flex;
+    justify-content: space-between;
 }
 
 .commentUserInfo{

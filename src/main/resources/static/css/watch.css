@@ -31,6 +31,25 @@
     max-width: 80%;
 }
 
+.btnVideoSetting{
+    display: flex;
+    align-items: center;
+}
+
+.btnDeleteVideo{
+    background: none;
+    border: none;
+    font-size: 30px;
+    color: #fff;
+    margin-left: 20px;
+    cursor: pointer;
+    transition: color ease-in 0.2s;
+}
+
+.btnDeleteVideo:hover{
+    color: #4ED8D8;
+}
+
 .secondColumn{
     position: absolute;
     right: 0;

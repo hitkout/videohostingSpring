@@ -3,6 +3,7 @@
     const firstName = document.getElementById('firstName');
     const lastName = document.getElementById('lastName');
     const password = document.getElementById('password');
+    const regularRegPass = /(?=.*[!@#$%^&*])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{6,}/g;
 
     form.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -20,12 +21,14 @@
     let count = 0;
 
     if (emailValue === ''){
-    setErrorFor(email, 'Email cannot be blank');
-} else if (!isEmail(emailValue)){
-    setErrorFor(email, 'Email is not valid');
-} else {
-    setSuccessFor(email);
-    count++;
+        setErrorFor(email, 'Поле почты не может быть пустым');
+    } else if (emailValue.length > 254){
+        setErrorFor(email, 'Почта не должна превышать 254 символов');
+    }else if (!isEmail(emailValue)){
+        setErrorFor(email, 'Некорректный адрес электронной почты');
+    } else {
+        setSuccessFor(email);
+        count++;
 }
 
     function isEmail(email) {
@@ -33,22 +36,24 @@
 }
 
     if (firstNameValue === ''){
-    setErrorFor(firstName, 'FirstName cannot be blank');
+    setErrorFor(firstName, 'Поле имени не может быть пустым');
 }else {
     setSuccessFor(firstName);
     count++;
 }
 
     if (lastNameValue === ''){
-    setErrorFor(lastName, 'LastName cannot be blank');
+    setErrorFor(lastName, 'Поле фамилии не может быть пустым');
 }else {
     setSuccessFor(lastName);
     count++;
 }
 
     if (passwordValue === ''){
-    setErrorFor(password, 'Password cannot be blank');
-}else {
+        setErrorFor(password, 'Поле пароля не может быть пустым');
+    } else if (!regularRegPass.test(passwordValue)){
+        setErrorFor(password, 'Пароль должен содержать от 6 символов, а также хотя бы один спецсимвол и латинскую букву в верхнем регистре');
+    } else {
     setSuccessFor(password);
     count++;
 }

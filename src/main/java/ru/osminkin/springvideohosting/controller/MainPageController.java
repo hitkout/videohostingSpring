@@ -6,9 +6,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.osminkin.springvideohosting.services.*;
 
-import java.text.SimpleDateFormat;
-import java.util.TimeZone;
-
 @Controller
 public class MainPageController {
     private final UserService userService;
@@ -25,8 +22,7 @@ public class MainPageController {
 
     @GetMapping("")
     public String mainPage(Model model,
-                           Authentication authentication,
-                           @RequestParam(value = "sort", defaultValue = "pop") String sort){
+                           Authentication authentication){
         model.addAttribute("authUser", authentication == null ? null : userService.findUserByAuthentication(authentication));
         model.addAttribute("videos", videoService.getFiveRandomVideos());
         model.addAttribute("photos", photoService.getFiveRandomPhotos());
@@ -56,8 +52,7 @@ public class MainPageController {
     @GetMapping("/users")
     public String mainUsersPage(Model model,
                                 Authentication authentication,
-                                String search,
-                                @RequestParam(value = "sort", defaultValue = "pop") String sort){
+                                String search){
         if (search != null)
             model.addAttribute("users", userService.findBySearch(search.toLowerCase()));
         else model.addAttribute("users", userService.findAll());
@@ -69,8 +64,6 @@ public class MainPageController {
     public String mainSubscriptionsPage(Model model,
                                         Authentication authentication,
                                         String search){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         model.addAttribute("authUser", userService.findUserByAuthentication(authentication));
         if (search != null){
             model.addAttribute("followUsers", userService.findBySearchUserAuthFromSubscriptions(userService.findUserByAuthentication(authentication), search.toLowerCase()));

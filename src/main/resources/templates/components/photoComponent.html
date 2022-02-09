@@ -9,21 +9,36 @@
 </head>
 <body>
     <section th:fragment="photoComponent">
-<!--        <form modelAttribute="photoFromForm" method="post" enctype="multipart/form-data">-->
-<!--            <input type="file" name="file">-->
-<!--            <input type="hidden" name="_csrf" value="${_csrf.token}" />-->
-<!--            <button type="submit" name="savePhoto">Add</button>-->
-<!--        </form>-->
         <div id="mainPhoto" class="mainPhoto catalogRow">
             <div class="catalogCard" th:each="photo : ${photos}">
-                <a th:href="@{'/channel/' + *{photo.getUser().getId()}}" th:text="${photo.getUser().getFirstName() + ' ' + photo.getUser().getLastName()}"></a>
-<!--                <p class="idPhoto" th:text="*{photo.id}"></p>-->
                 <img class="image catalogImg" th:src="@{'/img/' + *{photo.getFilename()}}" alt=""/>
-                <div th:if="${#authentication.getName() == photo.getUser().getEmail() && #httpServletRequest.requestURI == '/channel/' + user.getId() + '/photos'}">
-                    <form th:action="@{'/channel/' + *{user.getId()} + '/photos'}" th:method="post">
-                        <input type="hidden" name="photoId" th:value="*{photo.getId()}" />
-                        <button type="submit" name="deletePhoto">Удалить фотографию</button>
-                    </form>
+                <div class="photoText">
+                    <p th:text="${photo.getText()}"></p>
+                </div>
+                <div class="photoUserInfo" th:classappend="${#authentication.getName() == photo.getUser().getEmail() && #httpServletRequest.requestURI == '/channel/' + photo.getUser().getId() + '/photos'} ? 'photoUserInfoIf' : ''">
+                    <div class="rowPhotoUserInfo">
+                        <a th:href="@{'/channel/' + *{photo.getUser().getId()}}" class="photoLinkToUser">
+                            <div class="photoUserAvatar">
+                                <img th:src="@{'/img/' + *{photo.getUser().getPhoto()}}" alt="">
+                            </div>
+                        </a>
+                        <div class="photoUserNameDateText">
+                            <a th:href="@{'/channel/' + *{photo.getUser().getId()}}" class="photoLinkToUser">
+                                <div class="photoUserNameText">
+                                    <p th:text="*{photo.getUser().getFirstName() + ' ' + photo.getUser().getLastName()}"></p>
+                                </div>
+                                <div class="photoDate">
+                                    <p th:text="*{photo.getAddDate()}"></p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div th:if="${#authentication.getName() == photo.getUser().getEmail() && #httpServletRequest.requestURI == '/channel/' + photo.getUser().getId() + '/photos'}">
+                        <form th:action="@{'/channel/' + *{user.getId()} + '/photos'}" th:method="post">
+                            <input type="hidden" name="photoId" th:value="*{photo.getId()}" />
+                            <button class="btnDeletePhoto" type="submit" name="deletePhoto"><i class="fas fa-trash-alt"></i></button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

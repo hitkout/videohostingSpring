@@ -71,4 +71,16 @@ public class RecordService {
     public List<Record> findAllCommentsByVideoId(Long videoId){
         return recordsRepository.findAllCommentsByVideoId(videoId);
     }
+
+    public List<Record> findAllCommentsByNewVideoId(Long videoId){
+        return recordsRepository.findAllCommentsByNewVideoId(videoId);
+    }
+
+    public List<Record> findAllCommentsByOldVideoId(Long videoId){
+        return recordsRepository.findAllCommentsByOldVideoId(videoId);
+    }
+
+    public void deleteByVideoId(Long id){
+        recordsRepository.deleteByVideoId(id);
+    }
 }

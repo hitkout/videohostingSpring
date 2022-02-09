@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="/css/search.css">
     <link rel="stylesheet" href="/css/videoCards.css">
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/videoPlayButton.css">
+    <link rel="stylesheet" href="/css/photoUserStyle.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 </head>
@@ -28,7 +30,7 @@
     </a>
 </div>
 
-<div class="marginContentMain">
+<div th:if="${!#lists.isEmpty(videos)}" class="marginContentMain">
     <div class="mainVideo">
         <h2 class="mainTitle" th:text="'Новые видео за последнюю неделю'"></h2>
         <div th:replace="components/videoComponent :: videoComponent"></div>

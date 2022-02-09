@@ -1,5 +1,6 @@
 package ru.osminkin.springvideohosting.repository;
 
+import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -12,29 +13,25 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     @Override
-    Optional<User> findById(Long id);
+    @NonNull
+    Optional<User> findById(@NonNull Long id);
     Optional<User> findByEmail(String email);
 
-    User findUserByEmail(String email);
-
     @Transactional
-    @Modifying(clearAutomatically = true)
+    @Modifying
     @Query(value = "update users set status = 'BANNED' where id = :bannedUser", nativeQuery = true)
     void banUserById(@Param("bannedUser") Long bannedUser);
 
     @Transactional
-    @Modifying(clearAutomatically = true)
+    @Modifying
     @Query(value = "update users set status = 'ACTIVE' where id = :bannedUser", nativeQuery = true)
     void unbanUserById(@Param("bannedUser") Long bannedUser);
-
-    @Query(value = "select role from users where id = :authUser", nativeQuery = true)
-    String getUserRole(@Param("authUser") User authUser);
 
     @Query(value = "select status from users where id = :userId", nativeQuery = true)
     String getUserStatus(@Param("userId") Long userId);
 
     @Transactional
-    @Modifying(clearAutomatically = true)
+    @Modifying
     @Query(value = "update users set photo = :photoName where id = :id", nativeQuery = true)
     void updatePhoto(@Param("id") Long id, @Param("photoName") String photoName);
 
@@ -42,12 +39,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findBySearch(@Param("search") String search);
 
     @Transactional
-    @Modifying(clearAutomatically = true)
+    @Modifying
     @Query(value = "insert into subscriptions(follower, follow_user) values (:follower, :followUser)",nativeQuery = true)
     void subscribe(@Param("follower") User follower, @Param("followUser") User followUser);
 
     @Transactional
-    @Modifying(clearAutomatically = true)
+    @Modifying
     @Query(value = "delete from subscriptions where follower = :follower and follow_user = :followUser",nativeQuery = true)
     void unsubscribe(@Param("follower") User follower, @Param("followUser") User followUser);
 
@@ -61,17 +58,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findBySearchUserAuthFromSubscriptions(@Param("follower") User follower, @Param("search") String search);
 
     @Transactional
-    @Modifying(clearAutomatically = true)
-    @Query(value = "update users set first_name = :name where id = :id", nativeQuery = true)
-    void changeName(@Param("id") Long id, @Param("name") String name);
-
-    @Transactional
-    @Modifying(clearAutomatically = true)
-    @Query(value = "update users set last_name = :surname where id = :id", nativeQuery = true)
-    void changeSurname(@Param("id") Long id, @Param("surname") String surname);
-
-    @Transactional
-    @Modifying(clearAutomatically = true)
+    @Modifying
     @Query(value = "update users set password = :password where id = :id", nativeQuery = true)
     void changeUserPassword(@Param("id") Long id, @Param("password") String password);
 

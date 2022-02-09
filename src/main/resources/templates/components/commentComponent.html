@@ -3,6 +3,7 @@
 <!--/*@thymesVar id="user" type="ru.osminkin.springvideohosting.model.User"*/-->
 <!--/*@thymesVar id="comments" type="ru.osminkin.springvideohosting.model.Record"*/-->
 <!--/*@thymesVar id="comment" type="ru.osminkin.springvideohosting.model.Record"*/-->
+<!--/*@thymesVar id="video" type="ru.osminkin.springvideohosting.model.Video"*/-->
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
@@ -31,14 +32,13 @@
             </div>
           </div>
       </div>
+      <div th:if="${#authentication.getName() == comment.getUser().getEmail()}">
+        <form th:action="@{'/watch/' + *{video.getId()}}" th:method="post">
+          <input type="hidden" name="commentId" th:value="${comment.getId()}" />
+          <button class="btnDeleteComment" type="submit" name="deleteComment"><i class="fas fa-times"></i></button>
+        </form>
+      </div>
     </div>
-
-                <div th:if="${#authentication.getName() == comment.getUser().getEmail()}">
-                    <form th:action="@{'/watch/' + *{video.getId()}}" th:method="post">
-                        <input type="hidden" name="commentId" th:value="${comment.getId()}" />
-                        <button type="submit" name="deleteComment">удалить комментарий</button>
-                    </form>
-                </div>
   </div>
 </section>
 </body>

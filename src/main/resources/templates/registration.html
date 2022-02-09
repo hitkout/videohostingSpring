@@ -16,6 +16,7 @@
                 <label for="email">Введите почту</label>
                 <input type="text" id="email" name="email" placeholder="test@mail.ru">
                 <small>Error message</small>
+                <p th:if="${userExists}" style="color: #f00">Пользователь с такой почтой уже существует</p>
             </div>
             <div class="form-control">
                 <label for="firstName">Введите имя</label>

@@ -6,7 +6,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.osminkin.springvideohosting.model.Video;
 import ru.osminkin.springvideohosting.services.TypeAndSortService;
 import ru.osminkin.springvideohosting.services.UserService;
 import ru.osminkin.springvideohosting.services.VideoService;
@@ -14,23 +13,24 @@ import ru.osminkin.springvideohosting.services.VideoService;
 import java.io.IOException;
 
 @Controller
-public class VideosPageController {
+public class UserVideosPageController {
     private final TypeAndSortService typeAndSortService;
     private final UserService userService;
     private final VideoService videoService;
 
-    public VideosPageController(TypeAndSortService typeAndSortService, UserService userService, VideoService videoService) {
+    public UserVideosPageController(TypeAndSortService typeAndSortService, UserService userService, VideoService videoService) {
         this.typeAndSortService = typeAndSortService;
         this.userService = userService;
         this.videoService = videoService;
     }
 
-    @PostMapping(value = "/channel/{userId}/videos", params = "saveVideo")
+    @PostMapping(value = "/channel/{userId}/videos", params = {"videoTitle", "videoDescription"})
     @PreAuthorize("@authenticatedUserService.hasId(#userId)")
     public String postChannelVideo(@PathVariable("userId") long userId,
                                    @RequestParam("file") MultipartFile file,
-                                   @ModelAttribute("videoFromForm") Video videoFromForm) throws IOException {
-        videoService.saveVideoInDb(userId, file, videoFromForm);
+                                   @RequestParam("videoTitle") String videoTitle,
+                                   @RequestParam("videoDescription") String videoDescription) throws IOException {
+        videoService.saveVideoInDb(userId, file, videoTitle, videoDescription);
         return "redirect:/channel/{userId}?type=videos";
     }
 

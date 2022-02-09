@@ -22,13 +22,15 @@
 </div>
 <div class="settings">
     <div class="example">
-        <form class="form-group" modelAttribute="userPhotoFromForm" method="post" enctype="multipart/form-data">
-            <label class="label">
+        <form id="formFile" class="form-group" modelAttribute="userPhotoFromForm" method="post" enctype="multipart/form-data">
+            <label class="label form-control-settings">
                 <p>Загрузить фото</p>
-                <input type="file" name="file">
-                <input type="hidden" name="_csrf" value="${_csrf.token}" />
+                <input id="file" type="file" name="file">
+                <small>Error message</small>
             </label>
             <button type="submit" name="changeUserPhoto">Изменить фотографию</button>
+        </form>
+        <form method="post">
             <button type="submit" name="deleteUserPhoto">Удалить фотографию</button>
         </form>
     </div>
@@ -38,7 +40,10 @@
     <div class="divName">
         <p>Введите имя:</p>
         <form id="formFirstName" th:action="@{'/settings'}" th:method="post">
-            <input id="name" type="text" name="name" th:placeholder="*{authUser.getFirstName()}">
+            <div class="form-control-settings">
+                <input id="name" type="text" name="name" th:placeholder="*{authUser.getFirstName()}">
+                <small>Error message</small>
+            </div>
             <button type="submit" name="changeName">Изменить имя</button>
         </form>
     </div>
@@ -47,8 +52,11 @@
 
     <div class="divSurname">
         <p>Введите фамилию:</p>
-        <form id="formLastName" class="form" th:action="@{'/settings'}" th:method="post">
-            <input id="surname" type="text" name="surname" th:placeholder="*{authUser.getLastName()}">
+        <form id="formLastName" th:action="@{'/settings'}" th:method="post">
+            <div class="form-control-settings">
+                <input id="surname" type="text" name="surname" th:placeholder="*{authUser.getLastName()}">
+                <small>Error message</small>
+            </div>
             <button type="submit" name="changeSurname">Изменить фамилию</button>
         </form>
     </div>
@@ -58,108 +66,25 @@
     <div class="divPassword">
         <p>Введите новый пароль:</p>
         <form id="formPassword" th:action="@{'/settings'}" th:method="post">
-            <input id="password" type="text" name="password" placeholder="Пароль">
-            <input id="passwordConfirm" type="text" name="passwordConfirm" placeholder="Подтверждение пароля">
+            <div class="form-control-settings">
+                <input id="oldPassword" type="text" name="oldPassword" placeholder="Старый пароль">
+                <small>Error message</small>
+            </div>
+            <div class="form-control-settings">
+                <input id="newPassword" type="text" name="newPassword" placeholder="Пароль">
+                <small>Error message</small>
+            </div>
+            <div class="form-control-settings">
+                <input id="newPasswordConfirm" type="text" name="newPasswordConfirm" placeholder="Подтверждение пароля">
+                <small>Error message</small>
+            </div>
+            <p th:if="${changePassword == false}" style="color: #A00">Ошибка смены пароля: старый пароль не совпадает</p>
+            <p th:if="${changePassword == true}" style="color: #0A0">Пароль успешно изменён</p>
             <button type="submit" name="changeUserPassword">Изменить пароль</button>
         </form>
     </div>
 </div>
 
-<!--<script>-->
-<!--    const formFirstName = document.getElementById('formFirstName');-->
-<!--    const formLastName = document.getElementById('formLastName');-->
-<!--    const formPassword = document.getElementById('formPassword');-->
-<!--    const firstName = document.getElementById('name');-->
-<!--    const lastName = document.getElementById('surname');-->
-<!--    const password = document.getElementById('password');-->
-<!--    const passwordConfirm = document.getElementById('passwordConfirm');-->
-
-<!--    formFirstName.addEventListener('submit', (e) => {-->
-<!--        e.preventDefault();-->
-
-<!--        if (checkInputFirstName() === true){-->
-<!--            e.currentTarget.submit();-->
-<!--        }-->
-<!--    });-->
-
-<!--    formLastName.addEventListener('submit', (e) => {-->
-<!--        e.preventDefault();-->
-
-<!--        if (checkInputLastName() === true){-->
-<!--            e.currentTarget.submit();-->
-<!--        }-->
-<!--    });-->
-
-<!--    formPassword.addEventListener('submit', (e) => {-->
-<!--        e.preventDefault();-->
-
-<!--        if (checkInputPassword() === true){-->
-<!--            e.currentTarget.submit();-->
-<!--        }-->
-<!--    });-->
-
-<!--    function checkInputFirstName(){-->
-<!--        const firstNameValue = firstName.value.trim();-->
-<!--        let checker = false;-->
-
-<!--        if (firstNameValue === ''){-->
-<!--            setErrorFor(firstName, 'FirstName cannot be blank');-->
-<!--        }else {-->
-<!--            setSuccessFor(firstName);-->
-<!--            checker = true;-->
-<!--        }-->
-
-<!--        return checker;-->
-<!--    }-->
-
-<!--    function checkInputLastName(){-->
-<!--        const lastNameValue = lastName.value.trim();-->
-<!--        let checker = false;-->
-
-<!--        if (lastNameValue === ''){-->
-<!--            setErrorFor(lastName, 'LastName cannot be blank');-->
-<!--        }else {-->
-<!--            setSuccessFor(lastName);-->
-<!--            checker = true;-->
-<!--        }-->
-
-<!--        return checker;-->
-<!--    }-->
-
-<!--    function checkInputPassword(){-->
-<!--        const passwordValue = password.value.trim();-->
-<!--        const passwordConfirmValue = passwordConfirm.value.trim();-->
-<!--        let checker = false;-->
-
-<!--        if (passwordValue === ''){-->
-<!--            setErrorFor(password, 'Password cannot be blank');-->
-<!--        } else if (passwordConfirmValue === ''){-->
-<!--            setErrorFor(passwordConfirm, 'Password cannot be blank')-->
-<!--        } else if (passwordValue !== passwordConfirmValue){-->
-<!--            setErrorFor(password, 'Passwords don\'t match')-->
-<!--            setErrorFor(passwordConfirm, 'Passwords don\'t match')-->
-<!--        }-->
-<!--        else {-->
-<!--            setSuccessFor(password);-->
-<!--            checker = true;-->
-<!--        }-->
-
-<!--        return checker;-->
-<!--    }-->
-
-<!--    function setErrorFor(input, message){-->
-<!--        const formControl = input.parentElement;-->
-<!--        const small = formControl.querySelector('small');-->
-
-<!--        small.innerText = message;-->
-<!--        formControl.className = 'form-control error';-->
-<!--    }-->
-
-<!--    function setSuccessFor(input){-->
-<!--        const formControl = input.parentElement;-->
-<!--        formControl.className = 'form-control success';-->
-<!--    }-->
-<!--</script>-->
-
+<script src="/scripts/formValidationForSettings.js"></script>
 </body>
 </html>

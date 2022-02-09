@@ -22,6 +22,8 @@
                             <li>
                                 <a th:href="@{'/'}" class="top-panel__nav-link"
                                     th:classappend="${#httpServletRequest.getRequestURL() == 'http://localhost:8080/'
+                                    || #httpServletRequest.getRequestURL() == 'http://localhost:8080/videos'
+                                    || #httpServletRequest.getRequestURL() == 'http://localhost:8080/photos'
                                     || #httpServletRequest.requestURI == '/users'
                                     || #httpServletRequest.requestURI == '/subscriptions'} ? 'top-panel__nav-link-constant' : ''">Главная</a>
                             </li>

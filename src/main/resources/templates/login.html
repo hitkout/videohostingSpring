@@ -19,8 +19,9 @@
                 <label for="password" class="sr-only">Введите пароль</label>
                 <input type="password" id="password" name="password" placeholder="Password">
             </div>
+            <p th:if="${param.error != null}" style="color: #c00; text-align: center">Неверно введён логин или пароль</p>
             <button class="authSignIn" type="submit">Войти в учётную запись</button>
-            <a class="authSignUp" href="/auth/registration">Создать новый аккаунт</a>
+            <a class="authSignUp" th:href="@{'/auth/registration'}">Создать новый аккаунт</a>
         </form>
     </div>
 </div>

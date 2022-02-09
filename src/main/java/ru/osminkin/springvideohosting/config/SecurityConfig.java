@@ -1,7 +1,5 @@
 package ru.osminkin.springvideohosting.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -21,21 +19,29 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
 
-    @Autowired
-    public SecurityConfig(@Qualifier("userDetailsServiceImpl") UserDetailsService userDetailsService) {
+    public SecurityConfig(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable().authorizeRequests()
-                .antMatchers("/", "/auth/registration", "/video/**", "/img/**", "/css/**", "/scripts/**", "/videos", "/photos", "/records", "/users", "/channel/**", "/watch/**").permitAll()
-                .anyRequest().authenticated().and().formLogin().loginPage("/auth/login").permitAll().defaultSuccessUrl("/auth/success")
-                .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout", "POST"))
+        http.csrf()
+                .disable()
+                .authorizeRequests()
+                .antMatchers("/", "/auth/registration", "/video/**", "/img/**", "/css/**", "/scripts/**",
+                        "/videos", "/photos", "/records", "/users", "/channel/**", "/watch/**")
+                .permitAll()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .formLogin()
+                .loginPage("/auth/login")
+                .permitAll()
+                .defaultSuccessUrl("/auth/success")
+                .and()
+                .logout()
                 .invalidateHttpSession(true)
-                .clearAuthentication(true)
-                .deleteCookies("JSESSIONID")
-                .logoutSuccessUrl("/auth/login");
+                .logoutUrl("/auth/logout");
     }
 
 //    @Bean

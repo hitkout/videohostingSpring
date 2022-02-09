@@ -5,8 +5,8 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "like_and_dislike_video")
-public class LikeAndDislikeVideo {
+@Table(name = "user_votes_video")
+public class UserVotesVideo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

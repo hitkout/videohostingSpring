@@ -31,8 +31,8 @@ public class TypeAndSortService {
             }
             else {
                 if (search != null)
-                    model.addAttribute("videos", videoService.findAll(search));
-                else model.addAttribute("videos", videoService.findAll());
+                    model.addAttribute("videos", videoService.findAllVideos(search));
+                else model.addAttribute("videos", videoService.findAllVideos());
             }
         }
         else {
@@ -60,7 +60,7 @@ public class TypeAndSortService {
                 model.addAttribute("photos", photoService.findAllPhotosOrderByDate());
             else if (Objects.equals(sort, "old"))
                 model.addAttribute("photos", photoService.findAllPhotosOrderByDateDesc());
-            else model.addAttribute("photos", photoService.findAll());
+            else model.addAttribute("photos", photoService.findAllPhotos());
         }
         else {
             if (Objects.equals(sort, "new"))
@@ -68,23 +68,6 @@ public class TypeAndSortService {
             else if (Objects.equals(sort, "old"))
                 model.addAttribute("photos", photoService.findAllUserPhotosOrderByDateDesc(userId));
             else model.addAttribute("photos", photoService.findAllPhotosByUserId(userId));
-        }
-    }
-
-    public void getRecordsPage(String sort, Model model, Long userId){
-        if (userId == null){
-            if (Objects.equals(sort, "new"))
-                model.addAttribute("records", recordService.findAllRecordsOrderByDate());
-            else if (Objects.equals(sort, "old"))
-                model.addAttribute("records", recordService.findAllRecordsOrderByDateDesc());
-            else model.addAttribute("records", recordService.findAll());
-        }
-        else {
-            if (Objects.equals(sort, "new"))
-                model.addAttribute("records", recordService.findAllUserRecordsOrderByDate(userId));
-            else if (Objects.equals(sort, "old"))
-                model.addAttribute("records", recordService.findAllUserRecordsOrderByDateDesc(userId));
-            else model.addAttribute("records", recordService.findAllUserRecords(userId));
         }
     }
 }

@@ -1,0 +1,24 @@
+.serverErrorContainer{
+    padding-left: 30px;
+}
+
+.serverErrorTitle{
+    color: #ffffff;
+}
+
+.serverErrorText{
+    color: #c7c7c7;
+    font-size: 26px;
+}
+
+.serverErrorLink{
+    text-decoration: none;
+    color: #c7c7c7;
+    border-bottom: 1px solid #c7c7c7;
+    transition: color 0.2s ease-in, border-bottom-color 0.2s ease-in;
+}
+
+.serverErrorLink:hover{
+    color: #4ED8D8;
+    border-color: #4ED8D8;
+}

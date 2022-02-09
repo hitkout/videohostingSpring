@@ -1,5 +1,6 @@
 package ru.osminkin.springvideohosting.services;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
+@Slf4j
 public class PhotoService {
     private final PhotoRepository photoRepository;
     private final UserService userService;
@@ -23,23 +25,25 @@ public class PhotoService {
         this.userService = userService;
     }
 
-    public void savePhotoInDb(long userId, MultipartFile file, Photo photoFromForm) throws IOException {
+    public void savePhotoInDb(long userId, MultipartFile file, String photoTitle) throws IOException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()){
             File upload = new File(uploadPathImages);
             if (!upload.exists()){
                 if (upload.mkdir()){
-                    System.out.println("Created directory");
+                    log.info("Dir {} created", upload.getName());
                 }
             }
             String uuidFile = UUID.randomUUID().toString();
             String resultFilename = uuidFile + "." + file.getOriginalFilename();
             file.transferTo(new File(uploadPathImages + "/" + resultFilename));
-            photoFromForm.setFilename(resultFilename);
-            photoFromForm.setUser(userService.findUserById(userId));
-            photoFromForm.setAddDate(Timestamp.valueOf(dateFormat.format(GregorianCalendar.getInstance().getTime())));
-            photoRepository.save(photoFromForm);
+            Photo photo = new Photo();
+            photo.setFilename(resultFilename);
+            photo.setUser(userService.findUserById(userId));
+            photo.setAddDate(Timestamp.valueOf(dateFormat.format(GregorianCalendar.getInstance().getTime())));
+            photo.setText(photoTitle);
+            photoRepository.save(photo);
         }
     }
 
@@ -50,7 +54,7 @@ public class PhotoService {
     public void deletePhotoById(Long id){
         File file = new File(uploadPathImages + "/" + photoRepository.findPhotoById(id).getFilename());
         if (file.delete()){
-            System.out.println("Photo deleted");
+            log.info("Photo {} deleted", file.getName());
         }
         photoRepository.deleteById(id);
     }
@@ -71,8 +75,8 @@ public class PhotoService {
         return photoRepository.findAllUserPhotosOrderByDateDesc(id);
     }
 
-    public Iterable<Photo> findAll(){
-        return photoRepository.findAll();
+    public Iterable<Photo> findAllPhotos(){
+        return photoRepository.findAllPhotos();
     }
 
     public List<Photo> getFiveRandomPhotos(){

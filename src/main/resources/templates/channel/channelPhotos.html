@@ -12,6 +12,9 @@
     <link rel="stylesheet" href="/css/filter.css">
     <link rel="stylesheet" href="/css/search.css">
     <link rel="stylesheet" href="/css/follow.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/photoUserStyle.css">
+    <link rel="stylesheet" href="/css/photos.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 </head>
@@ -19,31 +22,36 @@
 <div th:replace="components/top-panel :: top-panel"></div>
 <div th:replace="components/headerForChannel :: headerForChannel"></div>
 
-<div th:replace="components/search :: search"></div>
-<div th:replace="components/filter :: filter"></div>
+<div class="rowFormPhoto">
+    <form id="formPhoto" class="formPhoto" th:if="${#authentication.getName() == user.getEmail()}" modelAttribute="photoFromForm" method="post" enctype="multipart/form-data">
+        <div class="form-control-photo">
+            <input class="filePhoto" type="file" id="filePhoto" name="file">
+            <small>Error message</small>
+        </div>
+        <div class="form-control-photo">
+            <label for="photoTitle">Введите название видео</label>
+            <textarea class="photoInput photoTitle" id="photoTitle" name="photoTitle"></textarea>
+            <small>Error message</small>
+        </div>
+        <button class="btnSavePhoto" type="submit" id="savePhoto" name="savePhoto">Сохранить</button>
+    </form>
+</div>
 
-<div th:replace="components/photoComponent :: photoComponent"></div>
+<div th:if="${!#lists.isEmpty(photos) && user.getStatus().name() == 'ACTIVE'}">
+    <div th:replace="components/search :: search"></div>
+    <div th:replace="components/filter :: filter"></div>
+</div>
+<div class="marginContentMain">
+    <div class="emptyMainUser" th:if="${#lists.isEmpty(photos) and user.getStatus().name() == 'ACTIVE'}">
+        Данный пользователь ничего не выкладывал :(
+    </div>
+    <div class="emptyMainUser" th:if="${user.getStatus().name() == 'BANNED'}">
+        Пользователь заблокирован, контент не будет отображён
+    </div>
 
-<!--    <div id="mainPhoto" class="mainPhoto catalogRow">-->
-<!--        <div class="catalogCard" th:each="photo : ${photos}">-->
-<!--            <p class="idPhoto" th:text="${photo.id}"></p>-->
-<!--            <img th:src="@{'/img/' + *{photo.getFilename()}}" alt="">-->
-<!--        </div>-->
-<!--    </div>-->
-
-<!--<div th:each="photo : ${photos}">-->
-<!--    <div>-->
-<!--        <p th:text="*{'Id: ' + photo.getId()}"></p>-->
-<!--        <p th:if="*{photo.getFilename()}">-->
-<!--            <img th:src="@{'/img/' + *{photo.getFilename()}}" alt="">-->
-<!--        </p>-->
-<!--    </div>-->
-<!--    <a th:href="@{'/auth/success/channel/' + *{user.getId()} + '/photos/' + *{photo.getId()}}">go</a>-->
-<!--    <form th:action="@{'/auth/success/channel/' + *{user.getId()} + '/photos'}" th:method="post">-->
-<!--        <input type="hidden" name="id" th:value="${photo.getId()}" />-->
-<!--        <button type="submit" name="delete" th:id="*{photo.getId()}">delete</button>-->
-<!--    </form>-->
-<!--</div>-->
+    <div th:replace="components/photoComponent :: photoComponent"></div>
+</div>
 <script src="/scripts/imageZoom.js"></script>
+<script src="/scripts/formValidationForPhoto.js"></script>
 </body>
 </html>
