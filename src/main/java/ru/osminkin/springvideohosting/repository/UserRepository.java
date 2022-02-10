@@ -17,6 +17,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findById(@NonNull Long id);
     Optional<User> findByEmail(String email);
 
+    User findUserById(Long id);
+
     @Transactional
     @Modifying
     @Query(value = "update users set status = 'BANNED' where id = :bannedUser", nativeQuery = true)
@@ -36,7 +38,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     void updatePhoto(@Param("id") Long id, @Param("photoName") String photoName);
 
     @Query(value = "select * from users where lower(first_name) like %:search% or lower(last_name) like %:search%", nativeQuery = true)
-    List<User> findBySearch(@Param("search") String search);
+    Iterable<User> findBySearch(@Param("search") String search);
 
     @Transactional
     @Modifying
@@ -52,10 +54,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean isSubscribe(@Param("follower") User follower, @Param("followUser") User followUser);
 
     @Query(value = "select * from users u inner join subscriptions s on u.id = s.follow_user where follower = :follower", nativeQuery = true)
-    List<User> findAllUserByUserAuthFromSubscriptions(@Param("follower") User follower);
+    Iterable<User> findAllUserByUserAuthFromSubscriptions(@Param("follower") User follower);
 
     @Query(value = "select * from users u inner join subscriptions s on u.id = s.follow_user where follower = :follower and (lower(first_name) like %:search% or lower(last_name) like %:search%)", nativeQuery = true)
-    List<User> findBySearchUserAuthFromSubscriptions(@Param("follower") User follower, @Param("search") String search);
+    Iterable<User> findBySearchUserAuthFromSubscriptions(@Param("follower") User follower, @Param("search") String search);
 
     @Transactional
     @Modifying

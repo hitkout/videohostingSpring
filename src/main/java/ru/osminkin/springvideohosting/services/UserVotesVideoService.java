@@ -25,7 +25,7 @@ public class UserVotesVideoService {
         Long likes = videoRepository.getLikesVideo(videoId);
         Long dislikes = videoRepository.getDislikesVideo(videoId);
 
-        if (authUser != videoRepository.findVideoById(videoId).getUser()){
+        if (!authUser.equals(videoRepository.findVideoById(videoId).getUser())){
             if (userVotesVideoRepository.getLikeOrDislike(authUser, videoId) == null){
                 userVotesVideoRepository.createRecordAndLike(authUser, videoId);
                 videoRepository.likeVideo(videoId, ++likes);
@@ -46,7 +46,7 @@ public class UserVotesVideoService {
         Long likes = videoRepository.getLikesVideo(videoId);
         Long dislikes = videoRepository.getDislikesVideo(videoId);
 
-        if (authUser != videoRepository.findVideoById(videoId).getUser()) {
+        if (!authUser.equals(videoRepository.findVideoById(videoId).getUser())) {
             if (userVotesVideoRepository.getLikeOrDislike(authUser, videoId) == null) {
                 userVotesVideoRepository.createRecordAndDislike(authUser, videoId);
                 videoRepository.dislikeVideo(videoId, ++dislikes);

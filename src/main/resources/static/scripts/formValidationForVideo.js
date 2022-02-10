@@ -12,9 +12,11 @@ formVideo.addEventListener('submit', (e) => {
 });
 
 function checkInputFile(){
-    if (fileVideo.files[0].size > 104857600)
+    if (fileVideo.files[0].name.indexOf('.mp4') === -1){
+        setErrorFor(fileVideo, 'Формат видео должен быть .mp4');
+    } else if (fileVideo.files[0].size > 104857600){
         setErrorFor(fileVideo, 'Размер видео не должен превышать 100 Мб');
-    else {
+    } else {
         setSuccessFor(fileVideo);
         return true;
     }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
 <!--/*@thymesVar id="user" type="ru.osminkin.springvideohosting.model.User"*/-->
 <!--/*@thymesVar id="comments" type="ru.osminkin.springvideohosting.model.Record"*/-->
 <!--/*@thymesVar id="comment" type="ru.osminkin.springvideohosting.model.Record"*/-->
@@ -32,7 +32,7 @@
             </div>
           </div>
       </div>
-      <div th:if="${#authentication.getName() == comment.getUser().getEmail()}">
+      <div th:if="${#authentication.getName() == comment.getUser().getEmail() || #authorization.expression('hasRole(''ROLE_ADMIN'')')}">
         <form th:action="@{'/watch/' + *{video.getId()}}" th:method="post">
           <input type="hidden" name="commentId" th:value="${comment.getId()}" />
           <button class="btnDeleteComment" type="submit" name="deleteComment"><i class="fas fa-times"></i></button>

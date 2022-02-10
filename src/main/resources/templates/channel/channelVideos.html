@@ -25,7 +25,7 @@
 <div class="rowFormVideo">
     <form id="formVideo" class="formVideo" th:if="${#authentication.getName() == user.getEmail()}" modelAttribute="videoFromForm" method="post" enctype="multipart/form-data">
         <div class="form-control-video">
-            <input class="fileVideo" type="file" id="fileVideo" name="file">
+            <input class="fileVideo" accept="video/*" type="file" id="fileVideo" name="file">
             <small>Error message</small>
         </div>
         <div class="form-control-video">

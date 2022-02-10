@@ -25,7 +25,7 @@
 <div class="rowFormPhoto">
     <form id="formPhoto" class="formPhoto" th:if="${#authentication.getName() == user.getEmail()}" modelAttribute="photoFromForm" method="post" enctype="multipart/form-data">
         <div class="form-control-photo">
-            <input class="filePhoto" type="file" id="filePhoto" name="file">
+            <input class="filePhoto" accept="image/*" type="file" id="filePhoto" name="file">
             <small>Error message</small>
         </div>
         <div class="form-control-photo">

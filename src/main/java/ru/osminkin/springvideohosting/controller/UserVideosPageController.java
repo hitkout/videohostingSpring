@@ -18,7 +18,9 @@ public class UserVideosPageController {
     private final UserService userService;
     private final VideoService videoService;
 
-    public UserVideosPageController(TypeAndSortService typeAndSortService, UserService userService, VideoService videoService) {
+    public UserVideosPageController(TypeAndSortService typeAndSortService,
+                                    UserService userService,
+                                    VideoService videoService) {
         this.typeAndSortService = typeAndSortService;
         this.userService = userService;
         this.videoService = videoService;
@@ -49,8 +51,10 @@ public class UserVideosPageController {
                                    @RequestParam(value = "sort", defaultValue = "pop") String sort,
                                    Model model){
         model.addAttribute("user", userService.findUserById(userId));
-        model.addAttribute("authUser", authentication == null ? null : userService.findUserByAuthentication(authentication));
-        model.addAttribute("follow", authentication == null ? null : userService.isSubscribe(userService.findUserByAuthentication(authentication), userService.findUserById(userId)));
+        model.addAttribute("authUser", userService.getCurrentUser());
+        model.addAttribute("follow", authentication == null
+                ? null
+                : userService.isSubscribe(userService.getCurrentUser(), userService.findUserById(userId)));
         model.addAttribute("subscribers", userService.getSubscribersCount(userService.findUserById(userId)));
         typeAndSortService.getVideosPage(search, sort, model, userId);
         return "channel/channelVideos";

@@ -13,7 +13,9 @@ public class UserPageController {
     private final VideoService videoService;
     private final PhotoService photoService;
 
-    public UserPageController(UserService userService, VideoService videoService, PhotoService photoService) {
+    public UserPageController(UserService userService,
+                              VideoService videoService,
+                              PhotoService photoService) {
         this.userService = userService;
         this.videoService = videoService;
         this.photoService = photoService;
@@ -24,8 +26,10 @@ public class UserPageController {
                              Authentication authentication,
                              Model model){
         model.addAttribute("user", userService.findUserById(userId));
-        model.addAttribute("authUser", authentication == null ? null : userService.findUserByAuthentication(authentication));
-        model.addAttribute("follow", authentication == null ? null : userService.isSubscribe(userService.findUserByAuthentication(authentication), userService.findUserById(userId)));
+        model.addAttribute("authUser", userService.getCurrentUser());
+        model.addAttribute("follow", authentication == null
+                ? null
+                : userService.isSubscribe(userService.getCurrentUser(), userService.findUserById(userId)));
         model.addAttribute("videos", videoService.findAllVideosByUserId(userId));
         model.addAttribute("photos", photoService.findAllPhotosByUserId(userId));
         model.addAttribute("subscribers", userService.getSubscribersCount(userService.findUserById(userId)));
@@ -34,9 +38,8 @@ public class UserPageController {
     }
 
     @PostMapping(value = "/channel/{userId}", params = "subscribe")
-    public String postSubscribe(@PathVariable("userId") long userId,
-                                Authentication authentication) {
-        userService.subscribe(userService.findUserByAuthentication(authentication), userService.findUserById(userId));
+    public String postSubscribe(@PathVariable("userId") long userId) {
+        userService.subscribe(userService.getCurrentUser(), userService.findUserById(userId));
         return "redirect:/channel/{userId}";
     }
 
@@ -55,9 +58,8 @@ public class UserPageController {
     }
 
     @PostMapping(value = "/channel/{userId}", params = "unsubscribe")
-    public String postUnsubscribe(@PathVariable("userId") long userId,
-                                Authentication authentication) {
-        userService.unsubscribe(userService.findUserByAuthentication(authentication), userService.findUserById(userId));
+    public String postUnsubscribe(@PathVariable("userId") long userId) {
+        userService.unsubscribe(userService.getCurrentUser(), userService.findUserById(userId));
         return "redirect:/channel/{userId}";
     }
 }

@@ -1,6 +1,5 @@
 package ru.osminkin.springvideohosting.controller;
 
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,35 +19,31 @@ public class UserSettingsPageController {
     }
 
     @GetMapping("/settings")
-    public String getSettingsPage(Model model,
-                                  Authentication authentication){
-        model.addAttribute("authUser", authentication == null ? null : userService.findUserByAuthentication(authentication));
+    public String getSettingsPage(Model model){
+        model.addAttribute("authUser", userService.getCurrentUser());
         model.addAttribute("changePassword", null);
         return "channel/channelSettings";
     }
 
     @PostMapping(value = "/settings", params = "name")
-    public String postChangeName(Authentication authentication,
-                                   @RequestParam("name") String name) {
-        userService.changeName(userService.findUserByAuthentication(authentication).getId(), name);
+    public String postChangeName(@RequestParam("name") String name) {
+        userService.changeName(userService.getCurrentUser().getId(), name);
         return "redirect:/settings";
     }
 
     @PostMapping(value = "/settings", params = "surname")
-    public String postChangeSurname(Authentication authentication,
-                                   @RequestParam("surname") String surname) {
-        userService.changeSurname(userService.findUserByAuthentication(authentication).getId(), surname);
+    public String postChangeSurname(@RequestParam("surname") String surname) {
+        userService.changeSurname(userService.getCurrentUser().getId(), surname);
         return "redirect:/settings";
     }
 
     @PostMapping(value = "/settings", params = {"oldPassword", "newPassword", "newPasswordConfirm"})
-    public String postChangeUserPassword(Authentication authentication,
-                                         @RequestParam("oldPassword") String oldPassword,
+    public String postChangeUserPassword(@RequestParam("oldPassword") String oldPassword,
                                          @RequestParam("newPassword") String newPassword,
                                          Model model) {
-        model.addAttribute("authUser", userService.findUserByAuthentication(authentication));
+        model.addAttribute("authUser", userService.getCurrentUser());
         model.addAttribute("changePassword", userService.changeUserPassword(
-                userService.findUserByAuthentication(authentication).getId(),
+                userService.getCurrentUser().getId(),
                 oldPassword,
                 newPassword));
 
@@ -56,22 +51,23 @@ public class UserSettingsPageController {
     }
 
     @PostMapping(value = "/settings")
-    public String postChangeUserPhoto(Authentication authentication,
-                                   @RequestParam("file") MultipartFile file,
-                                   @ModelAttribute("userPhotoFromForm") Photo userPhotoFromForm) throws IOException {
+    public String postChangeUserPhoto(@RequestParam("file") MultipartFile file,
+                                      @ModelAttribute("userPhotoFromForm") Photo userPhotoFromForm) throws IOException {
         if (!Objects.equals(file.getOriginalFilename(), "")){
-            if (!userService.findUserById(userService.findUserByAuthentication(authentication).getId()).getPhoto().equals("default.png"))
-                userService.deleteUserPhoto(userService.findUserById(userService.findUserByAuthentication(authentication).getId()).getPhoto());
-            userService.saveUserPhoto(userService.findUserByAuthentication(authentication).getId(), file);
+            if (!userService.findUserById(
+                    userService.getCurrentUser().getId()).getPhoto().equals("default.png"))
+                userService.deleteUserPhoto(userService.findUserById(userService.getCurrentUser().getId()).getPhoto());
+            userService.saveUserPhoto(userService.getCurrentUser().getId(), file);
         }
         return "redirect:/settings";
     }
 
     @PostMapping(value = "/settings", params = "deleteUserPhoto")
-    public String postDeleteUserPhoto(Authentication authentication) {
-        if (!userService.findUserById(userService.findUserByAuthentication(authentication).getId()).getPhoto().equals("default.png"))
-            userService.deleteUserPhoto(userService.findUserById(userService.findUserByAuthentication(authentication).getId()).getPhoto());
-        userService.saveUserPhoto(userService.findUserByAuthentication(authentication).getId(), "default.png");
+    public String postDeleteUserPhoto() {
+        if (!userService.findUserById(
+                userService.getCurrentUser().getId()).getPhoto().equals("default.png"))
+            userService.deleteUserPhoto(userService.findUserById(userService.getCurrentUser().getId()).getPhoto());
+        userService.saveUserPhoto(userService.getCurrentUser().getId(), "default.png");
         return "redirect:/settings";
     }
 }

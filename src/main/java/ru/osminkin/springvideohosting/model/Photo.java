@@ -1,7 +1,6 @@
 package ru.osminkin.springvideohosting.model;
 
 import lombok.Data;
-
 import javax.persistence.*;
 import java.sql.Timestamp;
 

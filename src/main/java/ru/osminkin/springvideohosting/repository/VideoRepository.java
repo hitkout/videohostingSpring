@@ -56,19 +56,19 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
     Video findVideoById(@Param("id") Long id);
 
     @Query(value = "select * from videos v inner join users u on v.user_id = u.id where u.status = 'ACTIVE' order by random() limit 5", nativeQuery = true)
-    List<Video> getFiveRandomVideos();
+    Iterable<Video> getFiveRandomVideos();
 
     @Query(value = "select * from videos v inner join users u on v.user_id = u.id inner join subscriptions s on u.id = s.follow_user where u.status = 'ACTIVE' and s.follower = :follower and v.user_id = s.follow_user", nativeQuery = true)
-    List<Video> getAllVideosFromAllFollowUsers(@Param("follower") User follower);
+    Iterable<Video> getAllVideosFromAllFollowUsers(@Param("follower") User follower);
 
     @Query(value = "select * from videos v inner join users u on v.user_id = u.id inner join subscriptions s on u.id = s.follow_user where u.status = 'ACTIVE' and s.follower = :follower and v.user_id = s.follow_user and v.add_date >= (now() at time zone 'UTC' - interval '7 day')", nativeQuery = true)
-    List<Video> getAllVideosForLastWeekFromAllFollowUsers(@Param("follower") User follower);
+    Iterable<Video> getAllVideosForLastWeekFromAllFollowUsers(@Param("follower") User follower);
 
     @Query(value = "select * from videos v inner join users u on v.user_id = u.id inner join subscriptions s on u.id = s.follow_user where u.status = 'ACTIVE' and s.follower = :follower and v.user_id = s.follow_user and (lower(first_name) like %:search% or lower(last_name) like %:search%) and v.add_date >= (now() at time zone 'UTC' - interval '7 day')", nativeQuery = true)
-    List<Video> getAllVideosForLastWeekFromAllFollowUsersByFollowUserSearch(@Param("follower") User follower, @Param("search") String search);
+    Iterable<Video> getAllVideosForLastWeekFromAllFollowUsersByFollowUserSearch(@Param("follower") User follower, @Param("search") String search);
 
     @Query(value = "select * from videos v inner join users u on v.user_id = u.id where u.status = 'ACTIVE' and v.id != :videoId order by random() limit 10", nativeQuery = true)
-    List<Video> findRandomVideosWithoutSelectedVideo(@Param("videoId") Long videoId);
+    Iterable<Video> findRandomVideosWithoutSelectedVideo(@Param("videoId") Long videoId);
 
     @Transactional
     @Modifying

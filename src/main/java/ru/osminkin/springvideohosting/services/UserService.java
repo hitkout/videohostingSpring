@@ -3,8 +3,10 @@ package ru.osminkin.springvideohosting.services;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,20 +30,16 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public List<User> findAll(){
+    public Iterable<User> findAll(){
         return userRepository.findAll();
     }
 
-    public List<User> findBySearch(String search){
+    public Iterable<User> findBySearch(String search){
         return userRepository.findBySearch(search);
     }
 
     public User findUserById(Long id){
         return userRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
-    }
-
-    public User findUserByAuthentication(Authentication authentication){
-        return userRepository.findByEmail(authentication.getName()).orElseThrow(() -> new UsernameNotFoundException("User doesn't exists"));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -96,11 +94,11 @@ public class UserService {
         return userRepository.isSubscribe(follower, followUser);
     }
 
-    public List<User> findBySearchUserAuthFromSubscriptions(User follower, String search){
+    public Iterable<User> findBySearchUserAuthFromSubscriptions(User follower, String search){
         return userRepository.findBySearchUserAuthFromSubscriptions(follower, search);
     }
 
-    public List<User> findAllUserByUserAuthFromSubscriptions(User follower){
+    public Iterable<User> findAllUserByUserAuthFromSubscriptions(User follower){
         return userRepository.findAllUserByUserAuthFromSubscriptions(follower);
     }
 
@@ -126,5 +124,17 @@ public class UserService {
 
     public Long getSubscribersCount(User user){
         return userRepository.getSubscribersCount(user);
+    }
+
+    public User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication instanceof AnonymousAuthenticationToken)
+            return null;
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User user = null;
+        if (userDetails instanceof User) {
+            user =  (User) userDetails;
+        }
+        return userRepository.findUserById(Objects.requireNonNull(user).getId());
     }
 }

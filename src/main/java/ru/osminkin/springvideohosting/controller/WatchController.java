@@ -38,12 +38,10 @@ public class WatchController {
         }
         numberWatchVideoService.watch(videoId);
         model.addAttribute("user", videoService.findVideoById(videoId).getUser());
-        model.addAttribute("authUser", authentication == null
-                ? null
-                : userService.findUserByAuthentication(authentication));
+        model.addAttribute("authUser", userService.getCurrentUser());
         model.addAttribute("follow", authentication == null
                 ? null
-                : userService.isSubscribe(userService.findUserByAuthentication(authentication),
+                : userService.isSubscribe(userService.getCurrentUser(),
                 userService.findUserById(videoService.findVideoById(videoId).getUser().getId())));
         model.addAttribute("video", videoService.findVideoById(videoId));
         model.addAttribute("videos", videoService.findRandomVideosWithoutSelectedVideo(videoId));
@@ -55,23 +53,20 @@ public class WatchController {
         model.addAttribute("number", numberWatchVideoService.getNumber(videoId));
         if (authentication != null) {
             model.addAttribute("isLikeOrDislike",
-                    userVotesVideoService.getLikeOrDislike(
-                            userService.findUserByAuthentication(authentication), videoId));
+                    userVotesVideoService.getLikeOrDislike(userService.getCurrentUser(), videoId));
         }
         return "general/watch";
     }
 
     @PostMapping(value = "/watch/{videoId}", params = "like")
-    public String postLike(Authentication authentication,
-                                    @PathVariable("videoId") Long videoId){
-        userVotesVideoService.likeVideo(userService.findUserByAuthentication(authentication), videoId);
+    public String postLike(@PathVariable("videoId") Long videoId){
+        userVotesVideoService.likeVideo(userService.getCurrentUser(), videoId);
         return "redirect:/watch/{videoId}";
     }
 
     @PostMapping(value = "/watch/{videoId}", params = "dislike")
-    public String postDislike(Authentication authentication,
-                                    @PathVariable("videoId") Long videoId){
-        userVotesVideoService.dislikeVideo(userService.findUserByAuthentication(authentication), videoId);
+    public String postDislike(@PathVariable("videoId") Long videoId){
+        userVotesVideoService.dislikeVideo(userService.getCurrentUser(), videoId);
         return "redirect:/watch/{videoId}";
     }
 
@@ -91,11 +86,9 @@ public class WatchController {
     }
 
     @PostMapping(value = "/watch/{videoId}", params = "addComment")
-    public String postComment(Authentication authentication,
-                              @PathVariable("videoId") Long videoId,
+    public String postComment(@PathVariable("videoId") Long videoId,
                               @ModelAttribute("commentFromForm") Record record){
-        recordService.saveComment(userService.findUserByAuthentication(authentication),
-                videoService.findVideoById(videoId), record);
+        recordService.saveComment(userService.getCurrentUser(), videoService.findVideoById(videoId), record);
         return "redirect:/watch/{videoId}";
     }
 }

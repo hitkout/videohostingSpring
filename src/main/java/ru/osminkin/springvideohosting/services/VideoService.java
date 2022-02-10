@@ -37,7 +37,6 @@ public class VideoService {
 
     public void saveVideoInDb(long userId, MultipartFile file, String videoTitle, String videoDescription) throws IOException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         Video video = new Video();
         if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()){
             File upload = new File(uploadPathVideos);
@@ -85,10 +84,6 @@ public class VideoService {
         videoRepository.deleteById(id);
     }
 
-    public Iterable<Video> findAll(){
-        return videoRepository.findAll();
-    }
-
     public Iterable<Video> findAllVideosOrderByDateDesc(){
         return videoRepository.findAllVideosOrderByDateDesc();
     }
@@ -121,23 +116,23 @@ public class VideoService {
         return videoRepository.findAllUserVideosOrderByDate(id, search);
     }
 
-    public List<Video> getFiveRandomVideos(){
+    public Iterable<Video> getFiveRandomVideos(){
         return videoRepository.getFiveRandomVideos();
     }
 
-    public List<Video> getAllVideosFromAllFollowUsers(User follower){
+    public Iterable<Video> getAllVideosFromAllFollowUsers(User follower){
         return videoRepository.getAllVideosFromAllFollowUsers(follower);
     }
 
-    public List<Video> getAllVideosForLastWeekFromAllFollowUsers(User follower){
+    public Iterable<Video> getAllVideosForLastWeekFromAllFollowUsers(User follower){
         return videoRepository.getAllVideosForLastWeekFromAllFollowUsers(follower);
     }
 
-    public List<Video> getAllVideosForLastWeekFromAllFollowUsersByFollowUserSearch(User follower, String search){
+    public Iterable<Video> getAllVideosForLastWeekFromAllFollowUsersByFollowUserSearch(User follower, String search){
         return videoRepository.getAllVideosForLastWeekFromAllFollowUsersByFollowUserSearch(follower, search);
     }
 
-    public List<Video> findRandomVideosWithoutSelectedVideo(Long videoId){
+    public Iterable<Video> findRandomVideosWithoutSelectedVideo(Long videoId){
         return videoRepository.findRandomVideosWithoutSelectedVideo(videoId);
     }
 }

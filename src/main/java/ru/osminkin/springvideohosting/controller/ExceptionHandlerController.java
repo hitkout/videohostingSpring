@@ -1,11 +1,13 @@
 package ru.osminkin.springvideohosting.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
+@Slf4j
 public class ExceptionHandlerController {
 
     @ExceptionHandler(ResourceNotFoundException.class)
@@ -16,7 +18,8 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public String internalServerError() {
+    public String internalServerError(RuntimeException exception) {
+        log.error("Error: ", exception);
         return "error/500";
     }
 

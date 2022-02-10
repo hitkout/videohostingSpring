@@ -25,7 +25,7 @@
         <form id="formFile" class="form-group" modelAttribute="userPhotoFromForm" method="post" enctype="multipart/form-data">
             <label class="label form-control-settings">
                 <p>Загрузить фото</p>
-                <input id="file" type="file" name="file">
+                <input id="file" accept="image/*" type="file" name="file">
                 <small>Error message</small>
             </label>
             <button type="submit" name="changeUserPhoto">Изменить фотографию</button>
@@ -67,15 +67,15 @@
         <p>Введите новый пароль:</p>
         <form id="formPassword" th:action="@{'/settings'}" th:method="post">
             <div class="form-control-settings">
-                <input id="oldPassword" type="text" name="oldPassword" placeholder="Старый пароль">
+                <input id="oldPassword" type="password" name="oldPassword" placeholder="Старый пароль">
                 <small>Error message</small>
             </div>
             <div class="form-control-settings">
-                <input id="newPassword" type="text" name="newPassword" placeholder="Пароль">
+                <input id="newPassword" type="password" name="newPassword" placeholder="Пароль">
                 <small>Error message</small>
             </div>
             <div class="form-control-settings">
-                <input id="newPasswordConfirm" type="text" name="newPasswordConfirm" placeholder="Подтверждение пароля">
+                <input id="newPasswordConfirm" type="password" name="newPasswordConfirm" placeholder="Подтверждение пароля">
                 <small>Error message</small>
             </div>
             <p th:if="${changePassword == false}" style="color: #A00">Ошибка смены пароля: старый пароль не совпадает</p>

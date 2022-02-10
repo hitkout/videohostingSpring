@@ -18,7 +18,9 @@ public class UserPhotosPageController {
     private final UserService userService;
     private final PhotoService photoService;
 
-    public UserPhotosPageController(TypeAndSortService typeAndSortService, UserService userService, PhotoService photoService) {
+    public UserPhotosPageController(TypeAndSortService typeAndSortService,
+                                    UserService userService,
+                                    PhotoService photoService) {
         this.typeAndSortService = typeAndSortService;
         this.userService = userService;
         this.photoService = photoService;
@@ -26,14 +28,18 @@ public class UserPhotosPageController {
 
     @GetMapping("/channel/{userId}/photos")
     public String getChannelPhoto(@PathVariable("userId") long userId,
+                                  String search,
                                   @RequestParam(value = "sort", defaultValue = "pop") String sort,
                                   Authentication authentication,
                                   Model model){
         model.addAttribute("user", userService.findUserById(userId));
-        model.addAttribute("authUser", authentication == null ? null : userService.findUserByAuthentication(authentication));
-        model.addAttribute("follow", authentication == null ? null : userService.isSubscribe(userService.findUserByAuthentication(authentication), userService.findUserById(userId)));
+        model.addAttribute("authUser", userService.getCurrentUser());
+        model.addAttribute("follow", authentication == null
+                ? null
+                : userService.isSubscribe(userService.getCurrentUser(),
+                userService.findUserById(userId)));
         model.addAttribute("subscribers", userService.getSubscribersCount(userService.findUserById(userId)));
-        typeAndSortService.getPhotosPage(sort, model, userId);
+        typeAndSortService.getPhotosPage(search, sort, model, userId);
         return "channel/channelPhotos";
     }
 

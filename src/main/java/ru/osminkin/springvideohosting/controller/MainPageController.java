@@ -13,7 +13,10 @@ public class MainPageController {
     private final VideoService videoService;
     private final PhotoService photoService;
 
-    public MainPageController(UserService userService, TypeAndSortService typeAndSortService, VideoService videoService, PhotoService photoService) {
+    public MainPageController(UserService userService,
+                              TypeAndSortService typeAndSortService,
+                              VideoService videoService,
+                              PhotoService photoService) {
         this.userService = userService;
         this.typeAndSortService = typeAndSortService;
         this.videoService = videoService;
@@ -21,57 +24,79 @@ public class MainPageController {
     }
 
     @GetMapping("")
-    public String mainPage(Model model,
-                           Authentication authentication){
-        model.addAttribute("authUser", authentication == null ? null : userService.findUserByAuthentication(authentication));
+    public String mainPage(Model model){
+        model.addAttribute("authUser", userService.getCurrentUser());
+        model.addAttribute("user", userService.getCurrentUser());
         model.addAttribute("videos", videoService.getFiveRandomVideos());
         model.addAttribute("photos", photoService.getFiveRandomPhotos());
-        model.addAttribute("user", authentication == null ? null : userService.findUserByAuthentication(authentication));
         return "general/main";
     }
 
     @GetMapping("/videos")
     public String mainVideosPage(Model model,
-                                 Authentication authentication,
                                  String search,
                                  @RequestParam(value = "sort", defaultValue = "pop") String sort){
-        model.addAttribute("authUser", authentication == null ? null : userService.findUserByAuthentication(authentication));
+        model.addAttribute("authUser", userService.getCurrentUser());
         typeAndSortService.getVideosPage(search, sort, model, null);
         return "general/videos";
     }
 
     @GetMapping("/photos")
     public String mainPhotosPage(Model model,
-                                 Authentication authentication,
+                                 String search,
                                  @RequestParam(value = "sort", defaultValue = "pop") String sort){
-        model.addAttribute("authUser", authentication == null ? null : userService.findUserByAuthentication(authentication));
-        typeAndSortService.getPhotosPage(sort, model, null);
+        model.addAttribute("authUser", userService.getCurrentUser());
+        typeAndSortService.getPhotosPage(search, sort, model, null);
         return "general/photos";
     }
 
     @GetMapping("/users")
     public String mainUsersPage(Model model,
-                                Authentication authentication,
                                 String search){
         if (search != null)
             model.addAttribute("users", userService.findBySearch(search.toLowerCase()));
         else model.addAttribute("users", userService.findAll());
-        model.addAttribute("authUser", authentication == null ? null : userService.findUserByAuthentication(authentication));
+        model.addAttribute("authUser", userService.getCurrentUser());
         return "general/allUsers";
     }
 
     @GetMapping("/subscriptions")
     public String mainSubscriptionsPage(Model model,
-                                        Authentication authentication,
                                         String search){
-        model.addAttribute("authUser", userService.findUserByAuthentication(authentication));
+        model.addAttribute("authUser", userService.getCurrentUser());
         if (search != null){
-            model.addAttribute("followUsers", userService.findBySearchUserAuthFromSubscriptions(userService.findUserByAuthentication(authentication), search.toLowerCase()));
-            model.addAttribute("videos", videoService.getAllVideosForLastWeekFromAllFollowUsersByFollowUserSearch(userService.findUserByAuthentication(authentication), search.toLowerCase()));
+            model.addAttribute("followUsers",
+                    userService.findBySearchUserAuthFromSubscriptions(
+                            userService.getCurrentUser(), search.toLowerCase()
+                    )
+            );
+            model.addAttribute("videos",
+                    videoService.getAllVideosForLastWeekFromAllFollowUsersByFollowUserSearch(
+                            userService.getCurrentUser(), search.toLowerCase()
+                    )
+            );
+            model.addAttribute("photos",
+                    photoService.getAllPhotosForLastWeekFromAllFollowUsersByFollowUserSearch(
+                            userService.getCurrentUser(), search.toLowerCase()
+                    )
+            );
         }
         else {
-            model.addAttribute("followUsers", userService.findAllUserByUserAuthFromSubscriptions(userService.findUserByAuthentication(authentication)));
-            model.addAttribute("videos", videoService.getAllVideosForLastWeekFromAllFollowUsers(userService.findUserByAuthentication(authentication)));
+            model.addAttribute("followUsers",
+                    userService.findAllUserByUserAuthFromSubscriptions(
+                            userService.getCurrentUser()
+                    )
+            );
+            model.addAttribute("videos",
+                    videoService.getAllVideosForLastWeekFromAllFollowUsers(
+                            userService.getCurrentUser()
+                    )
+            );
+            model.addAttribute("photos",
+                    photoService.getAllPhotosForLastWeekFromAllFollowUsers(
+                            userService.getCurrentUser()
+                    )
+            );
         }
         return "general/subscriptions";
     }

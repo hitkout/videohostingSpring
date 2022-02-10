@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/css/comment.css">
     <link rel="stylesheet" href="/css/follow.css">
     <link rel="stylesheet" href="/css/videoPlayButton.css">
+    <link rel="stylesheet" href="/css/rightColumnVideos.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -39,6 +40,7 @@
                     </div>
                 </div>
                 <p class="viewsCount" th:text="'Количество просмотров: ' + ${number}"></p>
+                <p class="viewsCount" th:text="*{'Дата добавления видео: ' + video.getAddDate()}"></p>
                 <div class="lineBetweenTitleAndDescription"></div>
                 <div class="commentUserInfo">
                     <a th:href="@{'/channel/' + *{video.getUser().getId()}}" class="commentLinkToUser">
@@ -62,8 +64,6 @@
                         <div th:replace="components/followComponent :: followComponent"></div>
                     </div>
                 </div>
-
-                <p th:text="*{'Дата добавления видео: ' + video.getAddDate()}"></p>
                 <p th:text="${video.getVideoDescription()}"></p>
             </div>
         </div>

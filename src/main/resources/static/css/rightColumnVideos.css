@@ -1,0 +1,10 @@
+.videoTitleCard {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 16px;
+    transition: color 0.2s ease-in;
+}
+
+.videoTitleCard:hover{
+    color: #4ED8D8;
+}
