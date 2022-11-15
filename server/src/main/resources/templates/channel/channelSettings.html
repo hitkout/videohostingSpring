@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Settings</title>
+    <link rel="stylesheet" href="/static/css/top-panel.css">
+    <link rel="stylesheet" href="/static/css/body.css">
+    <link rel="stylesheet" href="/static/css/user.css">
+    <link rel="stylesheet" href="/static/css/file.css">
+    <link rel="stylesheet" href="/static/css/settings.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div th:replace="components/top-panel :: top-panel"></div>
+<div class="user">
+    <div class="userAvatar">
+        <img th:src="@{'/img/' + *{authUser.getPhoto()}}" alt="">
+    </div>
+    <div class="userInfo">
+        <p class="firstName" th:text="${authUser.getFirstName() + ' ' + authUser.getLastName()}"></p>
+    </div>
+</div>
+<div class="settings">
+    <div class="example">
+        <form id="formFile" class="form-group" modelAttribute="userPhotoFromForm" method="post" enctype="multipart/form-data">
+            <label class="label form-control-settings">
+                <p>Загрузить фото</p>
+                <input id="file" accept="image/*" type="file" name="file">
+                <small>Error message</small>
+            </label>
+            <button type="submit" name="changeUserPhoto">Изменить фотографию</button>
+        </form>
+        <form method="post">
+            <button type="submit" name="deleteUserPhoto">Удалить фотографию</button>
+        </form>
+    </div>
+
+    <div class="lineBetweenSettings"></div>
+
+    <div class="divName">
+        <p>Введите имя:</p>
+        <form id="formFirstName" th:action="@{'/settings'}" th:method="post">
+            <div class="form-control-settings">
+                <input id="name" type="text" name="name" th:placeholder="*{authUser.getFirstName()}">
+                <small>Error message</small>
+            </div>
+            <button type="submit" name="changeName">Изменить имя</button>
+        </form>
+    </div>
+
+    <div class="lineBetweenSettings"></div>
+
+    <div class="divSurname">
+        <p>Введите фамилию:</p>
+        <form id="formLastName" th:action="@{'/settings'}" th:method="post">
+            <div class="form-control-settings">
+                <input id="surname" type="text" name="surname" th:placeholder="*{authUser.getLastName()}">
+                <small>Error message</small>
+            </div>
+            <button type="submit" name="changeSurname">Изменить фамилию</button>
+        </form>
+    </div>
+
+    <div class="lineBetweenSettings"></div>
+
+    <div class="divPassword">
+        <p>Введите новый пароль:</p>
+        <form id="formPassword" th:action="@{'/settings'}" th:method="post">
+            <div class="form-control-settings">
+                <input id="oldPassword" type="password" name="oldPassword" placeholder="Старый пароль">
+                <small>Error message</small>
+            </div>
+            <div class="form-control-settings">
+                <input id="newPassword" type="password" name="newPassword" placeholder="Пароль">
+                <small>Error message</small>
+            </div>
+            <div class="form-control-settings">
+                <input id="newPasswordConfirm" type="password" name="newPasswordConfirm" placeholder="Подтверждение пароля">
+                <small>Error message</small>
+            </div>
+            <p th:if="${changePassword == false}" style="color: #A00">Ошибка смены пароля: старый пароль не совпадает</p>
+            <p th:if="${changePassword == true}" style="color: #0A0">Пароль успешно изменён</p>
+            <button type="submit" name="changeUserPassword">Изменить пароль</button>
+        </form>
+    </div>
+</div>
+
+<script src="/static/scripts/formValidationForSettings.js"></script>
+</body>
+</html>

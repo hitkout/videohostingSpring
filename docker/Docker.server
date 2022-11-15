@@ -1,0 +1,17 @@
+FROM maven:3.6.3-openjdk-11 as builder
+
+WORKDIR /build
+COPY ./pom.xml /build/
+COPY ./server/ /build/server/
+COPY ./log-reader/pom.xml /build/log-reader/pom.xml
+
+RUN mvn --projects server clean package
+
+
+FROM acmecorp/baseimage:latest
+
+COPY --from=builder /build/server/target/server-*-SNAPSHOT.jar /app/server.jar
+VOLUME /app/logs
+
+ENV LOG_PATH=/app/logs
+CMD java -DLOG_PATH=${LOG_PATH} -jar server.jar
