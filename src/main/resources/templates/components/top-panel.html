@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--/*@thymesVar id="authUser" type="ru.osminkin.springvideohosting.model.User"*/-->
+<!--/*@thymesVar id="user" type="ru.osminkin.springvideohosting.model.User"*/-->
+<head>
+    <meta charset="UTF-8">
+    <title>top-panel</title>
+    <link rel="stylesheet" type="text/css" href="/css/top-panel.css">
+</head>
+<body>
+    <div class="top-panel" th:fragment="top-panel">
+        <div class="container height-100">
+            <div class="row-top-panel height-100">
+                <div class="top-panel__left">
+                    <a th:href="@{'/'}" class="top-panel__logo">
+                        itube
+                    </a>
+                </div>
+                <div class="top-panel__right">
+                    <nav class="top-panel__nav">
+                        <ul>
+                            <li>
+                                <a th:href="@{'/'}" class="top-panel__nav-link"
+                                    th:classappend="${#httpServletRequest.getRequestURL() == 'http://localhost:8080/'
+                                    || #httpServletRequest.getRequestURL() == 'http://localhost:8080/videos'
+                                    || #httpServletRequest.getRequestURL() == 'http://localhost:8080/photos'
+                                    || #httpServletRequest.requestURI == '/users'
+                                    || #httpServletRequest.requestURI == '/subscriptions'} ? 'top-panel__nav-link-constant' : ''">Главная</a>
+                            </li>
+                            <li th:if="${authUser == null}">
+                                <a class="top-panel__nav-link" th:href="'/auth/success'">Войти</a>
+                            </li>
+                            <li th:if="${authUser != null}">
+                                <a th:href="@{'/channel/' + ${authUser.getId()}}" class="top-panel__nav-link"
+                                   th:classappend="${#strings.contains(#httpServletRequest.requestURI, 'channel/' + authUser.getId())} ? 'top-panel__nav-link-constant' : ''">Моя страница</a>
+                            </li>
+                            <li th:if="${authUser != null}" class="dropdown">
+                                <div class="top-panel__nav-link dropButton">
+                                    <img class="linkImg" th:src="@{'/img/' + *{authUser.getPhoto()}}" alt="">
+                                    <i class="fas fa-caret-down"></i>
+                                </div>
+                                <div class="dropdown-content">
+                                    <a th:href="@{'/settings'}">Настройки</a>
+                                    <form action="/auth/login" method="post">
+                                        <button class="btnExit" type="submit">Выход</button>
+                                    </form>
+                                </div>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
